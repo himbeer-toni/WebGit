@@ -93,7 +93,7 @@ body {
 																	}
 
 .theme-switcher {
-  font-size: 0.83em;
+  font-size: 0.23em;
   font-weight: 400;
   background: var(--btn-bg);
   color: var(--btn-fg);
@@ -118,6 +118,13 @@ body {
   margin-right: 0;
   margin-left: 0.6em;
   position: relative;
+}
+
+.theme-switcher,
+.theme-switcher *,
+.theme-switcher select,
+.theme-switcher span {
+  font-size: 0.43em !important;
 }
 
 .theme-popup {
