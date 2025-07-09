@@ -69,10 +69,19 @@ body {
   transform: scale(1.05);
 }
 
+.theme-switcher:hover,
+.theme-switcher:focus {
+  opacity: 1;
+}
+
 .theme-switcher {
   margin-right: 0;
   margin-left: 0.6em;
   position: relative;
+  font-size: 0.83em;
+  padding: 0.3em 0.8em;
+  border-radius: 4px;
+  opacity: 0.45;
 }
 
 .theme-popup {
@@ -225,4 +234,8 @@ body {
 .theme-popup .theme-item:focus {
   outline: 2px solid var(--btn-bg-hover);
   outline-offset: 2px;
+}
+
+.theme-switcher:focus {
+  opacity: 1;
 }
