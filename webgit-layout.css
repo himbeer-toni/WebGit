@@ -47,7 +47,7 @@ body {
 }
 
 .levelup-btn,
-.theme-switcher {
+.theme-switcher{
   display: inline-block;
   background: var(--btn-bg);
   color: var(--btn-fg);
@@ -69,6 +69,51 @@ body {
   transform: scale(1.05);
 }
 
+.theme-switcher {
+	  font-size: 0.83em;
+		  font-weight: 400;
+			  background: var(--btn-bg);
+				  color: var(--btn-fg);
+					  border: 1px solid var(--border-color);
+						  padding: 0.09em 0.7em 0.09em 0.7em;
+							  border-radius: 4px;
+								  box-shadow: none;
+									  opacity: 0.45;
+										  transition: background 0.13s, opacity 0.13s, border 0.13s;
+											  margin: 0;
+												  position: relative;
+													  min-width: 0;
+														  min-height: 0;
+														}
+														.theme-switcher:hover,
+														.theme-switcher:focus {
+															  opacity: 0.87;
+																  background: var(--btn-bg-hover);
+																	  border-color: var(--btn-bg-hover);
+																	}
+
+.theme-switcher {
+  font-size: 0.83em;
+  font-weight: 400;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  border: 1px solid var(--border-color);
+  padding: 0.09em 0.7em 0.09em 0.7em;
+  border-radius: 4px;
+  box-shadow: none;
+  opacity: 0.45;
+  transition: background 0.13s, opacity 0.13s, border 0.13s;
+  margin: 0;
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+}
+.theme-switcher:hover,
+.theme-switcher:focus {
+  opacity: 0.87;
+  background: var(--btn-bg-hover);
+  border-color: var(--btn-bg-hover);
+}
 .theme-switcher {
   margin-right: 0;
   margin-left: 0.6em;

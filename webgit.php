@@ -170,34 +170,32 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
 </head>
 <body class="level-<?=$level?>">
 <div id="headline-row">
-    <div class="hl-left">
-        <?php if ($level==2): ?>
-         <a href="webgit.php" class="levelup-btn">&larr; Repository List</a>
-        <?php elseif ($level==3): ?>
-        <a href="webgit.php?repo=<?=urlencode($repo)?>" class="levelup-btn">&larr; Commits</a>
-        <?php endif; ?>
+  <div class="hl-left">
+    <?php if ($level==2): ?>
+      <a href="gitweb.php" class="levelup-btn" title="Back to list">&larr;</a>
+    <?php elseif ($level==3): ?>
+      <a href="gitweb.php?repo=<?=urlencode($repo)?>" class="levelup-btn" title="Back to commits">&larr;</a>
+    <?php endif; ?>
+  </div>
+  <div class="hl-center">
+    <?php if ($level==1): ?>
+      Repository List
+    <?php elseif ($level==2): ?>
+      <?=htmlspecialchars($repo)?>
+    <?php elseif ($level==3): ?>
+      <?=htmlspecialchars($repo)?>: <span style="font-family:monospace;"><?=htmlspecialchars($commit)?></span>
+    <?php endif; ?>
+  </div>
+  <div class="hl-right">
+    <button class="theme-switcher" id="themeBtn" title="Switch theme"><?=htmlspecialchars($theme)?> &#x25BC;</button>
+    <div class="theme-popup" id="themePopup" role="menu">
+      <?php foreach ($themes as $t => $css): ?>
+        <button class="theme-item<?php if($t==$theme)echo' selected';?>" data-theme="<?=htmlspecialchars($t)?>">
+          <?=ucfirst(htmlspecialchars($t))?>
+        </button>
+      <?php endforeach; ?>
     </div>
-    <div class="hl-center">
-        <?php if ($level==1): ?>
-            Repository List
-        <?php elseif ($level==2): ?>
-            <?=htmlspecialchars($repo)?>
-        <?php elseif ($level==3): ?>
-            <?=htmlspecialchars($repo)?>: <span style="font-family:monospace;"><?=htmlspecialchars($commit)?></span>
-        <?php endif; ?>
-    </div>
-    <div class="hl-right">
-        <div style="display:inline-block; position:relative;">
-            <button class="theme-switcher" id="themeBtn"><?=htmlspecialchars($theme)?> &#x25BC;</button>
-            <div class="theme-popup" id="themePopup" role="menu">
-                <?php foreach ($themes as $t => $css): ?>
-                    <button class="theme-item<?php if($t==$theme)echo' selected';?>" data-theme="<?=htmlspecialchars($t)?>">
-                        <?=ucfirst(htmlspecialchars($t))?>
-                    </button>
-                <?php endforeach; ?>
-            </div>
-        </div>
-    </div>
+  </div>
 </div>
 <?php if ($level==3 && isset($msg) && $msg): ?>
     <div class="subheadline"><?=htmlspecialchars($msg)?></div>
