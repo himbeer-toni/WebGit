@@ -93,20 +93,22 @@ if ($level == 1) {
     $repos = [];
     $all = scandir($repoRoot);
     $repoRootReal = realpath($repoRoot);
-    foreach ($all as $r) {
-        if ($r[0] == '.') continue;
-        $path = "$repoRoot/$r";
-        if (!is_dir($path)) continue;
-        if (is_link($path)) {
-            $target = realpath($path);
-            if ($target && strpos($target, $repoRootReal . DIRECTORY_SEPARATOR) === 0) {
-                // Skip symlinks that point within repoRoot
-                continue;
-            }
-        }
-        if (!repoExists($repoRoot, $r)) continue;
-        $repos[] = $r;
-    }
+		foreach ($all as $r) {
+			if ($r[0] == '.') continue;
+			$path = "$repoRoot/$r";
+			if (!is_dir($path)) continue;
+			if (is_link($path)) {
+					$target = realpath($path);
+					if ($target && strpos($target, $repoRootReal . DIRECTORY_SEPARATOR) === 0) {
+							// Skip symlinks that point within repoRoot
+							continue;
+					}
+			}
+			$real = realpath($path);
+			if ($real === false) continue;
+			if (!is_dir($real . '/.git')) continue;
+			$repos[] = $r;
+		}
     sort($repos, SORT_NATURAL | SORT_FLAG_CASE);
 } elseif ($level == 2 && repoExists($repoRoot, $repo)) {
     // Get commit list
