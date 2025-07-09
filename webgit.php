@@ -94,20 +94,27 @@ if ($level == 1) {
     $all = scandir($repoRoot);
     $repoRootReal = realpath($repoRoot);
 		foreach ($all as $r) {
-			if ($r[0] == '.') continue;
-			$path = "$repoRoot/$r";
-			if (!is_dir($path)) continue;
-			if (is_link($path)) {
-					$target = realpath($path);
-					if ($target && strpos($target, $repoRootReal . DIRECTORY_SEPARATOR) === 0) {
-							// Skip symlinks that point within repoRoot
-							continue;
-					}
-			}
-			$real = realpath($path);
-			if ($real === false) continue;
-			if (!is_dir($real . '/.git')) continue;
-			$repos[] = $r;
+				if ($r[0] == '.') continue;
+				$path = "$repoRoot/$r";
+				if (is_dir($path) && !is_link($path)) {
+						// Normal directory: show only if it has a .git
+						if (!is_dir($path . '/.git')) continue;
+						$repos[] = $r;
+						continue;
+				}
+				if (is_link($path)) {
+						$target = readlink($path);
+						// Skip symlinks of the form ../Something (no further slash)
+						if (preg_match('#^\.\./[^/]+$#', $target)) {
+								continue;
+						}
+						// Only show if the resolved target is a git repo
+						$real = realpath($path);
+						if ($real === false || !is_dir($real . '/.git')) continue;
+						$repos[] = $r;
+						continue;
+				}
+				// skip everything else (files, broken links, etc)
 		}
     sort($repos, SORT_NATURAL | SORT_FLAG_CASE);
 } elseif ($level == 2 && repoExists($repoRoot, $repo)) {
