@@ -1,6 +1,6 @@
 SHELL = /bin/bash
 
-PTARGETS=webgit.php
+PTARGETS= webgit.php
 REPODIR = $(HOME)/gitrepos
 XTRGOWN = pi
 XTRGPRM = 4610
@@ -16,7 +16,8 @@ POWNER  = www-data
 PGROUP  = www-data
 PSTYLES	= dark-theme light-theme webgit-layout
 
-all: php layout suidbin
+
+install: php layout suidbin
 
 php: 
 	@for n in $(PTARGETS);\
@@ -55,22 +56,4 @@ suidbin: $(XTRGSRC)
 		sudo chown $(XTRGOWN):$(XTRGGRP) $(XTARGET); \
 		sudo chmod $(XTRGPRM) $(XTARGET); \
 	fi; \
-
-OLDinstall: $(TARGETS) $(UTARGETS)
-	@for n in $(UTARGETS);\
-	do \
-	diff -q $$n $(UBINDIR)/$$n > /dev/null;\
-	if [ "$$?" != "0"	];then \
-	   echo install -m 755 -t $(UBINDIR) $$n;\
-	   install -m 755 -t $(UBINDIR) $$n;\
-	fi;\
-	done
-	@for n in $(TARGETS);\
-	do \
-	diff -q $$n $(LBINDIR)/$$n > /dev/null;\
-	if [ "$$?" != "0"	];then \
-	   echo sudo install -m 755 -t $(LBINDIR) $$n;\
-	   sudo install -m 755 -t $(LBINDIR) $$n;\
-	fi;\
-	done;\
 
