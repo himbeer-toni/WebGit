@@ -1,0 +1,228 @@
+html {
+  box-sizing: border-box;
+  font-size: 100%;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  background: var(--body-bg);
+  color: var(--body-color);
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, sans-serif;
+}
+
+#headline-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1em 2vw 0.8em 2vw;
+  min-height: 3.3em;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--headline-bg);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  gap: 1em;
+}
+
+#headline-row .hl-left,
+#headline-row .hl-center,
+#headline-row .hl-right {
+  flex: 1 1 0;
+}
+#headline-row .hl-center {
+  text-align: center;
+  font-size: 1.3em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+#headline-row .hl-left {
+  text-align: left;
+}
+#headline-row .hl-right {
+  text-align: right;
+}
+
+.levelup-btn,
+.theme-switcher {
+  display: inline-block;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  border: none;
+  padding: 0.42em 1.3em;
+  border-radius: 7px;
+  font-size: 1.09em;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.13s, transform 0.12s;
+  margin-right: 0.6em;
+  cursor: pointer;
+  box-shadow: 0 2px 4px #0002;
+}
+
+.levelup-btn:hover,
+.theme-switcher:hover {
+  background: var(--btn-bg-hover);
+  transform: scale(1.05);
+}
+
+.theme-switcher {
+  margin-right: 0;
+  margin-left: 0.6em;
+  position: relative;
+}
+
+.theme-popup {
+  display: none;
+  position: absolute;
+  top: 110%;
+  right: 0;
+  min-width: 9em;
+  background: var(--popup-bg);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 24px #0005;
+  padding: 0.4em 0;
+  border-radius: 6px;
+  z-index: 100;
+}
+
+.theme-popup.show {
+  display: block;
+}
+.theme-popup .theme-item {
+  display: block;
+  color: var(--btn-fg);
+  padding: 0.45em 1.2em;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  font-size: 1.06em;
+  cursor: pointer;
+  transition: background 0.11s;
+  border-radius: 3px;
+}
+.theme-popup .theme-item.selected {
+  font-weight: 600;
+  color: var(--btn-bg-hover);
+}
+.theme-popup .theme-item:hover {
+  background: var(--btn-bg-hover);
+  color: var(--btn-fg);
+}
+
+@media print {
+  .theme-switcher,
+  .theme-popup,
+  .levelup-btn {
+    display: none !important;
+  }
+  #headline-row {
+    border-bottom: none !important;
+  }
+}
+
+.subheadline {
+  text-align: center;
+  font-size: 1.18em;
+  margin: 2em 0 1.2em 0;
+  color: var(--subheadline-color);
+}
+
+.nav-content-layout {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  min-height: 80vh;
+}
+
+.nav-pane {
+  flex: 0 0 18em;
+  max-width: 25vw;
+  min-width: 12em;
+  background: var(--nav-bg);
+  border-right: 1px solid var(--border-color);
+  padding: 1.5em 1em 1em 1.3em;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.main-pane {
+  flex: 1 1 0;
+  padding: 2em 3vw 3em 3vw;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.git-diff {
+  background: var(--diff-bg);
+  padding: 1.1em 1.2em;
+  border-radius: 7px;
+  margin: 2em 3vw 1em 3vw;
+  font-family: 'JetBrains Mono', 'Fira Mono', 'Menlo', monospace;
+  font-size: 1.05em;
+  overflow-x: auto;
+  box-shadow: 0 0 12px #0004;
+  border: 1px solid var(--border-color);
+  line-height: 1.61;
+  word-break: break-word;
+}
+
+.git-red { color: var(--git-red);}
+.git-green { color: var(--git-green);}
+.git-yellow { color: var(--git-yellow);}
+.git-cyan { color: var(--git-cyan);}
+.git-bold { font-weight: bold; }
+
+/* Responsive layout: nav-pane hides in level-3 on small screens or portrait */
+@media (max-width: 900px), (orientation: portrait), (max-aspect-ratio: 10/16) {
+  body.level-3 .nav-pane {
+    display: none;
+  }
+  body.level-3 .main-pane {
+    max-width: 100vw;
+    padding-left: 1em;
+  }
+  body.level-3 .nav-content-layout {
+    flex-direction: column;
+  }
+  /* Make buttons fill width for easier tapping */
+  .levelup-btn,
+  .theme-switcher {
+    width: 100%;
+    margin: 0.3em 0;
+    font-size: 1.12em;
+  }
+  #headline-row {
+    flex-direction: column;
+    gap: 0.6em;
+    padding: 0.7em 2vw 0.7em 2vw;
+  }
+}
+
+/* Extra: Better scrollbars for nav-pane on desktop */
+@media (min-width: 901px) {
+  .nav-pane {
+    scrollbar-color: var(--border-color) var(--nav-bg);
+    scrollbar-width: thin;
+  }
+  .nav-pane::-webkit-scrollbar {
+    width: 8px;
+    background: var(--nav-bg);
+  }
+  .nav-pane::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 6px;
+  }
+}
+
+/* Accessibility: Focus style for buttons */
+.levelup-btn:focus,
+.theme-switcher:focus,
+.theme-popup .theme-item:focus {
+  outline: 2px solid var(--btn-bg-hover);
+  outline-offset: 2px;
+}

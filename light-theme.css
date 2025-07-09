@@ -1,0 +1,30 @@
+:root {
+  --body-bg: #fff;
+  --body-color: #222;
+  --btn-bg: #f5f5f5;
+  --btn-bg-hover: #e0e0e0;
+  --btn-fg: #222;
+  --popup-bg: #fafbfc;
+  --border-color: #d1d5da;
+  --headline-bg: #f7f7f7;
+  --subheadline-color: #888;
+  --nav-bg: #f7f7f7;
+  --diff-bg: #fbfbfb;
+  --git-red: #be1e1e;
+  --git-green: #18741a;
+  --git-yellow: #b68c00;
+  --git-cyan: #1687a7;
+  --git-bold: #111;
+  --meta-date: #666;
+  --meta-author: #3b2d64;
+  --meta-subject: #222;
+}
+
+/* Ensure theme selector button and popup items are always readable */
+.theme-switcher,
+.theme-popup .theme-item {
+  color: var(--btn-fg) !important;
+}
+.theme-popup .theme-item.selected {
+  color: var(--btn-bg-hover) !important;
+}
