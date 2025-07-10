@@ -10,6 +10,10 @@ WebGit is a lightweight PHP script for browsing local git repositories via a web
 - **Navigation**: Click to move between the list of repositories, commit history, and single commit view.
 - **Minimal dependencies**: Only requires PHP and read access to your git repositories.
 
+### Self-contained
+
+WebGit is fully self-contained: it requires only a standard PHP installation and Git on the server (plus optional CSS for themes). There are no external dependencies or required PHP extensions beyond what is typically bundled with PHP itself.
+
 ## Git Binary Selection
 
 WebGit can use a special setuid copy of the `git` binary to avoid permission issues that often occur when the webserver runs as a different user than the owner of the repositories. 
