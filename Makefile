@@ -18,10 +18,6 @@ XTRGGRP = www-data
 # - Target location for the copy
 XTARGET = $(REPODIR)/webgit
 
-# Not used below, but could be for scripts
-LBINDIR = /usr/local/bin
-UBINDIR = ~/bin
-
 # Web root for PHP and CSS
 PBINDIR = /data/www
 PSTYDIR = $(PBINDIR)/webgit-style
