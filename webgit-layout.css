@@ -14,10 +14,12 @@ body {
   font-family: system-ui, sans-serif;
 }
 
+/* --- HEADLINE ROW: single line, left/center/right --- */
 #headline-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
   padding: 1em 2vw 0.8em 2vw;
   min-height: 3.3em;
   border-bottom: 1px solid var(--border-color);
@@ -29,22 +31,28 @@ body {
 }
 
 #headline-row .hl-left,
-#headline-row .hl-center,
 #headline-row .hl-right {
-  flex: 1 1 0;
+  flex: 0 1 auto;
+  white-space: nowrap;
 }
+
 #headline-row .hl-center {
+  flex: 1 1 auto;
   text-align: center;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 1.3em;
   font-weight: 600;
   letter-spacing: 0.04em;
 }
-#headline-row .hl-left {
-  text-align: left;
-}
-#headline-row .hl-right {
-  text-align: right;
-}
+
+/* (Optional) align left/right if you ever need extra alignment tweaks */
+/*
+#headline-row .hl-left { text-align: left; }
+#headline-row .hl-right { text-align: right; }
+*/
 
 .levelup-btn,
 .theme-switcher{
@@ -70,30 +78,7 @@ body {
 }
 
 .theme-switcher {
-	  font-size: 0.83em;
-		  font-weight: 400;
-			  background: var(--btn-bg);
-				  color: var(--btn-fg);
-					  border: 1px solid var(--border-color);
-						  padding: 0.09em 0.7em 0.09em 0.7em;
-							  border-radius: 4px;
-								  box-shadow: none;
-									  opacity: 0.45;
-										  transition: background 0.13s, opacity 0.13s, border 0.13s;
-											  margin: 0;
-												  position: relative;
-													  min-width: 0;
-														  min-height: 0;
-														}
-														.theme-switcher:hover,
-														.theme-switcher:focus {
-															  opacity: 0.87;
-																  background: var(--btn-bg-hover);
-																	  border-color: var(--btn-bg-hover);
-																	}
-
-.theme-switcher {
-  font-size: 0.23em;
+  font-size: 0.83em;
   font-weight: 400;
   background: var(--btn-bg);
   color: var(--btn-fg);
@@ -103,21 +88,17 @@ body {
   box-shadow: none;
   opacity: 0.45;
   transition: background 0.13s, opacity 0.13s, border 0.13s;
-  margin: 0;
+  margin: 0 0 0 0.6em;
   position: relative;
   min-width: 0;
   min-height: 0;
 }
+
 .theme-switcher:hover,
 .theme-switcher:focus {
   opacity: 0.87;
   background: var(--btn-bg-hover);
   border-color: var(--btn-bg-hover);
-}
-.theme-switcher {
-  margin-right: 0;
-  margin-left: 0.6em;
-  position: relative;
 }
 
 .theme-switcher,
@@ -249,7 +230,7 @@ body {
     font-size: 1.12em;
   }
   #headline-row {
-    flex-direction: column;
+    /* flex-direction: column; */
     gap: 0.6em;
     padding: 0.7em 2vw 0.7em 2vw;
   }

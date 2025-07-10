@@ -181,9 +181,9 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
 <div id="headline-row">
   <div class="hl-left">
     <?php if ($level==2): ?>
-      <a href="gitweb.php" class="levelup-btn" title="Back to list">&larr;</a>
+		<a href="<?=$selfUrl?>" class="levelup-btn" title="Back to list">&larr;</a>
     <?php elseif ($level==3): ?>
-      <a href="gitweb.php?repo=<?=urlencode($repo)?>" class="levelup-btn" title="Back to commits">&larr;</a>
+		<a href="<?=$selfUrl?>" class="levelup-btn" title="Back to commits">&larr;</a>
     <?php endif; ?>
   </div>
   <div class="hl-center">
@@ -223,7 +223,7 @@ if ($level == 1): ?>
             <ul style="list-style:none; padding:0; margin:0;">
             <?php foreach($repos as $r): ?>
                 <li style="margin-bottom:1.1em;">
-            		<a href="webgit.php?repo=<?=urlencode($r)?>" class="levelup-btn" style="font-size:1.08em;">
+								<a href="<?=$selfUrl?>?repo=<?=urlencode($r)?>" class="levelup-btn" style="font-size:1.08em;">
                         <?=htmlspecialchars($r)?>
                     </a>
                 </li>
@@ -243,7 +243,7 @@ elseif ($level == 2 && !$notfound): ?>
             <?php foreach ($commits as $c): ?>
                 <div class="commit-row">
                     <div class="commit-meta">
-                    <a href="webgit.php?repo=<?=urlencode($repo)?>&commit=<?=htmlspecialchars($c['hash'])?>" class="levelup-btn commit-hash" style="font-family:monospace; font-size:1em;">
+										<a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=htmlspecialchars($c['hash'])?>" class="levelup-btn commit-hash" style="font-family:monospace; font-size:1em;">
                             <?=htmlspecialchars($c['hash'])?>
                         </a>
                         <span class="commit-date"><?=htmlspecialchars($c['date'])?></span>
@@ -266,7 +266,7 @@ elseif ($level == 3 && !$notfound): ?>
             <ul style="list-style:none; padding:0;">
             <?php foreach ($commits as $c): ?>
                 <li style="margin-bottom:0.39em;">
-                    <a href="webgit.php?repo=<?=urlencode($repo)?>&commit=<?=$c['hash']?>" class="levelup-btn" style="font-family:monospace; font-size:1em;<?=($c['hash']==$commit?' background:var(--btn-bg-hover);':'')?>">
+										<a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=$c['hash']?>" class="levelup-btn" style="font-family:monospace; font-size:1em;<?=($c['hash']==$commit?' background:var(--btn-bg-hover);':'')?>">
                         <?=htmlspecialchars($c['hash'])?>
                     </a>
                 </li>
@@ -287,7 +287,7 @@ else: ?>
         <h2>Not found</h2>
         <div>The page you wanted does not exist or is not available.</div>
         <div style="margin-top:2em;">
-        <a href="webgit.php" class="levelup-btn">Go to Repository List</a>
+				<a href="<?=$selfUrl?>" class="levelup-btn">Go to Repository List</a>
         </div>
     </div>
 <?php endif; ?>
