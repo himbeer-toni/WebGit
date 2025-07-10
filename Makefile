@@ -35,7 +35,7 @@ install: php layout suidbin
 devinstall: php layout
 
 # Install PHP and CSS files if changed
-php: 
+# php: 
 	@for n in $(PTARGETS);\
 	do \
 	sudo diff -q $$n $(PBINDIR)/$$n > /dev/null;\
@@ -74,3 +74,5 @@ suidbin: $(XTRGSRC)
 		sudo chown $(XTRGOWN):$(XTRGGRP) $(XTARGET); \
 		sudo chmod $(XTRGPRM) $(XTARGET); \
 	fi;
+
+.PHONY: install devinstall php layout suidbin
