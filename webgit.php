@@ -8,7 +8,16 @@ error_reporting(E_ALL);
 $repoRoot = '/home/pi/gitrepos'; // All git repos in this directory
 $styleDir = __DIR__ . '/webgit-style';
 $styleWebPath = '/webgit-style'; // Web-accessible path (relative to script location)
-$gitBin   = '/home/pi/gitrepos/webgit'; // Use your setuid git copy here
+// ----------- GIT BINARY SELECTION -----------
+$setuidGit = '/home/pi/gitrepos/webgit'; // path as before
+$systemGit = '/usr/bin/git'; // fallback
+if (is_executable($setuidGit)) {
+    $gitBin = $setuidGit;
+} elseif (is_executable($systemGit)) {
+    $gitBin = $systemGit;
+} else {
+    $gitBin = 'git'; // rely on PATH
+}
 $selfUrl = basename(__FILE__);
 // ----------- UTILS -----------
 function themesAvailable($styleDir) {
@@ -179,13 +188,13 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
 </head>
 <body class="level-<?=$level?>">
 <div id="headline-row">
-  <div class="hl-left">
-    <?php if ($level==2): ?>
-		<a href="<?=$selfUrl?>" class="levelup-btn" title="Back to list">&larr;</a>
-    <?php elseif ($level==3): ?>
-		<a href="<?=$selfUrl?>" class="levelup-btn" title="Back to commits">&larr;</a>
-    <?php endif; ?>
-  </div>
+	<div class="hl-left">
+  <?php if ($level==2): ?>
+    <a href="<?=$selfUrl?>" class="levelup-btn" title="Back to list">&larr;</a>
+  <?php elseif ($level==3): ?>
+    <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>" class="levelup-btn" title="Back to commits">&larr;</a>
+  <?php endif; ?>
+</div>
   <div class="hl-center">
     <?php if ($level==1): ?>
       Repository List
