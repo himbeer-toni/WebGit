@@ -32,6 +32,8 @@ PSTYLES	= dark-theme light-theme webgit-layout
 # Main install target: install PHP, layout, and special git binary
 install: php layout suidbin
 
+devinstall: php layout
+
 # Install PHP and CSS files if changed
 php: 
 	@for n in $(PTARGETS);\

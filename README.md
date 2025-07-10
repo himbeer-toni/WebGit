@@ -24,17 +24,38 @@ The Makefile includes a target to build and install the setuid git binary with s
 ## Installation
 
 1. **Clone or download this repository.**
-2. **Install files** to your web server root using the provided Makefile:
-   ```sh
-   make install
-   ```
-   This copies `webgit.php` and associated CSS to `/data/www` (edit `PBINDIR`/`PSTYDIR` as needed).
-
-3. **Set up the setuid git binary** (recommended for multi-user or production setups):
-   - The Makefile will create `/home/pi/gitrepos/webgit` as a copy of `/usr/bin/git`, owned by `pi:www-data` with mode `4610`.
+2. **cloned setuid git binary** (recommended for multi-user or production setups):
+   - The Makefile can create `/home/pi/gitrepos/webgit` as a copy of `/usr/bin/git`, owned by `pi:www-data` with mode `4610`.
    - Adjust the `REPODIR`, `XTRGOWN`, `XTRGGRP`, `XTRGSRC`, and `XTARGET` variables in the Makefile if your paths or users differ.
+3. Run make to get everything to where it belongs
+   - Use
+   ```
+   make
+   ```
+   for a production environment where you **do** need a setuid-clone.
+   - Use
+   ```
+   make devinstall
+   ```
+   for a dev/test environment where you **do not** need a setuid-clone.
 
 4. **Point your web browser to** `http://yourserver/webgit.php`.
+5. When the git-binary on your system
+    - has been updated on your system or 
+    - even when you doubt it could have been updated
+    - then just use
+   ```
+   make
+   ```
+   again, as it will re-create the setuid-copy only
+   if the original binary was updated.[^1]
+   [^1]:If you're paranoid to have an updated setuid-copy whenever the is a new one, you could set up a cronjob running `make suidbin` as frequent as you wish.
+
+3. **Install files** to your web server root using the provided Makefile:
+   ```sh
+   make (or make install)
+   ```
+   This copies `webgit.php` and associated CSS to `/data/www` (edit `PBINDIR`/`PSTYDIR` as needed).
 
 ## Usage
 
