@@ -1,8 +1,8 @@
 <?php
-// ----------- DEBUGGING ----------- FIXME (f.prod.)
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// ----------- DEBUGGING --------- disabled by comment
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
 // echo "<pre>" . __FILE__ . "</pre>";
 // ----------- CONFIGURATION -----------
 $repoRoot = '/home/pi/gitrepos'; // All git repos in this directory
@@ -47,7 +47,11 @@ function setThemeHeader($themes, $theme, $styleWebPath) {
     }
 }
 function sanitizeRepo($repo) {
-    return preg_replace('/[^\w.-]/', '', $repo);
+		if ( basename($repo) != $repo) {
+			return "Do not even think of trying to trick me!";
+		} else {
+			return preg_replace('/[^\w.-]/', '', $repo);
+		}
 }
 function repoExists($repoRoot, $repo) {
     return is_dir("$repoRoot/$repo/.git");
@@ -83,6 +87,10 @@ function ansi2html($ansi) {
 // ----------- ROUTING LOGIC -----------
 $repo = isset($_GET['repo']) ? sanitizeRepo($_GET['repo']) : null;
 $commit = isset($_GET['commit']) ? preg_replace('/[^0-9a-f]/i', '', $_GET['commit']) : null;
+$commit = isset($_GET['commit']) ? $_GET['commit'] : null;
+if (($commit != '') && (!preg_match('/^[0-9a-f]+$/', $commit))) {
+	    $commit = "!$commit is invalid!";
+}
 $themes = themesAvailable($styleDir);
 $theme = getTheme();
 
