@@ -1,4 +1,16 @@
 <?php
+##
+# Author: Himbeertoni
+# Email: Toni.Himbeer@fn.de
+# Github: https://www.github.com/himbeer-toni
+# 
+# This script is available for
+# public use under GPL V3 (see
+# https://www.gnu.org/licenses/gpl-3.0.en.html )
+# 
+# ©2025 Himbeertoni
+# 
+##
 // ----------- DEBUGGING --------- disabled by comment
 // ini_set('display_errors', 1);
 // ini_set('display_startup_errors', 1);
