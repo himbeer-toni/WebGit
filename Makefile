@@ -58,7 +58,7 @@ phpadapt:
 	@# any ONE character instead of the dollar.
 	@# That works because the code does not
 	@# contain another matching line
-	@sed -i.bak -E "s#(^.{1}repoRoot = ).*;(.*)#\1'$(REPODIR)';\2#" GitPeek.php | grep /home | less
+	@sed -i.bak -E "s#(^.{1}repoRoot = ).*;(.*)#\1'$(REPODIR)';\2#" GitPeek.php
 
 comment:
 	# $repoRoot = '/home/pi/gitrepos'; // All git repos in this directory
@@ -69,7 +69,7 @@ php: phpadapt
 	do \
 	sudo diff -q $$n $(PBINDIR)/$$n > /dev/null;\
 	if [ "$$?" != "0" ];then \
-     echo sudo installing in $(PBINDIR): $$n;\
+     echo installing in $(PBINDIR): $$n;\
 	   sudo install -o $(POWNER) -g $(PGROUP) -m 500 -t $(PBINDIR) $$n;\
 	fi;\
 	done;\
@@ -77,7 +77,7 @@ php: phpadapt
 	do \
 	sudo diff -q $$n.css $(PSTYDIR)/$$n.css > /dev/null;\
 	if [ "$$?" != "0" ];then \
-      echo sudo installing in $(PSTYDIR): $$n.css;\
+      echo installing in $(PSTYDIR): $$n.css;\
 	   sudo install -o $(POWNER) -g $(PGROUP) -m 400 -t $(PSTYDIR) $$n.css;\
 	fi;\
 	done;
@@ -86,7 +86,7 @@ php: phpadapt
 layout: layout.css
 	@sudo diff -q layout.css $(PSTYDIR)/layout.css > /dev/null; \
 	if [ "$$?" != "0" ];then \
-    echo sudo installing in $(PSTYDIR)/$(PRODUCT)-style: style layout.css;\
+    echo installing in $(PSTYDIR)/$(PRODUCT)-style: style layout.css;\
 		sudo install -o $(POWNER) -g $(PGROUP) -m 400 -t $(PBINDIR)/$(PRODUCT)-style  layout.css; \
 	fi; \
 
