@@ -3,9 +3,6 @@ SHELL = /bin/bash
 gitTarget := $(firstword $(MAKECMDGOALS))
 cmdArg1 := $(word 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
 
-# To get around an escaping challenge
-DOLLAR = $
-
 # Targets
 PHONY = install devinstall php layout suidbin rebrand phpadapt
 
