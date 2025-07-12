@@ -1,7 +1,16 @@
 SHELL = /bin/bash
+# Command := $(firstword $(MAKECMDGOALS))
+gitTarget := $(firstword $(MAKECMDGOALS))
+cmdArg1 := $(word 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+
+# Targets
+PHONY = install devinstall php layout suidbin rebrand
+
+# Product name - can be changed using make rebrand
+PRODUCT = GitPeek
 
 # Main file(s) to install (the PHP frontend)
-PTARGETS= webgit.php
+PTARGETS= $(PRODUCT).php
 
 # Directory containing all git repositories
 REPODIR = $(HOME)/gitrepos
@@ -16,18 +25,18 @@ XTRGSRC = /usr/bin/git
 # - Group (webserver group)
 XTRGGRP = www-data
 # - Target location for the copy
-XTARGET = $(REPODIR)/webgit
+XTARGET = $(REPODIR)/git4$(PRODUCT)
 
 # Web root for PHP and CSS
 PBINDIR = /data/www
-PSTYDIR = $(PBINDIR)/webgit-style
+PSTYDIR = $(PBINDIR)/$(PRODUCT)-style
 
 # Target owner/group for installed files
 POWNER  = www-data
 PGROUP  = www-data
 
 # Stylesheets to install (without .css)
-PSTYLES	= dark-theme light-theme webgit-layout
+PSTYLES	= Dark-theme Light-theme layout
 
 # Main install target: install PHP, layout, and special git binary
 install: php layout suidbin
@@ -35,12 +44,12 @@ install: php layout suidbin
 devinstall: php layout
 
 # Install PHP and CSS files if changed
-# php: 
+php: 
 	@for n in $(PTARGETS);\
 	do \
 	sudo diff -q $$n $(PBINDIR)/$$n > /dev/null;\
 	if [ "$$?" != "0" ];then \
-      echo sudo installing in $(PBINDIR): $$n;\
+     echo sudo installing in $(PBINDIR): $$n;\
 	   sudo install -o $(POWNER) -g $(PGROUP) -m 500 -t $(PBINDIR) $$n;\
 	fi;\
 	done;\
@@ -54,12 +63,12 @@ devinstall: php layout
 	done;
 
 # Install only the main layout CSS if changed
-layout: webgit-layout.css
-	@sudo diff -q webgit-layout.css $(PSTYDIR)/webgit-layout.css > /dev/null; \
+layout: layout.css
+	@sudo diff -q layout.css $(PSTYDIR)/layout.css > /dev/null; \
 	if [ "$$?" != "0" ];then \
-    echo sudo installing in $(PSTYDIR)/webgit-style: style webgit-layout.css;\
-		sudo install -o $(POWNER) -g $(PGROUP) -m 400 -t $(PBINDIR)/webgit-style  webgit-layout.css; \
-	fi;
+    echo sudo installing in $(PSTYDIR)/$(PRODUCT)-style: style layout.css;\
+		sudo install -o $(POWNER) -g $(PGROUP) -m 400 -t $(PBINDIR)/$(PRODUCT)-style  layout.css; \
+	fi; \
 
 # Copy and set permissions for a setuid git binary for safe web use
 suidbin: $(XTRGSRC)
@@ -73,6 +82,33 @@ suidbin: $(XTRGSRC)
 		sudo cp $(XTRGSRC) $(XTARGET); \
 		sudo chown $(XTRGOWN):$(XTRGGRP) $(XTARGET); \
 		sudo chmod $(XTRGPRM) $(XTARGET); \
-	fi;
+	fi;\
 
-.PHONY: install devinstall php layout suidbin
+rebrand:
+	@prvprd=$$(awk '/^PRODUCT = *(.+)/{print $$3}' Makefile); \
+	[ -z "$(cmdArg1)" ] && echo "fatal: cannot rebrand without a new name use \"make rebrand <new-name>\"" && exit 7; \
+	[ ! -e $$prvprd.php ] && echo "fatal: cannot rebrand absent $$prvprd.php - check variable \$$(PRODUCT) in Makefile" && exit 8; \
+	echo "rebranding: $$prvprd -> $(cmdArg1)"; \
+	mv $(REPODIR)/git4$(PRODUCT) $(REPODIR)/git4$(cmdArg1) && \
+	sudo mv $(PSTYDIR)/ $(PBINDIR)/$(cmdArg1)-style/ && \
+	mv $$prvprd.php $(cmdArg1).php && \
+	sed -i.bak -e 's/^PRODUCT =.*/PRODUCT = $(cmdArg1)/' Makefile && \
+	echo "done. To install the new files in your webserver run \"make\"."; \
+
+# Rebrand also requires ourself to be updated
+
+# Catch all and ignore undefined targets
+# to enable "make rebrand <new-name>"
+%:
+	@if [[ " $(PHONY) " =~ " $(gitTarget) " ]]; then \
+		true; \
+	else \
+		echo "P:$(PHONY):"; \
+		echo "t:$(gitTarget):"; \
+		echo "make: *** no rule to create „$(gitTarget)“.  End."; \
+		exit 2; \
+	fi; \
+
+#	echo "make: *** no rule to create \„$(gitTarget)\“.  End.
+
+.PHONY: $(PHONY)
