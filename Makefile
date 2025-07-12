@@ -55,7 +55,7 @@ phpadapt:
 	@# any ONE character instead of the dollar.
 	@# That works because the code does not
 	@# contain another matching line
-	@sed -i.bak -E "s#(^.{1}repoRoot = ).*;(.*)#\1'$(REPODIR)';\2#" GitPeek.php
+	@sed -i.bak -E "s#(^.{1}repoRoot = ).*;(.*)#\1'$(REPODIR)';\2#" $(PRODUCT).php
 
 comment:
 	# $repoRoot = '/home/pi/gitrepos'; // All git repos in this directory
