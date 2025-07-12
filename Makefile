@@ -3,8 +3,11 @@ SHELL = /bin/bash
 gitTarget := $(firstword $(MAKECMDGOALS))
 cmdArg1 := $(word 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
 
+# To get around an escaping challenge
+DOLLAR = $
+
 # Targets
-PHONY = install devinstall php layout suidbin rebrand
+PHONY = install devinstall php layout suidbin rebrand phpadapt
 
 # Product name - can be changed using make rebrand
 PRODUCT = GitPeek
@@ -43,8 +46,25 @@ install: php layout suidbin
 
 devinstall: php layout
 
+# Adapt whatever $repoRoot is defined in the PHP
+# to reflect this Makefile's $(REPODIR)
+# (so much for consistent naming ;-)
+#sed -i.bak -E "s#($$repoRoot = ).*;(.*)#\1$(REPODIR);\2#" GitPeek.php
+phpadapt:
+	@# If someone can tell me how match ^$repoRoot
+	@# without getting in deep yoghurt with
+	@# dollar quoting, please drop me a note
+	@# Here I'm matching ^.{1}repoRoot which includes
+	@# any ONE character instead of the dollar.
+	@# That works because the code does not
+	@# contain another matching line
+	@sed -i.bak -E "s#(^.{1}repoRoot = ).*;(.*)#\1'$(REPODIR)';\2#" GitPeek.php | grep /home | less
+
+comment:
+	# $repoRoot = '/home/pi/gitrepos'; // All git repos in this directory
+
 # Install PHP and CSS files if changed
-php: 
+php: phpadapt
 	@for n in $(PTARGETS);\
 	do \
 	sudo diff -q $$n $(PBINDIR)/$$n > /dev/null;\
