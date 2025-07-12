@@ -25,6 +25,45 @@ WebGit can use a special setuid copy of the `git` binary to avoid permission iss
 
 The Makefile includes a target to build and install the setuid git binary with suitable ownership and permissions.
 
+## Customizing for Your System
+
+### Quick Start
+
+In most cases, **the only variable you need to edit in the Makefile is `REPODIR`**, which defines where your Git repositories are stored.  
+For example:
+```makefile
+REPODIR = /home/pi/gitrepos
+```
+Set this to the directory containing your repositories.
+
+> **Tip:** Unless your web server uses a nonstandard document root, you do **not** need to change other settings.
+
+### Web Server Root (PBINDIR)
+
+By default, WebGit installs the PHP frontend and style assets to:
+```makefile
+PBINDIR = /data/www
+```
+If your server uses a different web root (e.g., `/var/www/html` for a standard Apache2 setup), change `PBINDIR` accordingly:
+```makefile
+PBINDIR = /var/www/html
+```
+Other related paths (like `PSTYDIR` for styles) are automatically set based on `PBINDIR`.
+
+### Rebranding
+
+You can easily rename the tool (including all scripts, CSS, and the setuid binary) by running:
+```sh
+make rebrand <new-name>
+```
+No manual renaming or file editing is required—everything is handled automatically.
+
+---
+
+**Summary:**  
+- Only `REPODIR` must be edited for most setups.  
+- Adjust `PBINDIR` only if your web root is not `/data/www`.  
+- Use `make rebrand <new-name>` to change the tool’s name everywhere, without manual steps.
 ## Installation
 
 1. **Clone or download this repository.**
