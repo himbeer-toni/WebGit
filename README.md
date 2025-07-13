@@ -105,6 +105,14 @@ No manual renaming or file editing is required—everything is handled automatic
 - This tool is intended for use on local or trusted networks only.
 - The setuid git binary is a potential security risk if misconfigured. Make sure only trusted users have access to the web server and repository directories.
 
+## Want to see a demo?
+
+Just visit [https://bkpages.de/GitPeekDemo.php](https://bkpages.de/GitPeekDemo.php).
+It will show 
+(a copy of) my local repos (including the one you
+are just viewing) that 
+were pushed to github.
+
 ---
 
 ## Appendix: Understanding Colored Git Diff Output
