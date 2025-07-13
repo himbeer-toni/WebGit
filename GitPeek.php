@@ -141,8 +141,13 @@ if ($level == 1) {
 						// Only show if the resolved target is a git repo
 						$real = realpath($path);
 						if ($real === false || !is_dir($real . '/.git')) continue;
+						# Do NOT add if it links to a dir in
+						# $repoRoot, but do add if link points
+						# outside $repoRoot
+						if (str_contains(substr($real,strlen($repoRoot)+1),'/') === false) continue;
+						# Came here it must be a link to sth.
+						# OUTSIDE of $repoRoot, so add it
 						$repos[] = $r;
-						continue;
 				}
 				// skip everything else (files, broken links, etc)
 		}
@@ -198,7 +203,7 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>GitWeb<?php
+		<title><?=$selfName?><?php
         if ($level==2 && $repo) echo ': '.htmlspecialchars($repo);
         if ($level==3 && $repo && $commit) echo ': '.htmlspecialchars($repo).' '.htmlspecialchars($commit);
     ?></title>
