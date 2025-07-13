@@ -1,6 +1,6 @@
-# WebGit
+# GitPeek
 
-WebGit is a lightweight PHP script for browsing local git repositories via a web browser. It provides commit history, commit diffs (with color highlighting), and basic navigation, designed for self-hosting on a local or private server.
+GitPeek is a lightweight PHP script for browsing local git repositories via a web browser. It provides commit history, commit diffs (with color highlighting), and basic navigation, designed for self-hosting on a local or private server.
 
 ## Features
 
@@ -12,14 +12,14 @@ WebGit is a lightweight PHP script for browsing local git repositories via a web
 
 ### Self-contained
 
-WebGit is fully self-contained: it requires only a standard PHP installation and Git on the server (plus optional CSS for themes). There are no external dependencies or required PHP extensions beyond what is typically bundled with PHP itself.
+GitPeek is fully self-contained: it requires only a standard PHP installation and Git on the server (plus optional CSS for themes). There are no external dependencies or required PHP extensions beyond what is typically bundled with PHP itself.
 
 ## Git Binary Selection
 
-WebGit can use a special setuid copy of the `git` binary to avoid permission issues that often occur when the webserver runs as a different user than the owner of the repositories. 
+GitPeek can use a special setuid copy of the `git` binary to avoid permission issues that often occur when the webserver runs as a different user than the owner of the repositories. 
 
-- **If a setuid git binary (default `/home/pi/gitrepos/webgit`) exists and is executable, WebGit will use it.**
-- **If it does not exist, WebGit will fall back to the system git (`/usr/bin/git` or `git` in `$PATH`).**
+- **If a setuid git binary (default `/home/pi/gitrepos/webgit`) exists and is executable, GitPeek will use it.**
+- **If it does not exist, GitPeek will fall back to the system git (`/usr/bin/git` or `git` in `$PATH`).**
 
 > **Note:** In most real-world setups, a setuid git binary is required to allow the web server (often running as `www-data`) to access repositories owned by another user (e.g., `pi`). Without it, you may encounter permission errors or git refusing to operate due to "dubious ownership." For development or single-user installations where the web server and repositories share ownership, the system git may suffice.
 
@@ -40,7 +40,7 @@ Set this to the directory containing your repositories.
 
 ### Web Server Root (PBINDIR)
 
-By default, WebGit installs the PHP frontend and style assets to:
+By default, GitPeek installs the PHP frontend and style assets to:
 ```makefile
 PBINDIR = /data/www
 ```
@@ -117,7 +117,7 @@ were pushed to github.
 
 ## Appendix: Understanding Colored Git Diff Output
 
-WebGit displays git diffs with color highlights for clarity, closely matching standard `git diff` output. Here’s what you may see:
+GitPeek displays git diffs with color highlights for clarity, closely matching standard `git diff` output. Here’s what you may see:
 
 ### Diff Output Components
 
@@ -172,7 +172,7 @@ index 1234567..89abcd0 100644
 
 ### Notes
 
-- The coloring is handled by WebGit’s CSS and PHP, using `<span>` tags for semantic highlighting.
+- The coloring is handled by GitPeek’s CSS and PHP, using `<span>` tags for semantic highlighting.
 - This makes it easier to read and understand changes at a glance, especially on larger diffs.
 - Only the main content of the `git diff` is shown; binary files and non-text changes may appear as messages (yellow).
 
