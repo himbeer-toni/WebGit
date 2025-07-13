@@ -4,7 +4,7 @@ gitTarget := $(firstword $(MAKECMDGOALS))
 cmdArg1 := $(word 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
 
 # Targets
-PHONY = install devinstall php layout suidbin rebrand phpadapt
+PHONY = install devinstall php layout suidbin rebrand phpadapt readme
 
 # Product name - can be changed using make rebrand
 PRODUCT = GitPeek
@@ -39,9 +39,9 @@ PGROUP  = www-data
 PSTYLES	= Dark-theme Light-theme layout
 
 # Main install target: install PHP, layout, and special git binary
-install: php layout suidbin
+install: php layout suidbin readme
 
-devinstall: php layout
+devinstall: php layout readme
 
 # Adapt whatever $repoRoot is defined in the PHP
 # to reflect this Makefile's $(REPODIR)
@@ -57,8 +57,12 @@ phpadapt:
 	@# contain another matching line
 	@sed -i.bak -E "s#(^.{1}repoRoot = ).*;(.*)#\1'$(REPODIR)';\2#" $(PRODUCT).php
 
-comment:
-	# $repoRoot = '/home/pi/gitrepos'; // All git repos in this directory
+# This creates a README.m4 with the actual $(PRODUCT)
+# in the text. 
+# Must be called whenever a README.in is edited
+readme: README.in
+	@sed -e 's/PRODUCT/$(PRODUCT)/g' README.in > README.md
+	@git commit -m "new version generated - README.in changed" README.md
 
 # Install PHP and CSS files if changed
 php: phpadapt
@@ -101,7 +105,7 @@ suidbin: $(XTRGSRC)
 		sudo chmod $(XTRGPRM) $(XTARGET); \
 	fi;\
 
-rebrand:
+rebrand: readme
 	@prvprd=$$(awk '/^PRODUCT = *(.+)/{print $$3}' Makefile); \
 	[ -z "$(cmdArg1)" ] && echo "fatal: cannot rebrand without a new name use \"make rebrand <new-name>\"" && exit 7; \
 	[ ! -e $$prvprd.php ] && echo "fatal: cannot rebrand absent $$prvprd.php - check variable \$$(PRODUCT) in Makefile" && exit 8; \
