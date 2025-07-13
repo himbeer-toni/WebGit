@@ -18,7 +18,7 @@ GitPeek is fully self-contained: it requires only a standard PHP installation an
 
 GitPeek can use a special setuid copy of the `git` binary to avoid permission issues that often occur when the webserver runs as a different user than the owner of the repositories. 
 
-- **If a setuid git binary (default `/home/pi/gitrepos/git4GitPeek`) exists and is executable, GitPeek will use it.**
+- **If a setuid git binary (default `<your-repodir>/git4GitPeek`) exists and is executable, GitPeek will use it.**
 - **If it does not exist, GitPeek will fall back to the system git (`/usr/bin/git` or `git` in `$PATH`).**
 
 > **Note:** In most real-world setups, a setuid git binary is required to allow the web server (often running as `www-data`) to access repositories owned by another user (e.g., `pi`). Without it, you may encounter permission errors or git refusing to operate due to "dubious ownership." For development or single-user installations where the web server and repositories share ownership, the system git may suffice.
@@ -68,7 +68,7 @@ No manual renaming or file editing is required—everything is handled automatic
 
 1. **Clone or download this repository.**
 2. **cloned setuid git binary** (recommended for multi-user or production setups):
-   - The Makefile can create `/home/pi/gitrepos/git4GitPeek` as a copy of `/usr/bin/git`, owned by `pi:www-data` with mode `4610`.
+   - The Makefile can create `<your-repodir>/git4GitPeek` as a copy of `/usr/bin/git`, owned by `pi:www-data` with mode `4610`.
    - Adjust the `REPODIR`, `XTRGOWN`, `XTRGGRP`, `XTRGSRC`, and `XTARGET` variables in the Makefile if your paths or users differ.
 3. Run make to get everything to where it belongs
    - for a **production environment** where you **do** need a setuid-clone.
