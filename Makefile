@@ -60,7 +60,9 @@ phpadapt:
 # This creates a README.m4 with the actual $(PRODUCT)
 # in the text. 
 # Must be called whenever a README.in is edited
-readme: README.in
+readme: README.md
+
+README.md: README.in
 	@sed -e 's/PRODUCT/$(PRODUCT)/g' README.in > README.md
 	@git commit -m "new version generated - README.in changed" README.md
 
