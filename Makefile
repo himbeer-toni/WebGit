@@ -36,7 +36,7 @@ POWNER  = www-data
 PGROUP  = www-data
 
 # Stylesheets to install (without .css)
-PSTYLES	= Dark-theme Light-theme layout
+PSTYLES	= Dark-theme Light-theme layout Raspberry-theme
 
 # Main install target: install PHP, layout, and special git binary
 install: php layout suidbin readme
@@ -66,7 +66,6 @@ README.md: README.in
 	@sed -e 's/PRODUCT/$(PRODUCT)/g' README.in > README.md
 	@git commit -m "new version generated - README.in changed" README.md
 
-# Install PHP and CSS files if changed
 php: phpadapt
 	@for n in $(PTARGETS);\
 	do \
