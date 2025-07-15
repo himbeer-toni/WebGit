@@ -35,7 +35,7 @@ $selfUrl = basename(__FILE__);
 
 
 // Load and sort the font list
-$fontFile = __DIR__ . '/$(PRODUCT)-style/fontdata.txt';
+$fontFile = __DIR__ . "/$selfName-style/fontdata.txt";
 $fonts = [];
 if (file_exists($fontFile)) {
     $fonts = array_filter(array_map('trim', file($fontFile)));
@@ -132,20 +132,17 @@ if (($commit != '') && (!preg_match('/^[0-9a-f]+$/', $commit))) {
 $themes = themesAvailable($styleDir);
 $theme = getTheme();
 
-if (!$repo) {
-    $level = 1;
+if (isset($_GET['fonts'])) {
+	    $level = 4;
+} else if (!$repo) {
+	    $level = 1;
 } else if ($repo && !$commit) {
-    $level = 2;
+	    $level = 2;
 } else if ($repo && $commit) {
-    $level = 3;
+	    $level = 3;
 } else {
-		if (isset($_GET['fonts'])) {
-				$level = 4;
-		} else {
-				$level = 1;
-		}
+	    $level = 1;
 }
-
 // ----------- DATA FETCHING -----------
 if ($level == 1) {
     // List all repos, skipping symlinks to dirs within $repoRoot
@@ -345,6 +342,36 @@ elseif ($level == 3 && !$notfound): ?>
             <div class="git-diff"><?=ansi2html($diff)?></div>
         </div>
     </div>
+
+
+
+<?php elseif ($level == 4): 
+// Font-Selector
+?>
+    <div class="main-pane">
+      <h2>Font Selector</h2>
+      <form onsubmit="return false;">
+        <label for="fontSelect">Choose a font:</label>
+        <select id="fontSelect" onchange="setFontCookie(this.value)">
+            <?php foreach ($fonts as $font): ?>
+                <option value="<?= htmlspecialchars($font) ?>"
+                    <?= $appFont === $font ? 'selected' : '' ?>
+                    style="font-family:<?= htmlspecialchars($font) ?>,sans-serif;">
+                    <?= htmlspecialchars($font) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+        <div style="margin-top:1em;">
+            <span style="font-family:<?= htmlspecialchars($appFont) ?>,sans-serif;font-size:1.2em;">
+                Preview: The quick brown fox jumps over the lazy dog.
+            </span>
+        </div>
+      </form>
+    </div>
+
+
+
+
 <?php
 // Not found
 else: ?>
