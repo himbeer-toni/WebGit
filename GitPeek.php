@@ -235,6 +235,7 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
     ?></title>
     <?php setThemeHeader($themes, $theme, $styleWebPath); ?>
     <!-- Main layout CSS, after theme -->
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans|Montserrat|Lobster|Fira+Mono|Source+Serif+Pro&display=swap">
     <link rel="stylesheet" href="<?=$styleWebPath?>/layout.css" id="layoutcss">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
