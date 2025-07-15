@@ -42,9 +42,9 @@ PSTYLES	= Dark-theme Light-theme layout
 FONTLIST=fontdata.txt
 
 # Main install target: install PHP, layout, and special git binary
-install: php layout suidbin readme
+install: devinstall suidbin
 
-devinstall: php layout readme
+devinstall: php layout readme fontdata
 
 # Adapt whatever $repoRoot is defined in the PHP
 # to reflect this Makefile's $(REPODIR)
