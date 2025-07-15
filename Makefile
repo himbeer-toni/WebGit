@@ -4,7 +4,7 @@ gitTarget := $(firstword $(MAKECMDGOALS))
 cmdArg1 := $(word 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
 
 # Targets
-PHONY = install devinstall php layout suidbin rebrand phpadapt readme
+PHONY = install devinstall php layout suidbin rebrand phpadapt readme fontdata
 
 # Product name - can be changed using make rebrand
 PRODUCT = GitPeek
@@ -37,6 +37,9 @@ PGROUP  = www-data
 
 # Stylesheets to install (without .css)
 PSTYLES	= Dark-theme Light-theme layout Raspberry-theme
+
+# Font list
+FONTLIST=fontdata.txt
 
 # Main install target: install PHP, layout, and special git binary
 install: php layout suidbin readme
@@ -79,11 +82,20 @@ php: phpadapt
 	do \
 	sudo diff -q $$n.css $(PSTYDIR)/$$n.css > /dev/null;\
 	if [ "$$?" != "0" ];then \
-      echo installing in $(PSTYDIR): $$n.css;\
+     echo installing in $(PSTYDIR): $$n.css;\
 	   sudo install -o $(POWNER) -g $(PGROUP) -m 400 -t $(PSTYDIR) $$n.css;\
 	fi;\
 	done;
 
+# Install font list
+fontdata: $(FONTLIST)
+	@sudo diff -q $(FONTLIST) $(PSTYDIR)/$(FONTLIST) > /dev/null; \
+	if [ "$$?" != "0" ];then \
+    echo installing in $(PSTYDIR)/$(PRODUCT)-style: style $(FONTLIST); \
+		sudo install -o $(POWNER) -g $(PGROUP) -m 400 -t $(PBINDIR)/$(PRODUCT)-style  $(FONTLIST); \
+	fi; \
+
+# Copy and set permissions for a setuid git binary for safe web use
 # Install only the main layout CSS if changed
 layout: layout.css
 	@sudo diff -q layout.css $(PSTYDIR)/layout.css > /dev/null; \
