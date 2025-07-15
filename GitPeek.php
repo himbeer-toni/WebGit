@@ -32,6 +32,31 @@ if (is_executable($setuidGit)) {
     $gitBin = 'git'; // rely on PATH
 }
 $selfUrl = basename(__FILE__);
+
+
+// Load and sort the font list
+$fontFile = __DIR__ . '/$(PRODUCT)-style/fontdata.txt';
+$fonts = [];
+if (file_exists($fontFile)) {
+    $fonts = array_filter(array_map('trim', file($fontFile)));
+    natcasesort($fonts);
+    $fonts = array_values($fonts);
+}
+
+// Default font is the first in the sorted list
+$defaultFont = $fonts[0] ?? 'sans-serif';
+
+// Check for user-selected font in cookie (must be in list)
+$appFont = $defaultFont;
+if (isset($_COOKIE['appFont']) && in_array($_COOKIE['appFont'], $fonts, true)) {
+    $appFont = $_COOKIE['appFont'];
+}
+
+/* Helper: Use $appFont in your page's CSS
+	Example: 
+<body style="font-family: < ? = htmlspecialchars($appFont) ? >, sans-serif;">
+*/
+
 // ----------- UTILS -----------
 function themesAvailable($styleDir) {
     $themes = [];
@@ -114,7 +139,11 @@ if (!$repo) {
 } else if ($repo && $commit) {
     $level = 3;
 } else {
-    $level = 1;
+		if (isset($_GET['fonts'])) {
+				$level = 4;
+		} else {
+				$level = 1;
+		}
 }
 
 // ----------- DATA FETCHING -----------
@@ -212,7 +241,7 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
     <link rel="stylesheet" href="<?=$styleWebPath?>/layout.css" id="layoutcss">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body class="level-<?=$level?>">
+<body class="level-<?=$level?>" style="font-family:<?= htmlspecialchars($appFont) ?>,sans-serif;">
 <div id="headline-row">
 	<div class="hl-left">
   <?php if ($level==2): ?>
@@ -233,6 +262,7 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
   <div class="hl-right">
     <button class="theme-switcher" id="themeBtn" title="Switch theme"><?=htmlspecialchars($theme)?> &#x25BC;</button>
     <div class="theme-popup" id="themePopup" role="menu">
+<a href="?fonts=1">Font Selector</a>
       <?php foreach ($themes as $t => $css): ?>
         <button class="theme-item<?php if($t==$theme)echo' selected';?>" data-theme="<?=htmlspecialchars($t)?>">
           <?=ucfirst(htmlspecialchars($t))?>
@@ -330,6 +360,10 @@ else: ?>
 <script>
 const themeBtn = document.getElementById('themeBtn');
 const themePopup = document.getElementById('themePopup');
+function setFontCookie(fontName) {
+	    document.cookie = 'appFont=' + encodeURIComponent(fontName) + ';path=/;max-age=31536000';
+			    location.reload();
+}
 if (themeBtn && themePopup) {
     themeBtn.addEventListener('click',function(e){
         e.stopPropagation();

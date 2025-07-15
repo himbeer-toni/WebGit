@@ -36,7 +36,7 @@ POWNER  = www-data
 PGROUP  = www-data
 
 # Stylesheets to install (without .css)
-PSTYLES	= Dark-theme Light-theme layout Raspberry-theme
+PSTYLES	= Dark-theme Light-theme layout
 
 # Font list
 FONTLIST=fontdata.txt
