@@ -274,6 +274,7 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
   <div class="hl-right">
 		<button class="theme-switcher" id="themeBtn" title="Switch theme"><?=htmlspecialchars($theme)?> &#x25BC;</button>
 </br>
+		<button class="theme-switcher" id="fontBtn" title="Switch theme">Fonts</button>
 	</form>
     <div class="theme-popup" id="themePopup" role="menu">
       <?php foreach ($themes as $t => $css): ?>
