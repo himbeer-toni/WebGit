@@ -1,6 +1,6 @@
-system-ui
 sans-serif
 serif
+system-ui
 monospace
 Roboto
 Open Sans

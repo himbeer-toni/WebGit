@@ -61,9 +61,9 @@ body {
 
 /* (Optional) align left/right if you ever need extra alignment tweaks */
 /*
+*/
 #headline-row .hl-left { text-align: left; }
 #headline-row .hl-right { text-align: right; }
-*/
 
 .levelup-btn,
 .theme-switcher{
@@ -111,6 +111,18 @@ body {
   background: var(--btn-bg-hover);
   border-color: var(--btn-bg-hover);
 }
+
+.font-switcher: {
+    font-size:1.1em;
+    border-radius:6px;
+    border:1px solid #888;
+    background:var(--button-bg, #222);
+    color:var(--button-fg, #fff);
+    padding:0.5em 1.2em;
+    margin:0.3em 0.2em;
+    box-shadow:1px 1px 3px #0002;
+    cursor:pointer;
+		}
 
 .theme-switcher,
 .theme-switcher *,

@@ -44,19 +44,32 @@ if (file_exists($fontFile)) {
 }
 
 // Default font is the first in the sorted list
-$defaultFont = $fonts[0] ?? 'sans-serif';
+if (isset($_GET['fonts'])) {
+	if (!isset($fontOneShot)) {
+		$fontOneshot = 1;
+		$fontidx = (int)$_GET['fonts'];
+	}
+} else {
+	$fontidx = 0;
+}
+// echo "<!-- dbg:1 fontidx=$fontidx -->\n";
+if ( $fontidx < 0 ) {
+		$defaultFont = $fonts[0] ?? 'sans-serif';
+} else if ( $fontidx > sizeof($fonts)-1 ) {
+		$defaultFont = $fonts[sizeof($fonts)-1] ?? 'sans-serif';
+} else {
+		$defaultFont = $fonts[$fontidx-1] ?? 'sans-serif';
+}
 
 // Check for user-selected font in cookie (must be in list)
 $appFont = $defaultFont;
-if (isset($_COOKIE['appFont']) && in_array($_COOKIE['appFont'], $fonts, true)) {
-    $appFont = $_COOKIE['appFont'];
+// echo "<!-- dbg:defaultFont=$defaultFont -->\n";
+// echo "<!-- dbg:2 fontidx=$fontidx -->\n";
+if ( $fontidx == 0 ) {
+	if (isset($_COOKIE['appFont']) && in_array($_COOKIE['appFont'], $fonts, true)) {
+			$appFont = $_COOKIE['appFont'];
+	}
 }
-
-/* Helper: Use $appFont in your page's CSS
-	Example: 
-<body style="font-family: < ? = htmlspecialchars($appFont) ? >, sans-serif;">
-*/
-
 // ----------- UTILS -----------
 function themesAvailable($styleDir) {
     $themes = [];
@@ -133,6 +146,7 @@ $themes = themesAvailable($styleDir);
 $theme = getTheme();
 
 if (isset($_GET['fonts'])) {
+			$fontidx = (int)$_GET['fonts'];
 	    $level = 4;
 } else if (!$repo) {
 	    $level = 1;
@@ -242,7 +256,7 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
 <body class="level-<?=$level?>" style="font-family:<?= htmlspecialchars($appFont) ?>,sans-serif;">
 <div id="headline-row">
 	<div class="hl-left">
-  <?php if ($level==2): ?>
+  <?php if ($level==2 || $level==4): ?>
     <a href="<?=$selfUrl?>" class="levelup-btn" title="Back to list">&larr;</a>
   <?php elseif ($level==3): ?>
     <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>" class="levelup-btn" title="Back to commits">&larr;</a>
@@ -258,9 +272,11 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
     <?php endif; ?>
   </div>
   <div class="hl-right">
-    <button class="theme-switcher" id="themeBtn" title="Switch theme"><?=htmlspecialchars($theme)?> &#x25BC;</button>
+		<button class="theme-switcher" id="themeBtn" title="Switch theme"><?=htmlspecialchars($theme)?> &#x25BC;</button>
+</br>
+		<button class="theme-switcher" id="fontBtn" title="Switch theme">Fonts</button>
+	</form>
     <div class="theme-popup" id="themePopup" role="menu">
-<a href="?fonts=1">Font Selector</a>
       <?php foreach ($themes as $t => $css): ?>
         <button class="theme-item<?php if($t==$theme)echo' selected';?>" data-theme="<?=htmlspecialchars($t)?>">
           <?=ucfirst(htmlspecialchars($t))?>
@@ -363,9 +379,17 @@ elseif ($level == 3 && !$notfound): ?>
             <?php endforeach; ?>
         </select>
         <div style="margin-top:1em;">
-            <span style="font-family:<?= htmlspecialchars($appFont) ?>,sans-serif;font-size:1.2em;">
-                Preview: The quick brown fox jumps over the lazy dog.
-            </span>
+            <span style="font-family:<?= htmlspecialchars($appFont) ?>,sans-serif;font-size:0.75em;">
+	<h4>About font-selection and being tracked</h4>
+	If you want to make sure not to be tracked:
+	Choose a <strong>local font</strong>!
+	Fonts that are <strong>always local</strong> are <strong>serif</strong>, <strong>sans-serif</strong> and
+	<strong>monospace</strong>.
+
+  <h5>Background</h5>
+While developing this app, I noticed that very few fonts are available across all platforms. So-called “web-safe” fonts only work reliably on some desktop systems, and are rarely available on mobile devices. To solve this common web development issue, I use network-based fonts (like Google Fonts) for broader compatibility. The trade-off: they require an internet connection and may allow the font provider to track usage and
+even worse to track your activity. If they'd use e. g. browser-fingerprinting they could assign you a unique id and track you visiting all sites, that use the same font-service.
+           </span>
         </div>
       </form>
     </div>
@@ -388,6 +412,7 @@ else: ?>
 <script>
 const themeBtn = document.getElementById('themeBtn');
 const themePopup = document.getElementById('themePopup');
+const fontBtn = document.getElementById('fontBtn');
 function setFontCookie(fontName) {
 	    document.cookie = 'appFont=' + encodeURIComponent(fontName) + ';path=/;max-age=31536000';
 			    location.reload();
