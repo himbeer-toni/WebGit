@@ -40,7 +40,7 @@ $fonts = [];
 if (file_exists($fontFile)) {
     $fonts = array_filter(array_map('trim', file($fontFile)));
     natcasesort($fonts);
-    $fonts = array_values($fonts);
+   $fonts = array_values($fonts);
 }
 
 // Default font is the first in the sorted list
@@ -71,7 +71,36 @@ if ( $fontidx == 0 ) {
 	}
 }
 // ----------- UTILS -----------
+
 function themesAvailable($styleDir) {
+    $themes = [];
+    foreach (glob($styleDir . '/*-theme.css') as $css) {
+        $name = basename($css);
+        if (preg_match('/^(.*)-theme\.css$/', $name, $m)) {
+            // Trim accidental spaces in theme names
+            $themeKey = trim($m[1]);
+            $themes[$themeKey] = $name;
+        }
+    }
+    // Custom sort order: Himbeertoni, Dark, Light, then others
+    $preferredOrder = ['Light', 'Dark', 'Himbeertoni'];
+    uksort($themes, function($a, $b) use ($preferredOrder) {
+        $posA = array_search($a, $preferredOrder);
+        $posB = array_search($b, $preferredOrder);
+        if ($posA !== false && $posB !== false) {
+            return $posA - $posB;
+        } elseif ($posA !== false) {
+            return -1;
+        } elseif ($posB !== false) {
+            return 1;
+        }
+        // Alphabetical order for remaining themes
+        return strcmp($a, $b);
+    });
+    return $themes;
+}
+
+function themesAvailableObsolete($styleDir) {
     $themes = [];
     foreach (glob($styleDir . '/*-theme.css') as $css) {
         $name = basename($css);
@@ -85,7 +114,7 @@ function getTheme() {
     if (!empty($_COOKIE['theme']) && preg_match('/^[a-zA-Z0-9_-]+$/', $_COOKIE['theme'])) {
         return $_COOKIE['theme'];
     }
-    return 'dark'; // Default
+    return 'Light'; // Default
 }
 function setThemeHeader($themes, $theme, $styleWebPath) {
     if (isset($themes[$theme])) {
@@ -269,12 +298,19 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
       <?=htmlspecialchars($repo)?>
     <?php elseif ($level==3): ?>
       <?=htmlspecialchars($repo)?>: <span style="font-family:monospace;"><?=htmlspecialchars($commit)?></span>
+    <?php elseif ($level==4): ?>
+			Select font
     <?php endif; ?>
   </div>
   <div class="hl-right">
 		<button class="theme-switcher" id="themeBtn" title="Switch theme"><?=htmlspecialchars($theme)?> &#x25BC;</button>
 </br>
 		<button class="theme-switcher" id="fontBtn" title="Switch theme">Fonts</button>
+		<script>
+		document.getElementById('fontBtn').onclick = function() {
+			window.location = window.location.pathname + '?fonts=0';
+		};
+		</script>
 	</form>
     <div class="theme-popup" id="themePopup" role="menu">
       <?php foreach ($themes as $t => $css): ?>
@@ -365,8 +401,7 @@ elseif ($level == 3 && !$notfound): ?>
 <?php elseif ($level == 4): 
 // Font-Selector
 ?>
-    <div class="main-pane">
-      <h2>Font Selector</h2>
+           <span style="font-family:<?= htmlspecialchars($appFont) ?>,sans-serif;font-size:0.75em;">
       <form onsubmit="return false;">
         <label for="fontSelect">Choose a font:</label>
         <select id="fontSelect" onchange="setFontCookie(this.value)">
@@ -379,13 +414,13 @@ elseif ($level == 3 && !$notfound): ?>
             <?php endforeach; ?>
         </select>
         <div style="margin-top:1em;">
-            <span style="font-family:<?= htmlspecialchars($appFont) ?>,sans-serif;font-size:0.75em;">
-	<h4>About font-selection and being tracked</h4>
+  	<h4>About font-selection and being tracked</h4>
 	If you want to make sure not to be tracked:
 	Choose a <strong>local font</strong>!
 	Fonts that are <strong>always local</strong> are <strong>serif</strong>, <strong>sans-serif</strong> and
 	<strong>monospace</strong>.
 
+   <div class="main-pane">
   <h5>Background</h5>
 While developing this app, I noticed that very few fonts are available across all platforms. So-called “web-safe” fonts only work reliably on some desktop systems, and are rarely available on mobile devices. To solve this common web development issue, I use network-based fonts (like Google Fonts) for broader compatibility. The trade-off: they require an internet connection and may allow the font provider to track usage and
 even worse to track your activity. If they'd use e. g. browser-fingerprinting they could assign you a unique id and track you visiting all sites, that use the same font-service.
