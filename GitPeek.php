@@ -401,7 +401,8 @@ elseif ($level == 3 && !$notfound): ?>
 <?php elseif ($level == 4): 
 // Font-Selector
 ?>
-           <span style="font-family:<?= htmlspecialchars($appFont) ?>,sans-serif;font-size:0.75em;">
+					<div style="text-align:left">
+           <span style="font-family:<?= htmlspecialchars($appFont) ?>,sans-serif;font-size:0.75em">
       <form onsubmit="return false;">
         <label for="fontSelect">Choose a font:</label>
         <select id="fontSelect" onchange="setFontCookie(this.value)">
@@ -413,7 +414,9 @@ elseif ($level == 3 && !$notfound): ?>
                 </option>
             <?php endforeach; ?>
         </select>
-        <div style="margin-top:1em;">
+			</form>
+   <!--      <div style="margin-top:1em;">  -->
+   <div class="main-pane">
   	<h4>About font-selection and being tracked</h4>
 	If you want to make sure not to be tracked:
 	Choose a <strong>local font</strong>!

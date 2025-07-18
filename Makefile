@@ -35,13 +35,15 @@ PSTYDIR = $(PBINDIR)/$(PRODUCT)-style
 POWNER  = www-data
 PGROUP  = www-data
 
-# Stylesheets to install (without .css)
-PSTYLES	= Dark-theme Light-theme layout
+# Stylesheets to install
+PSTYLES	= Dark-theme.css Light-theme.css layout.css
+PSTYLES = layout.css $(wildcard *-theme.css)
 
 # Font list
 FONTLIST=fontdata.txt
 
 # Main install target: install PHP, layout, and special git binary
+
 install: devinstall suidbin
 
 devinstall: php layout readme fontdata
@@ -78,14 +80,6 @@ php: phpadapt
 	   sudo install -o $(POWNER) -g $(PGROUP) -m 500 -t $(PBINDIR) $$n;\
 	fi;\
 	done;\
-	for n in $(PSTYLES);\
-	do \
-	sudo diff -q $$n.css $(PSTYDIR)/$$n.css > /dev/null;\
-	if [ "$$?" != "0" ];then \
-     echo installing in $(PSTYDIR): $$n.css;\
-	   sudo install -o $(POWNER) -g $(PGROUP) -m 400 -t $(PSTYDIR) $$n.css;\
-	fi;\
-	done;
 
 # Install font list
 fontdata: $(FONTLIST)
@@ -97,12 +91,16 @@ fontdata: $(FONTLIST)
 
 # Copy and set permissions for a setuid git binary for safe web use
 # Install only the main layout CSS if changed
-layout: layout.css
-	@sudo diff -q layout.css $(PSTYDIR)/layout.css > /dev/null; \
+layout: $(PSTYLES)
+	@for n in $(PSTYLES);\
+	do \
+	sudo diff -q $$n $(PSTYDIR)/$$n > /dev/null;\
 	if [ "$$?" != "0" ];then \
-    echo installing in $(PSTYDIR)/$(PRODUCT)-style: style layout.css;\
-		sudo install -o $(POWNER) -g $(PGROUP) -m 400 -t $(PBINDIR)/$(PRODUCT)-style  layout.css; \
-	fi; \
+     echo installing in $(PSTYDIR): $$n;\
+	   sudo install -o $(POWNER) -g $(PGROUP) -m 400 -t $(PSTYDIR) $$n;\
+	fi;\
+	done;
+
 
 # Copy and set permissions for a setuid git binary for safe web use
 suidbin: $(XTRGSRC)
