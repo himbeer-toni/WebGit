@@ -58,7 +58,7 @@ if ( $fontidx < 0 ) {
 } else if ( $fontidx > sizeof($fonts)-1 ) {
 		$defaultFont = $fonts[sizeof($fonts)-1] ?? 'sans-serif';
 } else {
-		$defaultFont = $fonts[$fontidx-1] ?? 'sans-serif';
+		$defaultFont = $fonts[0] ?? 'sans-serif';
 }
 
 // Check for user-selected font in cookie (must be in list)
@@ -278,7 +278,7 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
     ?></title>
     <?php setThemeHeader($themes, $theme, $styleWebPath); ?>
     <!-- Main layout CSS, after theme -->
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans|Montserrat|Lobster|Fira+Mono|Source+Serif+Pro&display=swap">
+		<link rel="stylesheet" href="https://fonts.bunny.net/css?family=https://fonts.bunny.net/css?family='system-ui:400|Open+Sans:400|Roboto:400|ABeeZee:400|Abyssinica+SIL:400|Acme:400|Actor:400|Aldrich:400|Annie+Use+Your+Telescope:400|Damion:400'">
     <link rel="stylesheet" href="<?=$styleWebPath?>/layout.css" id="layoutcss">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
@@ -402,9 +402,9 @@ elseif ($level == 3 && !$notfound): ?>
 // Font-Selector
 ?>
 					<div style="text-align:left">
-           <span style="font-family:<?= htmlspecialchars($appFont) ?>,sans-serif;font-size:0.75em">
-      <form onsubmit="return false;">
-        <label for="fontSelect">Choose a font:</label>
+          <span style="font-family:<?= htmlspecialchars($appFont) ?>,sans-serif;font-size:0.75em;padding:0.25em">
+      <form style="text-align:center" onsubmit="return false;">
+        <label for="fontSelect">Select font:</label>
         <select id="fontSelect" onchange="setFontCookie(this.value)">
             <?php foreach ($fonts as $font): ?>
                 <option value="<?= htmlspecialchars($font) ?>"
@@ -413,23 +413,43 @@ elseif ($level == 3 && !$notfound): ?>
                     <?= htmlspecialchars($font) ?>
                 </option>
             <?php endforeach; ?>
-        </select>
+					</select>
+				</span>
 			</form>
    <!--      <div style="margin-top:1em;">  -->
    <div class="main-pane">
-  	<h4>About font-selection and being tracked</h4>
-	If you want to make sure not to be tracked:
-	Choose a <strong>local font</strong>!
-	Fonts that are <strong>always local</strong> are <strong>serif</strong>, <strong>sans-serif</strong> and
+  	<h4>About fonts on the web</h4>
+<p>
+	If you want the font to be working, when you are
+completely <strong>off</strong>-net you  should choose a
+	<strong>local font</strong>!<br/>
+	<strong>Local</strong> fonts are <strong>serif</strong>, <strong>sans-serif</strong> and
 	<strong>monospace</strong>.
+	<br/>If <strong>off</strong>-net all other fonts will
+look the same, as a fallback kicks in.
+</p>
 
-   <div class="main-pane">
-  <h5>Background</h5>
-While developing this app, I noticed that very few fonts are available across all platforms. So-called “web-safe” fonts only work reliably on some desktop systems, and are rarely available on mobile devices. To solve this common web development issue, I use network-based fonts (like Google Fonts) for broader compatibility. The trade-off: they require an internet connection and may allow the font provider to track usage and
-even worse to track your activity. If they'd use e. g. browser-fingerprinting they could assign you a unique id and track you visiting all sites, that use the same font-service.
-           </span>
-        </div>
-      </form>
+  <h4>Background and Details</h4>
+<p>While developing this app, I noticed that very few
+fonts are available across all platforms. So-called
+“web-safe” fonts only work reliably on some desktop
+systems, and are rarely available on mobile devices.
+To solve this common web development issue, I use
+network-based fonts (like Google Fonts) for broader
+compatibility. That is really a great help. But I had to
+decide carefully, which font service I implement,
+as some services track the users (even across sites 
+and apps).</p>
+<p>As I assume that the average user does not like
+to be tracked, I chose <em>bunny fonts</em> from 
+<em>bunny.net</em>
+(see <a href="https://fonts.bunny.net/about">here</a>),
+as they are <ul>
+<li>free to use</li><li>open-source</li><li>privacy-first</li>
+<li>zero-tracking</li><li>no-logging policy</li>
+<li>hosted on a global CDN</li>
+</ul>
+</p>
     </div>
 
 

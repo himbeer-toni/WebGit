@@ -46,7 +46,7 @@ FONTLIST=fontdata.txt
 
 install: devinstall suidbin
 
-devinstall: php layout readme fontdata
+devinstall: fontdata php layout readme
 
 # Adapt whatever $repoRoot is defined in the PHP
 # to reflect this Makefile's $(REPODIR)
@@ -82,7 +82,11 @@ php: phpadapt
 	done;\
 
 # Install font list
-fontdata: $(FONTLIST)
+#  create fontdata.txt out of 
+#   fontdata.default,fontdata.local and fontspec.txt 
+#   (the last derived from fontbunny/Fonts+/Embed CSS)
+fontdata: $(FONTLIST) fontdata.local fontdata.default fontspec.txt
+	@./newFontdata 
 	@sudo diff -q $(FONTLIST) $(PSTYDIR)/$(FONTLIST) > /dev/null; \
 	if [ "$$?" != "0" ];then \
     echo installing in $(PSTYDIR)/$(PRODUCT)-style: style $(FONTLIST); \
