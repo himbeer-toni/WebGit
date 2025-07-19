@@ -208,7 +208,7 @@ body {
 
 .main-pane {
   flex: 1 1 0;
-  padding: 2em 3vw 3em 3vw;
+  padding: 1em 3vw 3em 1vw;
   min-width: 0;
   overflow-x: auto;
 }
