@@ -1,10 +1,13 @@
+system-ui
+Open Sans
+Roboto
 sans-serif
 serif
-system-ui
 monospace
-Roboto
-Open Sans
-Montserrat
-Lobster
-Fira Mono
-Source Serif Pro
+ABeeZee
+Abyssinica SIL
+Acme
+Actor
+Aldrich
+Annie Use Your Telescope
+Damion
