@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# fontspec.txt from bunny
+# e. g. https://fonts.bunny.net/family/damion -
+# click Fonts+ snd copy "Embed CSS" to fontspec.tx<
+
+[ "$1" == "" ] && namfil=fontspec.txt
+[ "$1" != "" ] && namfil=$1
+[ "$2" == "" ] && namfil2=fontdata.default
+[ "$2" != "" ] && namfil2=$2
+
+url="https://fonts.bunny.net/css?family="
+phpfil="GitPeek.php"
+locnam="fontdata.local"
+
+f1=$(awk '{printf("font-family: \047%s\047, whatever;\n",$0)}' $namfil2| awk -F"'" '{list=sprintf("%s|%s:400",list,$2)};END{printf("%s\n",substr(list,2))}'|sed -e "s/ /+/g")
+f2=$(awk -F"'" '{list=sprintf("%s|%s:400",list,$2)};END{printf("%s\n",substr(list,2))}' ${namfil}|sed -e "s/ /+/g")
+tmpstr=$(mktemp -u XXXXXXXX)
+flist=$(printf "%s\047%s|%s\047\n" $url $f1 $f2)
+( cat $namfil2 $locnam;awk -F"'" '{print($2)}' ${namfil} ) > fontdata.txt.$tmpstr
+diff -q fontdata.txt fontdata.txt.$tmpstr
+if [ $? == 0 ]; then
+	rm fontdata.txt.$tmpstr
+else
+	cat fontdata.txt.$$ > fontdata.txt
+	echo Backup in $phpfil.bak-$tmpstr
+	sed -i.bak-$tmpstr -E "s@href=\"http.:.*font.*\?family=.*\"@href=\"$url$flist\"@" $phpfil
+fi
+exit
+
