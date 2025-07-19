@@ -425,7 +425,7 @@ completely <strong>off</strong>-net you  should choose a
 	<strong>local font</strong>!<br/>
 	<strong>Local</strong> fonts are <strong>serif</strong>, <strong>sans-serif</strong> and
 	<strong>monospace</strong>.
-	<br/>If <strong>off</strong>-net all other fonts will
+	<br/>If <strong>off</strong>-net, all other fonts will
 look the same, as a fallback kicks in.
 </p>
 
@@ -440,8 +440,8 @@ compatibility. That is really a great help. But I had to
 decide carefully, which font service I implement,
 as some services track the users (even across sites 
 and apps).</p>
-<p>As I assume that the average user does not like
-to be tracked, I chose <em>bunny fonts</em> from 
+<p>I assume, the average user does <strong>not</strong> like
+to be tracked. So I chose <em>bunny fonts</em> from 
 <em>bunny.net</em>
 (see <a href="https://fonts.bunny.net/about">here</a>),
 as they are <ul>
@@ -449,6 +449,7 @@ as they are <ul>
 <li>zero-tracking</li><li>no-logging policy</li>
 <li>hosted on a global CDN</li>
 </ul>
+which I decided, is good.
 </p>
     </div>
 
