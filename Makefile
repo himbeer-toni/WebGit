@@ -4,7 +4,7 @@ gitTarget := $(firstword $(MAKECMDGOALS))
 cmdArg1 := $(word 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
 
 # Targets
-PHONY = install devinstall php layout suidbin rebrand phpadapt readme fontdata
+PHONY = install devinstall php layout suidbin rebrand phpadapt readme fontdata demo
 
 # Product name - can be changed using make rebrand
 PRODUCT = GitPeek
@@ -46,7 +46,32 @@ FONTLIST=fontdata.txt
 
 install: devinstall suidbin
 
-devinstall: fontdata php layout readme
+devinstall: fontdata readme php layout
+
+# For demo;
+#  targets
+#    demodir (cp ecerything)
+#    Makefile (adapt for demo)	
+#    fontdata 
+#    readme (adapt!) 
+#    php (adapt!)
+#    layout
+#    suidbin (after adaption of Makefile)
+
+rmdemo:
+	rm -rf demo/
+
+mkdemo: rmdemo
+	mkdir demo
+	find . -maxdepth 1 -type f -exec cp {} demo/ \;   
+	rm -f demo/README.md
+	mv demo/GitPeek.php demo/GitPeekDemo.php
+# REPODIR = $(HOME)/gitrepos
+	sed -e 's/^PRODUCT =.*/PRODUCT = GitPeekDemo/' -e 's@^REPODIR =.*@REPODIR = $(HOME)/gitrepos/Toni@' Makefile > demo/Makefile
+	cd demo;make mkdemostage2
+
+mkdemostage2: README.md fontdata php layout suidbin
+	head -1 README.md
 
 # Adapt whatever $repoRoot is defined in the PHP
 # to reflect this Makefile's $(REPODIR)
@@ -65,11 +90,13 @@ phpadapt:
 # This creates a README.m4 with the actual $(PRODUCT)
 # in the text. 
 # Must be called whenever a README.in is edited
-readme: README.md
+readme: README.md READMEcommit
+
+READMEcommit: README.md
+	@git commit -m "new version generated - README.in changed" README.md
 
 README.md: README.in
 	@sed -e 's/PRODUCT/$(PRODUCT)/g' README.in > README.md
-	@git commit -m "new version generated - README.in changed" README.md
 
 php: phpadapt
 	@for n in $(PTARGETS);\
