@@ -59,7 +59,6 @@ rmdemo:
 demo: rmdemo
 	mkdir demo
 	find . -maxdepth 1 -type f -exec cp {} demo/ \;   
-	rm -f demo/README.md
 	mv demo/GitPeek.php demo/GitPeekDemo.php
 # REPODIR = $(HOME)/gitrepos
 	sed -e 's/^PRODUCT =.*/PRODUCT = GitPeekDemo/' -e 's@^REPODIR =.*@REPODIR = $(HOME)/gitrepos/Toni@' Makefile > demo/Makefile
