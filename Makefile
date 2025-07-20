@@ -48,20 +48,15 @@ install: devinstall suidbin
 
 devinstall: fontdata readme php layout
 
-# For demo;
-#  targets
-#    demodir (cp ecerything)
-#    Makefile (adapt for demo)	
-#    fontdata 
-#    readme (adapt!) 
-#    php (adapt!)
-#    layout
-#    suidbin (after adaption of Makefile)
+styledir:
+	@sudo mkdir -p $(PSTYDIR)
+	@sudo chown $(POWNER):$(PGROUP) $(PSTYDIR)
+	@sudo chmod 500 $(PSTYDIR)
 
 rmdemo:
 	rm -rf demo/
 
-mkdemo: rmdemo
+demo: rmdemo
 	mkdir demo
 	find . -maxdepth 1 -type f -exec cp {} demo/ \;   
 	rm -f demo/README.md
@@ -70,7 +65,7 @@ mkdemo: rmdemo
 	sed -e 's/^PRODUCT =.*/PRODUCT = GitPeekDemo/' -e 's@^REPODIR =.*@REPODIR = $(HOME)/gitrepos/Toni@' Makefile > demo/Makefile
 	cd demo;make mkdemostage2
 
-mkdemostage2: README.md fontdata php layout suidbin
+mkdemostage2: README.md styledir fontdata php layout suidbin
 	head -1 README.md
 
 # Adapt whatever $repoRoot is defined in the PHP
