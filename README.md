@@ -7,7 +7,8 @@ GitPeek is a lightweight PHP script for browsing local git repositories via a we
 
 - **View commit history** of any repository in a directory.
 - **See detailed diffs** for each commit, with colored highlights (additions, removals, metadata).
-- **Theme-switching** (dark/light) via the UI.
+- **Theme-switching** (dark/light/etc.) via the UI.
+- **Font-switching** (dark/light/etc.) via the UI.
 - **Navigation**: Click to move between the list of repositories, commit history, and single commit view.
 - **Minimal dependencies**: Only requires PHP and read access to your git repositories.
 
@@ -113,6 +114,32 @@ It will show
 (a copy of) my local repos (including the one you
 are just viewing) that 
 were pushed to github.
+
+## The font selector
+
+Implementing the font selector was interesting. Here
+is what learned.
+	
+### About fonts on the web
+
+If you want the font to be working, when you are completely **off**-net you should choose a **local** font!
+
+**Local** fonts are **serif**, **sans-serif** and **monospace**.
+If off-net, all other fonts will look the same, as a fallback kicks in.
+
+### Background and Details
+
+While developing this app, I noticed that very few fonts are available across all platforms. So-called “web-safe” fonts only work reliably on some desktop systems, and are rarely available on mobile devices. To solve this common web development issue, I use network-based fonts (like Google Fonts) for broader compatibility. That is really a great help. But I had to decide carefully, which font service I implement, as some services track the users (even across sites and apps).
+
+I assume, the average user does not like to be tracked. So I chose bunny fonts from bunny.net (see here), as they are
+- free to use
+- open-source
+- privacy-first
+- zero-tracking
+- no-logging policy
+- hosted on a global CDN
+
+which I decided, is good. So I implemented it.
 
 ---
 
