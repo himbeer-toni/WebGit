@@ -66,7 +66,7 @@ demo: rmdemo
 	cd demo;make mkdemostage2
 
 mkdemostage2: README.md styledir fontdata php layout suidbin
-	head -1 README.md
+	@echo stage 2 done
 
 # Adapt whatever $repoRoot is defined in the PHP
 # to reflect this Makefile's $(REPODIR)
@@ -85,13 +85,11 @@ phpadapt:
 # This creates a README.m4 with the actual $(PRODUCT)
 # in the text. 
 # Must be called whenever a README.in is edited
-readme: README.md READMEcommit
-
-READMEcommit: README.md
-	@git commit -m "new version generated - README.in changed" README.md
+readme: README.md
 
 README.md: README.in
 	@sed -e 's/PRODUCT/$(PRODUCT)/g' README.in > README.md
+	@git commit -m "new version generated - README.in changed" README.md
 
 php: phpadapt
 	@for n in $(PTARGETS);\
