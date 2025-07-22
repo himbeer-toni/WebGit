@@ -4,13 +4,16 @@ gitTarget := $(firstword $(MAKECMDGOALS))
 cmdArg1 := $(word 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
 
 # Targets
-PHONY = install devinstall php layout suidbin rebrand phpadapt readme fontdata demo
+PHONY = install devinstall php layout suidbin rebrand phpadapt readme fontdata demo $(PFNTPHP)
 
 # Product name - can be changed using make rebrand
 PRODUCT = GitPeek
 
 # Main file(s) to install (the PHP frontend)
 PTARGETS= $(PRODUCT).php
+
+# PHP to include fonts
+PFNTPHP = $(PRODUCT)-fontlink.php
 
 # Directory containing all git repositories
 REPODIR = $(HOME)/gitrepos
@@ -103,10 +106,24 @@ php: phpadapt
 # Install font list
 #  create fontdata.txt out of 
 #   fontdata.default,fontdata.local and fontspec.txt 
+#   and fontload.txt (loaded, but not selectable)
 #   (the last derived from fontbunny/Fonts+/Embed CSS)
-fontdata: $(FONTLIST) fontdata.local fontdata.default fontspec.txt
-	@./newFontdata 
-	@sudo diff -q $(FONTLIST) $(PSTYDIR)/$(FONTLIST) > /dev/null; \
+#   also update fontlink.php if needed
+fontdata: $(FONTLIST) fontdata.local fontdata.default fontspec.txt fontload.txt
+	@./newFontdata; \
+		sts=$$?; \
+		[ $$sts -ge 10 ] && \
+			sudo diff -q $(FONTLIST) $(PSTYDIR)/$(FONTLIST) > /dev/null; \
+			if [ "$$?" != "0" ];then \
+				echo installing in $(PSTYDIR)/$(PRODUCT)-style: style $(FONTLIST); \
+				sudo install -o $(POWNER) -g $(PGROUP) -m 400 -t $(PBINDIR)/$(PRODUCT)-style  $(FONTLIST); \
+			fi; \
+				[ $$sts -lt 10 ] && [ $$sts -gt 0 ] && echo ins link; \
+		[ $$sts -gt 10 ] && echo ins link; \
+		true; \
+
+void:
+	sudo diff -q $(FONTLIST) $(PSTYDIR)/$(FONTLIST) > /dev/null; \
 	if [ "$$?" != "0" ];then \
     echo installing in $(PSTYDIR)/$(PRODUCT)-style: style $(FONTLIST); \
 		sudo install -o $(POWNER) -g $(PGROUP) -m 400 -t $(PBINDIR)/$(PRODUCT)-style  $(FONTLIST); \
@@ -138,6 +155,11 @@ suidbin: $(XTRGSRC)
 		sudo chown $(XTRGOWN):$(XTRGGRP) $(XTARGET); \
 		sudo chmod $(XTRGPRM) $(XTARGET); \
 	fi;\
+
+$(PFNTPHP): fontlink.txt
+	@echo installing in $(PSTYDIR): fontlink.php;\
+	   echo sudo install -o $(POWNER) -g $(PGROUP) -m 400 -t $(PBINDIR) fontlink.php fontlink.txt $(PRODUCT)-fontlink.php;\
+	
 
 rebrand: readme
 	@prvprd=$$(awk '/^PRODUCT = *(.+)/{print $$3}' Makefile); \

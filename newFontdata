@@ -10,21 +10,33 @@
 [ "$2" != "" ] && namfil2=$2
 
 url="https://fonts.bunny.net/css?family="
-phpfil="GitPeek.php"
 locnam="fontdata.local"
+namfil3="fontload.txt"
+
+lnkfil=fontlink.php
+lnkins=$(awk /'^PRODUCT =/{print $3}' Makefile)-fontlink.php
 
 f1=$(awk '{printf("font-family: \047%s\047, whatever;\n",$0)}' $namfil2| awk -F"'" '{list=sprintf("%s|%s:400",list,$2)};END{printf("%s\n",substr(list,2))}'|sed -e "s/ /+/g")
 f2=$(awk -F"'" '{list=sprintf("%s|%s:400",list,$2)};END{printf("%s\n",substr(list,2))}' ${namfil}|sed -e "s/ /+/g")
 tmpstr=$(mktemp -u XXXXXXXX)
-flist=$(printf "%s\047%s|%s\047\n" $url $f1 $f2)
+flist=$(printf "\047%s|%s\047\n" $f1 $f2)
 ( cat $namfil2 $locnam;awk -F"'" '{print($2)}' ${namfil} ) > fontdata.txt.$tmpstr
+fplus=$(awk -F"'" '{list=sprintf("%s|%s:400",list,$0)};END{printf("%s\n",substr(list,2))}' ${namfil3}|sed -e "s/ /+/g")
+[ ! -z $fplus ] && f2="$f2|$fplus"
+((newd=0))
+((newl=0))
 diff -q fontdata.txt fontdata.txt.$tmpstr
 if [ $? == 0 ]; then
 	rm fontdata.txt.$tmpstr
 else
-	cat fontdata.txt.$$ > fontdata.txt
-	echo Backup in $phpfil.bak-$tmpstr
-	sed -i.bak-$tmpstr -E "s@href=\"http.:.*font.*\?family=.*\"@href=\"$url$flist\"@" $phpfil
+	cat fontdata.txt.$tmpstr > fontdata.txt
+	((newd++))
 fi
-exit
-
+grep -q 9"$url${flist:0:-1}|$fplus'" ${lnkfil}
+if [ $? != 0 ]; then
+	((newl++))
+	echo "New ${lnkfil} (backup: ${lnkfil}.bak-$tmpstr)"
+	sed -i.bak-$tmpstr -E "s@\"http.:.*font.*\?family=.*\"@\"$url${flist:0:-1}|$fplus'\"@" ${lnkfil}
+fi
+sts=$((newd*10+newl))
+exit $sts

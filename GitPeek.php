@@ -277,8 +277,10 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
         if ($level==3 && $repo && $commit) echo ': '.htmlspecialchars($repo).' '.htmlspecialchars($commit);
     ?></title>
     <?php setThemeHeader($themes, $theme, $styleWebPath); ?>
+    <!-- Fontserver & Fonts -->
+		<?php include 'fontlink.php'; ?>
+		<link rel="stylesheet" href="<?php echo $fontLink ?>">
     <!-- Main layout CSS, after theme -->
-		<link rel="stylesheet" href="https://fonts.bunny.net/css?family=https://fonts.bunny.net/css?family='system-ui:400|Open+Sans:400|Roboto:400|ABeeZee:400|Abyssinica+SIL:400|Acme:400|Actor:400|Aldrich:400|Annie+Use+Your+Telescope:400|Damion:400'">
     <link rel="stylesheet" href="<?=$styleWebPath?>/layout.css" id="layoutcss">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
