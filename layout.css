@@ -282,3 +282,8 @@ body {
   outline: 2px solid var(--btn-bg-hover);
   outline-offset: 2px;
 }
+.commit-nav-arrow.disabled {
+	pointer-events: none;
+	opacity: 0.4;
+	cursor: default;
+}

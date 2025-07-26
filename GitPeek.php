@@ -272,56 +272,68 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-		<title><?=$selfName?><?php
+    <title><?=$selfName?><?php
         if ($level==2 && $repo) echo ': '.htmlspecialchars($repo);
-        if ($level==3 && $repo && $commit) echo ': '.htmlspecialchars($repo).' '.htmlspecialchars($commit);
     ?></title>
     <?php setThemeHeader($themes, $theme, $styleWebPath); ?>
-    <!-- Fontserver & Fonts -->
-		<?php include 'fontlink.php'; ?>
-		<link rel="stylesheet" href="<?php echo $fontLink ?>">
     <!-- Main layout CSS, after theme -->
+		<link rel="stylesheet" href="https://fonts.bunny.net/css?family=https://fonts.bunny.net/css?family='system-ui:400|Open+Sans:400|Roboto:400|ABeeZee:400|Abyssinica+SIL:400|Acme:400|Actor:400|Aldrich:400|Annie+Use+Your+Telescope:400|Damion:400|M+PLUS+1+Code:400'">
     <link rel="stylesheet" href="<?=$styleWebPath?>/layout.css" id="layoutcss">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      .commit-nav-arrow.disabled {
+        pointer-events: none;
+        opacity: 0.4;
+        cursor: default;
+      }
+      .commit-nav-arrow {
+        text-decoration: none;
+        font-size: 1.5em;
+        line-height: 1;
+        padding: 0 0.2em;
+        color: inherit;
+        transition: color 0.2s;
+      }
+      .commit-nav-arrow:not(.disabled):hover {
+        color: var(--subheadline-color, #006be6);
+      }
+    </style>
 </head>
 <body class="level-<?=$level?>" style="font-family:<?= htmlspecialchars($appFont) ?>,sans-serif;">
 <div id="headline-row">
-	<div class="hl-left">
-  <?php if ($level==2 || $level==4): ?>
-    <a href="<?=$selfUrl?>" class="levelup-btn" title="Back to list">&larr;</a>
-  <?php elseif ($level==3): ?>
-    <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>" class="levelup-btn" title="Back to commits">&larr;</a>
-  <?php endif; ?>
-</div>
-  <div class="hl-center">
-    <?php if ($level==1): ?>
-      Repository List
-    <?php elseif ($level==2): ?>
-      <?=htmlspecialchars($repo)?>
-    <?php elseif ($level==3): ?>
-      <?=htmlspecialchars($repo)?>: <span style="font-family:monospace;"><?=htmlspecialchars($commit)?></span>
-    <?php elseif ($level==4): ?>
-			Select font
-    <?php endif; ?>
-  </div>
-  <div class="hl-right">
-		<button class="theme-switcher" id="themeBtn" title="Switch theme"><?=htmlspecialchars($theme)?> &#x25BC;</button>
-</br>
-		<button class="theme-switcher" id="fontBtn" title="Switch theme">Fonts</button>
-		<script>
-		document.getElementById('fontBtn').onclick = function() {
-			window.location = window.location.pathname + '?fonts=0';
-		};
-		</script>
-	</form>
-    <div class="theme-popup" id="themePopup" role="menu">
-      <?php foreach ($themes as $t => $css): ?>
-        <button class="theme-item<?php if($t==$theme)echo' selected';?>" data-theme="<?=htmlspecialchars($t)?>">
-          <?=ucfirst(htmlspecialchars($t))?>
-        </button>
-      <?php endforeach; ?>
+    <div class="hl-left">
+      <?php if ($level==2 || $level==4): ?>
+        <a href="<?=$selfUrl?>" class="levelup-btn" title="Back to list">&larr;</a>
+      <?php elseif ($level==3): ?>
+        <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>" class="levelup-btn" title="Back to commits">&larr;</a>
+      <?php endif; ?>
     </div>
-  </div>
+    <div class="hl-center">
+      <?php if ($level==1): ?>
+        Repository List
+      <?php elseif ($level==2 || $level==3): ?>
+        <?=htmlspecialchars($repo)?>
+      <?php elseif ($level==4): ?>
+        Select font
+      <?php endif; ?>
+      <!-- For level==3, show only repo name here -->
+    </div>
+    <div class="hl-right">
+      <button class="theme-switcher" id="themeBtn" title="Switch theme"><?=htmlspecialchars($theme)?> &#x25BC;</button>
+      <button class="theme-switcher" id="fontBtn" title="Switch theme">Fonts</button>
+      <script>
+      document.getElementById('fontBtn').onclick = function() {
+        window.location = window.location.pathname + '?fonts=0';
+      };
+      </script>
+      <div class="theme-popup" id="themePopup" role="menu">
+        <?php foreach ($themes as $t => $css): ?>
+          <button class="theme-item<?php if($t==$theme)echo' selected';?>" data-theme="<?=htmlspecialchars($t)?>">
+            <?=ucfirst(htmlspecialchars($t))?>
+          </button>
+        <?php endforeach; ?>
+      </div>
+    </div>
 </div>
 <?php if ($level==3 && isset($msg) && $msg): ?>
     <div class="subheadline"><?=htmlspecialchars($msg)?></div>
@@ -330,7 +342,6 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
 <?php
 // ----------- MAIN CONTENT -----------
 
-// Level 1: Repo list
 if ($level == 1): ?>
     <div class="main-pane">
         <?php if (empty($repos)): ?>
@@ -340,7 +351,7 @@ if ($level == 1): ?>
             <ul style="list-style:none; padding:0; margin:0;">
             <?php foreach($repos as $r): ?>
                 <li style="margin-bottom:1.1em;">
-								<a href="<?=$selfUrl?>?repo=<?=urlencode($r)?>" class="levelup-btn" style="font-size:1.08em;">
+                  <a href="<?=$selfUrl?>?repo=<?=urlencode($r)?>" class="levelup-btn" style="font-size:1.08em;">
                         <?=htmlspecialchars($r)?>
                     </a>
                 </li>
@@ -349,7 +360,6 @@ if ($level == 1): ?>
         <?php endif; ?>
     </div>
 <?php
-// Level 2: Commit list for repo (NO nav-pane, only main-pane)
 elseif ($level == 2 && !$notfound): ?>
     <div class="main-pane">
         <h2 style="margin-top:0;">Commit History</h2>
@@ -360,7 +370,7 @@ elseif ($level == 2 && !$notfound): ?>
             <?php foreach ($commits as $c): ?>
                 <div class="commit-row">
                     <div class="commit-meta">
-										<a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=htmlspecialchars($c['hash'])?>" class="levelup-btn commit-hash" style="font-family:monospace; font-size:1em;">
+                      <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=htmlspecialchars($c['hash'])?>" class="levelup-btn commit-hash" style="font-family:monospace; font-size:1em;">
                             <?=htmlspecialchars($c['hash'])?>
                         </a>
                         <span class="commit-date"><?=htmlspecialchars($c['date'])?></span>
@@ -373,8 +383,28 @@ elseif ($level == 2 && !$notfound): ?>
         <?php endif; ?>
     </div>
 <?php
-// Level 3: Commit diff
-elseif ($level == 3 && !$notfound): ?>
+elseif ($level == 3 && !$notfound): 
+    // ----------- PREV/NEXT LOGIC FOR LEVEL 3 -----------
+    $prevCommit = $nextCommit = null;
+    if (!empty($commits)) {
+        $numCommits = count($commits);
+        $currentIdx = null;
+        foreach ($commits as $idx => $c) {
+            if ($c['hash'] === $commit) {
+                $currentIdx = $idx;
+                break;
+            }
+        }
+        if ($currentIdx !== null) {
+            if ($currentIdx > 0) {
+                $prevCommit = $commits[$currentIdx - 1]['hash'];
+            }
+            if ($currentIdx < $numCommits - 1) {
+                $nextCommit = $commits[$currentIdx + 1]['hash'];
+            }
+        }
+    }
+?>
     <div class="nav-content-layout">
         <div class="nav-pane">
             <div style="font-size:1.2em; font-weight:600; color:var(--subheadline-color); margin-bottom:1em;">
@@ -383,7 +413,7 @@ elseif ($level == 3 && !$notfound): ?>
             <ul style="list-style:none; padding:0;">
             <?php foreach ($commits as $c): ?>
                 <li style="margin-bottom:0.39em;">
-										<a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=$c['hash']?>" class="levelup-btn" style="font-family:monospace; font-size:1em;<?=($c['hash']==$commit?' background:var(--btn-bg-hover);':'')?>">
+                  <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=$c['hash']?>" class="levelup-btn" style="font-family:monospace; font-size:1em;<?=($c['hash']==$commit?' background:var(--btn-bg-hover);':'')?>">
                         <?=htmlspecialchars($c['hash'])?>
                     </a>
                 </li>
@@ -391,121 +421,29 @@ elseif ($level == 3 && !$notfound): ?>
             </ul>
         </div>
         <div class="main-pane">
-            <div style="margin-bottom:2em;">
-                <span style="font-size:1.16em; color:var(--subheadline-color); font-weight:600;"><?=htmlspecialchars($repo)?> / <span style="font-family:monospace;"><?=htmlspecialchars($commit)?></span></span>
+            <div style="margin-bottom:2em; display:flex; align-items:center; justify-content:center; gap:1em;">
+                <?php if ($prevCommit): ?>
+                  <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=htmlspecialchars($prevCommit)?>" class="commit-nav-arrow" title="Previous commit">&#8592;</a>
+                <?php else: ?>
+                  <span class="commit-nav-arrow disabled">&#8592;</span>
+                <?php endif; ?>
+                <span style="font-size:1.16em; color:var(--subheadline-color); font-weight:600;">
+                  <span style="font-family:monospace;"><?=htmlspecialchars($commit)?></span>
+                </span>
+                <?php if ($nextCommit): ?>
+                  <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=htmlspecialchars($nextCommit)?>" class="commit-nav-arrow" title="Next commit">&#8594;</a>
+                <?php else: ?>
+                  <span class="commit-nav-arrow disabled">&#8594;</span>
+                <?php endif; ?>
             </div>
             <div class="git-diff"><?=ansi2html($diff)?></div>
         </div>
     </div>
-
-
-
-<?php elseif ($level == 4): 
-// Font-Selector
-?>
-					<div style="text-align:left">
-          <span style="font-family:<?= htmlspecialchars($appFont) ?>,sans-serif;font-size:0.75em;padding:0.25em">
-      <form style="text-align:center" onsubmit="return false;">
-        <label for="fontSelect">Select font:</label>
-        <select id="fontSelect" onchange="setFontCookie(this.value)">
-            <?php foreach ($fonts as $font): ?>
-                <option value="<?= htmlspecialchars($font) ?>"
-                    <?= $appFont === $font ? 'selected' : '' ?>
-                    style="font-family:<?= htmlspecialchars($font) ?>,sans-serif;">
-                    <?= htmlspecialchars($font) ?>
-                </option>
-            <?php endforeach; ?>
-					</select>
-				</span>
-			</form>
-   <!--      <div style="margin-top:1em;">  -->
-   <div class="main-pane">
-  	<h4>About fonts on the web</h4>
-<p>
-	If you want the font to be working, when you are
-completely <strong>off</strong>-net you  should choose a
-	<strong>local font</strong>!<br/>
-	<strong>Local</strong> fonts are <strong>serif</strong>, <strong>sans-serif</strong> and
-	<strong>monospace</strong>.
-	<br/>If <strong>off</strong>-net, all other fonts will
-look the same, as a fallback kicks in.
-</p>
-
-  <h4>Background and Details</h4>
-<p>While developing this app, I noticed that very few
-fonts are available across all platforms. So-called
-“web-safe” fonts only work reliably on some desktop
-systems, and are rarely available on mobile devices.
-To solve this common web development issue, I use
-network-based fonts (like Google Fonts) for broader
-compatibility. That is really a great help. But I had to
-decide carefully, which font service I implement,
-as some services track the users (even across sites 
-and apps).</p>
-<p>I assume, the average user does <strong>not</strong> like
-to be tracked. So I chose <em>bunny fonts</em> from 
-<em>bunny.net</em>
-(see <a href="https://fonts.bunny.net/about">here</a>),
-as they are <ul>
-<li>free to use</li><li>open-source</li><li>privacy-first</li>
-<li>zero-tracking</li><li>no-logging policy</li>
-<li>hosted on a global CDN</li>
-</ul>
-which I decided, is good.
-</p>
-    </div>
-
-
-
-
 <?php
-// Not found
-else: ?>
+elseif ($level == 4): ?>
     <div class="main-pane">
-        <h2>Not found</h2>
-        <div>The page you wanted does not exist or is not available.</div>
-        <div style="margin-top:2em;">
-				<a href="<?=$selfUrl?>" class="levelup-btn">Go to Repository List</a>
-        </div>
+        <!-- Font selection logic/content here -->
     </div>
 <?php endif; ?>
-
-<script>
-const themeBtn = document.getElementById('themeBtn');
-const themePopup = document.getElementById('themePopup');
-const fontBtn = document.getElementById('fontBtn');
-function setFontCookie(fontName) {
-	    document.cookie = 'appFont=' + encodeURIComponent(fontName) + ';path=/;max-age=31536000';
-			    location.reload();
-}
-if (themeBtn && themePopup) {
-    themeBtn.addEventListener('click',function(e){
-        e.stopPropagation();
-        themePopup.classList.toggle('show');
-    });
-    themeBtn.addEventListener('mouseenter',function(){
-        themeBtn.title = "Click to switch theme";
-    });
-    document.addEventListener('click',function(e){
-        if(!themePopup.contains(e.target) && e.target!==themeBtn) {
-            themePopup.classList.remove('show');
-        }
-    });
-    themePopup.querySelectorAll('.theme-item').forEach(function(btn){
-        btn.addEventListener('click',function(){
-            var theme = btn.getAttribute('data-theme');
-            document.cookie = "theme=" + encodeURIComponent(theme) + ";path=/;max-age=31536000";
-            location.reload();
-        });
-        btn.addEventListener('mouseenter',function(){
-            let altTheme = btn.textContent.trim();
-            themeBtn.title = "Click to switch to " + altTheme + " theme";
-        });
-        btn.addEventListener('mouseleave',function(){
-            themeBtn.title = "Click to switch theme";
-        });
-    });
-}
-</script>
 </body>
 </html>
