@@ -114,9 +114,6 @@ fontdata: $(FONTLIST) fontdata.local fontdata.default fontspec.txt fontload.txt
 	@./newFontdata; \
 		sts=$$?; \
 		if [ $$sts -ge 10 ]; then \
-			sudo true; \
-			echo $$?; \
-			exit 99; \
 			if [ $$? != 0 ];then \
 				echo installing in $(PSTYDIR): $(FONTLIST); \
 				sudo install -o $(POWNER) -g $(PGROUP) -m 400 -t $(PSTYDIR) $(FONTLIST); \
