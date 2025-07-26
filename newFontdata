@@ -32,7 +32,7 @@ else
 	cat fontdata.txt.$tmpstr > fontdata.txt
 	((newd++))
 fi
-grep -q 9"$url${flist:0:-1}|$fplus'" ${lnkfil}
+grep -q "$url${flist:0:-1}|$fplus'" ${lnkfil}
 if [ $? != 0 ]; then
 	((newl++))
 	echo "New ${lnkfil} (backup: ${lnkfil}.bak-$tmpstr)"
