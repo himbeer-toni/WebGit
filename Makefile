@@ -109,24 +109,29 @@ php: phpadapt
 #   and fontload.txt (loaded, but not selectable)
 #   (the last derived from fontbunny/Fonts+/Embed CSS)
 #   also update fontlink.php if needed
+#			sudo diff -q $(FONTLIST) $(PSTYDIR)/$(FONTLIST) > /dev/null; 
 fontdata: $(FONTLIST) fontdata.local fontdata.default fontspec.txt fontload.txt
 	@./newFontdata; \
 		sts=$$?; \
-		[ $$sts -ge 10 ] && \
-			sudo diff -q $(FONTLIST) $(PSTYDIR)/$(FONTLIST) > /dev/null; \
-			if [ "$$?" != "0" ];then \
-				echo installing in $(PSTYDIR)/$(PRODUCT)-style: style $(FONTLIST); \
-				sudo install -o $(POWNER) -g $(PGROUP) -m 400 -t $(PBINDIR)/$(PRODUCT)-style  $(FONTLIST); \
+		if [ $$sts -ge 10 ]; then \
+			sudo true; \
+			echo $$?; \
+			exit 99; \
+			if [ $$? != 0 ];then \
+				echo installing in $(PSTYDIR): $(FONTLIST); \
+				sudo install -o $(POWNER) -g $(PGROUP) -m 400 -t $(PSTYDIR) $(FONTLIST); \
 			fi; \
-				[ $$sts -lt 10 ] && [ $$sts -gt 0 ] && echo ins link; \
-		[ $$sts -gt 10 ] && echo ins link; \
-		true; \
+			echo $$sts; \
+			[ $$sts -lt 10 ] && [ $$sts -gt 0 ] && echo ins link; \
+			[ $$sts -gt 10 ] && echo ins link; \
+			true; \
+		fi; \
 
 void:
 	sudo diff -q $(FONTLIST) $(PSTYDIR)/$(FONTLIST) > /dev/null; \
 	if [ "$$?" != "0" ];then \
-    echo installing in $(PSTYDIR)/$(PRODUCT)-style: style $(FONTLIST); \
-		sudo install -o $(POWNER) -g $(PGROUP) -m 400 -t $(PBINDIR)/$(PRODUCT)-style  $(FONTLIST); \
+    echo installing in $(PSTYDIR): style $(FONTLIST); \
+		sudo install -o $(POWNER) -g $(PGROUP) -m 400 -t $(PSTYDIR)  $(FONTLIST); \
 	fi; \
 
 # Copy and set permissions for a setuid git binary for safe web use
