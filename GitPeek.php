@@ -11,16 +11,13 @@
 # ©2025 Himbeertoni
 # 
 ##
-// ----------- DEBUGGING --------- disabled by comment
-// ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
-// echo "<pre>" . __FILE__ . "</pre>";
+
 // ----------- CONFIGURATION -----------
 $repoRoot = '/home/pi/gitrepos'; // All git repos in this directory
-$selfName = basename(__FILE__,".php");
+$selfName = basename(__FILE__, ".php");
 $styleDir = __DIR__ . "/$selfName-style";
 $styleWebPath = "/$selfName-style"; // Web-accessible path (relative to script location)
+
 // ----------- GIT BINARY SELECTION -----------
 $setuidGit = "$repoRoot/git4$selfName"; // path as before
 $systemGit = '/usr/bin/git'; // fallback
@@ -33,43 +30,40 @@ if (is_executable($setuidGit)) {
 }
 $selfUrl = basename(__FILE__);
 
-
 // Load and sort the font list
 $fontFile = __DIR__ . "/$selfName-style/fontdata.txt";
 $fonts = [];
 if (file_exists($fontFile)) {
     $fonts = array_filter(array_map('trim', file($fontFile)));
     natcasesort($fonts);
-   $fonts = array_values($fonts);
+    $fonts = array_values($fonts);
 }
 
 // Default font is the first in the sorted list
 if (isset($_GET['fonts'])) {
-	if (!isset($fontOneShot)) {
-		$fontOneshot = 1;
-		$fontidx = (int)$_GET['fonts'];
-	}
+    if (!isset($fontOneShot)) {
+        $fontOneshot = 1;
+        $fontidx = (int)$_GET['fonts'];
+    }
 } else {
-	$fontidx = 0;
+    $fontidx = 0;
 }
-// echo "<!-- dbg:1 fontidx=$fontidx -->\n";
-if ( $fontidx < 0 ) {
-		$defaultFont = $fonts[0] ?? 'sans-serif';
-} else if ( $fontidx > sizeof($fonts)-1 ) {
-		$defaultFont = $fonts[sizeof($fonts)-1] ?? 'sans-serif';
+if ($fontidx < 0) {
+    $defaultFont = $fonts[0] ?? 'sans-serif';
+} else if ($fontidx > sizeof($fonts) - 1) {
+    $defaultFont = $fonts[sizeof($fonts) - 1] ?? 'sans-serif';
 } else {
-		$defaultFont = $fonts[0] ?? 'sans-serif';
+    $defaultFont = $fonts[0] ?? 'sans-serif';
 }
 
 // Check for user-selected font in cookie (must be in list)
 $appFont = $defaultFont;
-// echo "<!-- dbg:defaultFont=$defaultFont -->\n";
-// echo "<!-- dbg:2 fontidx=$fontidx -->\n";
-if ( $fontidx == 0 ) {
-	if (isset($_COOKIE['appFont']) && in_array($_COOKIE['appFont'], $fonts, true)) {
-			$appFont = $_COOKIE['appFont'];
-	}
+if ($fontidx == 0) {
+    if (isset($_COOKIE['appFont']) && in_array($_COOKIE['appFont'], $fonts, true)) {
+        $appFont = $_COOKIE['appFont'];
+    }
 }
+
 // ----------- UTILS -----------
 
 function themesAvailable($styleDir) {
@@ -84,7 +78,7 @@ function themesAvailable($styleDir) {
     }
     // Custom sort order: Himbeertoni, Dark, Light, then others
     $preferredOrder = ['Light', 'Dark', 'Himbeertoni'];
-    uksort($themes, function($a, $b) use ($preferredOrder) {
+    uksort($themes, function ($a, $b) use ($preferredOrder) {
         $posA = array_search($a, $preferredOrder);
         $posB = array_search($b, $preferredOrder);
         if ($posA !== false && $posB !== false) {
@@ -94,22 +88,11 @@ function themesAvailable($styleDir) {
         } elseif ($posB !== false) {
             return 1;
         }
-        // Alphabetical order for remaining themes
         return strcmp($a, $b);
     });
     return $themes;
 }
 
-function themesAvailableObsolete($styleDir) {
-    $themes = [];
-    foreach (glob($styleDir . '/*-theme.css') as $css) {
-        $name = basename($css);
-        if (preg_match('/^(.*)-theme\.css$/', $name, $m)) {
-            $themes[$m[1]] = $name;
-        }
-    }
-    return $themes;
-}
 function getTheme() {
     if (!empty($_COOKIE['theme']) && preg_match('/^[a-zA-Z0-9_-]+$/', $_COOKIE['theme'])) {
         return $_COOKIE['theme'];
@@ -127,11 +110,11 @@ function setThemeHeader($themes, $theme, $styleWebPath) {
     }
 }
 function sanitizeRepo($repo) {
-		if ( basename($repo) != $repo) {
-			return "Do not even think of trying to trick me!";
-		} else {
-			return preg_replace('/[^\w.-]/', '', $repo);
-		}
+    if (basename($repo) != $repo) {
+        return "Do not even think of trying to trick me!";
+    } else {
+        return preg_replace('/[^\w.-]/', '', $repo);
+    }
 }
 function repoExists($repoRoot, $repo) {
     return is_dir("$repoRoot/$repo/.git");
@@ -151,7 +134,7 @@ function ansi2html($ansi) {
         "\033[0m"    => '</span>',
         "\033[m"     => '</span>',
     ];
-    $ansi = preg_replace_callback('/(\033\[[0-9;]*m)/', function($m) use ($map) {
+    $ansi = preg_replace_callback('/(\033\[[0-9;]*m)/', function ($m) use ($map) {
         return $map[$m[1]] ?? '';
     }, $ansi);
 
@@ -169,57 +152,50 @@ $repo = isset($_GET['repo']) ? sanitizeRepo($_GET['repo']) : null;
 $commit = isset($_GET['commit']) ? preg_replace('/[^0-9a-f]/i', '', $_GET['commit']) : null;
 $commit = isset($_GET['commit']) ? $_GET['commit'] : null;
 if (($commit != '') && (!preg_match('/^[0-9a-f]+$/', $commit))) {
-	    $commit = "!$commit is invalid!";
+    $commit = "!$commit is invalid!";
 }
 $themes = themesAvailable($styleDir);
 $theme = getTheme();
 
 if (isset($_GET['fonts'])) {
-			$fontidx = (int)$_GET['fonts'];
-	    $level = 4;
+    $fontidx = (int)$_GET['fonts'];
+    $level = 4;
 } else if (!$repo) {
-	    $level = 1;
+    $level = 1;
 } else if ($repo && !$commit) {
-	    $level = 2;
+    $level = 2;
 } else if ($repo && $commit) {
-	    $level = 3;
+    $level = 3;
 } else {
-	    $level = 1;
+    $level = 1;
 }
+
 // ----------- DATA FETCHING -----------
 if ($level == 1) {
     // List all repos, skipping symlinks to dirs within $repoRoot
     $repos = [];
     $all = scandir($repoRoot);
     $repoRootReal = realpath($repoRoot);
-		foreach ($all as $r) {
-				if ($r[0] == '.') continue;
-				$path = "$repoRoot/$r";
-				if (is_dir($path) && !is_link($path)) {
-						// Normal directory: show only if it has a .git
-						if (!is_dir($path . '/.git')) continue;
-						$repos[] = $r;
-						continue;
-				}
-				if (is_link($path)) {
-						$target = readlink($path);
-						// Skip symlinks of the form ../Something (no further slash)
-						if (preg_match('#^\.\./[^/]+$#', $target)) {
-								continue;
-						}
-						// Only show if the resolved target is a git repo
-						$real = realpath($path);
-						if ($real === false || !is_dir($real . '/.git')) continue;
-						# Do NOT add if it links to a dir in
-						# $repoRoot, but do add if link points
-						# outside $repoRoot
-						if (str_contains(substr($real,strlen($repoRoot)+1),'/') === false) continue;
-						# Came here it must be a link to sth.
-						# OUTSIDE of $repoRoot, so add it
-						$repos[] = $r;
-				}
-				// skip everything else (files, broken links, etc)
-		}
+    foreach ($all as $r) {
+        if ($r[0] == '.') continue;
+        $path = "$repoRoot/$r";
+        if (is_dir($path) && !is_link($path)) {
+            // Normal directory: show only if it has a .git
+            if (!is_dir($path . '/.git')) continue;
+            $repos[] = $r;
+            continue;
+        }
+        if (is_link($path)) {
+            $target = readlink($path);
+            if (preg_match('#^\.\./[^/]+$#', $target)) {
+                continue;
+            }
+            $real = realpath($path);
+            if ($real === false || !is_dir($real . '/.git')) continue;
+            if (str_contains(substr($real, strlen($repoRoot) + 1), '/') === false) continue;
+            $repos[] = $r;
+        }
+    }
     sort($repos, SORT_NATURAL | SORT_FLAG_CASE);
 } elseif ($level == 2 && repoExists($repoRoot, $repo)) {
     // Get commit list
@@ -274,10 +250,10 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
     <meta charset="UTF-8">
     <title><?=$selfName?><?php
         if ($level==2 && $repo) echo ': '.htmlspecialchars($repo);
+        if ($level==3 && $repo && $commit) echo ': '.htmlspecialchars($repo).' '.htmlspecialchars($commit);
     ?></title>
     <?php setThemeHeader($themes, $theme, $styleWebPath); ?>
-    <!-- Main layout CSS, after theme -->
-		<link rel="stylesheet" href="https://fonts.bunny.net/css?family=https://fonts.bunny.net/css?family='system-ui:400|Open+Sans:400|Roboto:400|ABeeZee:400|Abyssinica+SIL:400|Acme:400|Actor:400|Aldrich:400|Annie+Use+Your+Telescope:400|Damion:400|M+PLUS+1+Code:400'">
+    <link rel="stylesheet" href="https://fonts.bunny.net/css?family='system-ui:400|Open+Sans:400|Roboto:400|ABeeZee:400|Abyssinica+SIL:400|Acme:400|Actor:400|Aldrich:400|Annie+Use+Your+Telescope:400|Damion:400|M+PLUS+1+Code:400'" />
     <link rel="stylesheet" href="<?=$styleWebPath?>/layout.css" id="layoutcss">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -311,15 +287,16 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
     <div class="hl-center">
       <?php if ($level==1): ?>
         Repository List
-      <?php elseif ($level==2 || $level==3): ?>
+      <?php elseif ($level==2): ?>
+        <?=htmlspecialchars($repo)?>
+      <?php elseif ($level==3): ?>
         <?=htmlspecialchars($repo)?>
       <?php elseif ($level==4): ?>
         Select font
       <?php endif; ?>
-      <!-- For level==3, show only repo name here -->
     </div>
     <div class="hl-right">
-      <button class="theme-switcher" id="themeBtn" title="Switch theme"><?=htmlspecialchars($theme)?> &#x25BC;</button>
+      <button class="theme-switcher" id="themeBtn" title="Switch theme"><?=htmlspecialchars($theme)?> &#x25BC;</button><br/>
       <button class="theme-switcher" id="fontBtn" title="Switch theme">Fonts</button>
       <script>
       document.getElementById('fontBtn').onclick = function() {
@@ -342,6 +319,7 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
 <?php
 // ----------- MAIN CONTENT -----------
 
+// Level 1: Repo list
 if ($level == 1): ?>
     <div class="main-pane">
         <?php if (empty($repos)): ?>
@@ -360,6 +338,7 @@ if ($level == 1): ?>
         <?php endif; ?>
     </div>
 <?php
+// Level 2: Commit list for repo (NO nav-pane, only main-pane)
 elseif ($level == 2 && !$notfound): ?>
     <div class="main-pane">
         <h2 style="margin-top:0;">Commit History</h2>
@@ -383,28 +362,8 @@ elseif ($level == 2 && !$notfound): ?>
         <?php endif; ?>
     </div>
 <?php
-elseif ($level == 3 && !$notfound): 
-    // ----------- PREV/NEXT LOGIC FOR LEVEL 3 -----------
-    $prevCommit = $nextCommit = null;
-    if (!empty($commits)) {
-        $numCommits = count($commits);
-        $currentIdx = null;
-        foreach ($commits as $idx => $c) {
-            if ($c['hash'] === $commit) {
-                $currentIdx = $idx;
-                break;
-            }
-        }
-        if ($currentIdx !== null) {
-            if ($currentIdx > 0) {
-                $prevCommit = $commits[$currentIdx - 1]['hash'];
-            }
-            if ($currentIdx < $numCommits - 1) {
-                $nextCommit = $commits[$currentIdx + 1]['hash'];
-            }
-        }
-    }
-?>
+// Level 3: Commit diff
+elseif ($level == 3 && !$notfound): ?>
     <div class="nav-content-layout">
         <div class="nav-pane">
             <div style="font-size:1.2em; font-weight:600; color:var(--subheadline-color); margin-bottom:1em;">
@@ -421,29 +380,118 @@ elseif ($level == 3 && !$notfound):
             </ul>
         </div>
         <div class="main-pane">
-            <div style="margin-bottom:2em; display:flex; align-items:center; justify-content:center; gap:1em;">
-                <?php if ($prevCommit): ?>
-                  <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=htmlspecialchars($prevCommit)?>" class="commit-nav-arrow" title="Previous commit">&#8592;</a>
-                <?php else: ?>
-                  <span class="commit-nav-arrow disabled">&#8592;</span>
-                <?php endif; ?>
-                <span style="font-size:1.16em; color:var(--subheadline-color); font-weight:600;">
-                  <span style="font-family:monospace;"><?=htmlspecialchars($commit)?></span>
-                </span>
-                <?php if ($nextCommit): ?>
-                  <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=htmlspecialchars($nextCommit)?>" class="commit-nav-arrow" title="Next commit">&#8594;</a>
-                <?php else: ?>
-                  <span class="commit-nav-arrow disabled">&#8594;</span>
-                <?php endif; ?>
+            <div style="margin-bottom:2em;text-align:center;">
+								<span style="font-size:1.16em; color:var(--subheadline-color); font-weight:600;">
+								<?=htmlspecialchars($commit)?></span>
             </div>
             <div class="git-diff"><?=ansi2html($diff)?></div>
         </div>
     </div>
+
 <?php
-elseif ($level == 4): ?>
+// Level 4: Font selector
+elseif ($level = 4): ?>
+    <div class="main-pane" style="text-align:left">
+      <form style="text-align:center" onsubmit="return false;">
+        <label for="fontSelect">Select font:</label>
+        <select id="fontSelect" onchange="setFontCookie(this.value)">
+          <?php foreach ($fonts as $font): ?>
+            <option value="<?= htmlspecialchars($font) ?>"
+              <?= $appFont === $font ? 'selected' : '' ?>
+              style="font-family:<?= htmlspecialchars($font) ?>,sans-serif;">
+              <?= htmlspecialchars($font) ?>
+            </option>
+          <?php endforeach; ?>
+        </select>
+      </form>
+      <div style="margin-top:2em;">
+        <h4>About fonts on the web</h4>
+        <p>
+          If you want the font to be working, when you are
+          completely <strong>off</strong>-net you should choose a
+          <strong>local font</strong>!<br/>
+          <strong>Local</strong> fonts are <strong>serif</strong>, <strong>sans-serif</strong> and
+          <strong>monospace</strong>.
+          <br/>If <strong>off</strong>-net, all other fonts will
+          look the same, as a fallback kicks in.
+        </p>
+        <h4>Background and Details</h4>
+        <p>
+          While developing this app, I noticed that very few
+          fonts are available across all platforms. So-called
+          “web-safe” fonts only work reliably on some desktop
+          systems, and are rarely available on mobile devices.
+          To solve this common web development issue, I use
+          network-based fonts (like Google Fonts) for broader
+          compatibility. That is really a great help. But I had to
+          decide carefully, which font service I implement,
+          as some services track the users (even across sites 
+          and apps).
+        </p>
+        <p>
+          I assume, the average user does <strong>not</strong> like
+          to be tracked. So I chose <em>bunny fonts</em> from 
+          <em>bunny.net</em>
+          (see <a href="https://fonts.bunny.net/about">here</a>),
+          as they are 
+          <ul>
+            <li>free to use</li><li>open-source</li><li>privacy-first</li>
+            <li>zero-tracking</li><li>no-logging policy</li>
+            <li>hosted on a global CDN</li>
+          </ul>
+          which I decided, is good.
+        </p>
+      </div>
+    </div>
+
+<?php
+// Not found
+else: ?>
     <div class="main-pane">
-        <!-- Font selection logic/content here -->
+        <h2>Not found</h2>
+        <div>The page you wanted does not exist or is not available.</div>
+        <div style="margin-top:2em;">
+          <a href="<?=$selfUrl?>" class="levelup-btn">Go to Repository List</a>
+        </div>
     </div>
 <?php endif; ?>
+
+<script>
+const themeBtn = document.getElementById('themeBtn');
+const themePopup = document.getElementById('themePopup');
+const fontBtn = document.getElementById('fontBtn');
+function setFontCookie(fontName) {
+    document.cookie = 'appFont=' + encodeURIComponent(fontName) + ';path=/;max-age=31536000';
+    location.reload();
+}
+if (themeBtn && themePopup) {
+    themeBtn.addEventListener('click', function(e){
+        e.stopPropagation();
+        themePopup.classList.toggle('show');
+    });
+    themeBtn.addEventListener('mouseenter', function(){
+        themeBtn.title = "Click to switch theme";
+    });
+    document.addEventListener('click', function(e){
+        if(!themePopup.contains(e.target) && e.target!==themeBtn) {
+            themePopup.classList.remove('show');
+        }
+    });
+    themePopup.querySelectorAll('.theme-item').forEach(function(btn){
+        btn.addEventListener('click', function(){
+            var theme = btn.getAttribute('data-theme');
+            document.cookie = "theme=" + encodeURIComponent(theme) + ";path=/;max-age=31536000";
+            location.reload();
+        });
+        btn.addEventListener('mouseenter', function(){
+            let altTheme = btn.textContent.trim();
+            themeBtn.title = "Click to switch to " + altTheme + " theme";
+        });
+        btn.addEventListener('mouseleave', function(){
+            themeBtn.title = "Click to switch theme";
+        });
+    });
+}
+</script>
 </body>
 </html>
