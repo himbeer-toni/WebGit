@@ -9,24 +9,20 @@
 # https://www.gnu.org/licenses/gpl-3.0.en.html )
 # 
 # ©2025 Himbeertoni
-# 
 ##
 
-// ----------- CONFIGURATION -----------
-$repoRoot = '/home/pi/gitrepos'; // All git repos in this directory
+$repoRoot = '/home/pi/gitrepos';
 $selfName = basename(__FILE__, ".php");
 $styleDir = __DIR__ . "/$selfName-style";
-$styleWebPath = "/$selfName-style"; // Web-accessible path (relative to script location)
-
-// ----------- GIT BINARY SELECTION -----------
-$setuidGit = "$repoRoot/git4$selfName"; // path as before
-$systemGit = '/usr/bin/git'; // fallback
+$styleWebPath = "/$selfName-style";
+$setuidGit = "$repoRoot/git4$selfName";
+$systemGit = '/usr/bin/git';
 if (is_executable($setuidGit)) {
     $gitBin = $setuidGit;
 } elseif (is_executable($systemGit)) {
     $gitBin = $systemGit;
 } else {
-    $gitBin = 'git'; // rely on PATH
+    $gitBin = 'git';
 }
 $selfUrl = basename(__FILE__);
 
@@ -55,8 +51,6 @@ if ($fontidx < 0) {
 } else {
     $defaultFont = $fonts[0] ?? 'sans-serif';
 }
-
-// Check for user-selected font in cookie (must be in list)
 $appFont = $defaultFont;
 if ($fontidx == 0) {
     if (isset($_COOKIE['appFont']) && in_array($_COOKIE['appFont'], $fonts, true)) {
@@ -64,19 +58,15 @@ if ($fontidx == 0) {
     }
 }
 
-// ----------- UTILS -----------
-
 function themesAvailable($styleDir) {
     $themes = [];
     foreach (glob($styleDir . '/*-theme.css') as $css) {
         $name = basename($css);
         if (preg_match('/^(.*)-theme\.css$/', $name, $m)) {
-            // Trim accidental spaces in theme names
             $themeKey = trim($m[1]);
             $themes[$themeKey] = $name;
         }
     }
-    // Custom sort order: Himbeertoni, Dark, Light, then others
     $preferredOrder = ['Light', 'Dark', 'Himbeertoni'];
     uksort($themes, function ($a, $b) use ($preferredOrder) {
         $posA = array_search($a, $preferredOrder);
@@ -92,12 +82,11 @@ function themesAvailable($styleDir) {
     });
     return $themes;
 }
-
 function getTheme() {
     if (!empty($_COOKIE['theme']) && preg_match('/^[a-zA-Z0-9_-]+$/', $_COOKIE['theme'])) {
         return $_COOKIE['theme'];
     }
-    return 'Light'; // Default
+    return 'Light';
 }
 function setThemeHeader($themes, $theme, $styleWebPath) {
     if (isset($themes[$theme])) {
@@ -137,13 +126,11 @@ function ansi2html($ansi) {
     $ansi = preg_replace_callback('/(\033\[[0-9;]*m)/', function ($m) use ($map) {
         return $map[$m[1]] ?? '';
     }, $ansi);
-
     $open = substr_count($ansi, '<span');
     $close = substr_count($ansi, '</span>');
     if ($open > $close) {
         $ansi .= str_repeat('</span>', $open - $close);
     }
-
     return nl2br($ansi);
 }
 
@@ -172,7 +159,6 @@ if (isset($_GET['fonts'])) {
 
 // ----------- DATA FETCHING -----------
 if ($level == 1) {
-    // List all repos, skipping symlinks to dirs within $repoRoot
     $repos = [];
     $all = scandir($repoRoot);
     $repoRootReal = realpath($repoRoot);
@@ -180,7 +166,6 @@ if ($level == 1) {
         if ($r[0] == '.') continue;
         $path = "$repoRoot/$r";
         if (is_dir($path) && !is_link($path)) {
-            // Normal directory: show only if it has a .git
             if (!is_dir($path . '/.git')) continue;
             $repos[] = $r;
             continue;
@@ -198,7 +183,6 @@ if ($level == 1) {
     }
     sort($repos, SORT_NATURAL | SORT_FLAG_CASE);
 } elseif ($level == 2 && repoExists($repoRoot, $repo)) {
-    // Get commit list
     $cmd = sprintf('%s -C %s log --pretty=format:"%%h|%%ad|%%an|%%s" --date=short --no-color 2>&1',
         escapeshellarg($gitBin), escapeshellarg("$repoRoot/$repo"));
     $gitlog = shell_exec($cmd);
@@ -212,16 +196,13 @@ if ($level == 1) {
         }
     }
 } elseif ($level == 3 && repoExists($repoRoot, $repo)) {
-    // Get commit diff and message
     $cmd = sprintf('%s -C %s show --color=always %s 2>&1',
         escapeshellarg($gitBin), escapeshellarg("$repoRoot/$repo"), escapeshellarg($commit));
     $diff = shell_exec($cmd);
-    // Get commit message only
     $msg = '';
     $cmd2 = sprintf('%s -C %s log -1 --pretty=format:"%%s" %s 2>&1',
         escapeshellarg($gitBin), escapeshellarg("$repoRoot/$repo"), escapeshellarg($commit));
     $msg = trim(shell_exec($cmd2));
-    // For left nav
     $cmd3 = sprintf('%s -C %s log --pretty=format:"%%h|%%ad|%%an|%%s" --date=short --no-color 2>&1',
         escapeshellarg($gitBin), escapeshellarg("$repoRoot/$repo"));
     $gitlog = shell_exec($cmd3);
@@ -236,7 +217,6 @@ if ($level == 1) {
     }
 }
 
-// ----------- ERROR HANDLING -----------
 $notfound = false;
 if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
     $notfound = true;
@@ -278,10 +258,12 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
 <body class="level-<?=$level?>" style="font-family:<?= htmlspecialchars($appFont) ?>,sans-serif;">
 <div id="headline-row">
     <div class="hl-left">
-      <?php if ($level==2 || $level==4): ?>
-        <a href="<?=$selfUrl?>" class="levelup-btn" title="Back to list">&larr;</a>
+      <?php if ($level==2): ?>
+        <a href="<?=$selfUrl?>#repo-<?=urlencode($repo)?>" class="levelup-btn" title="Back to list">&larr;</a>
       <?php elseif ($level==3): ?>
-        <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>" class="levelup-btn" title="Back to commits">&larr;</a>
+        <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>#commit-<?=htmlspecialchars($commit)?>" class="levelup-btn" title="Back to commits">&larr;</a>
+      <?php elseif ($level==4): ?>
+        <a href="<?=$selfUrl?>" class="levelup-btn" title="Back to list">&larr;</a>
       <?php endif; ?>
     </div>
     <div class="hl-center">
@@ -290,13 +272,13 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
       <?php elseif ($level==2): ?>
         <?=htmlspecialchars($repo)?>
       <?php elseif ($level==3): ?>
-        <?=htmlspecialchars($repo)?>
+        <?=htmlspecialchars($repo)?>: <span style="font-family:monospace;"><?=htmlspecialchars($commit)?></span>
       <?php elseif ($level==4): ?>
         Select font
       <?php endif; ?>
     </div>
     <div class="hl-right">
-      <button class="theme-switcher" id="themeBtn" title="Switch theme"><?=htmlspecialchars($theme)?> &#x25BC;</button><br/>
+      <button class="theme-switcher" id="themeBtn" title="Switch theme"><?=htmlspecialchars($theme)?> &#x25BC;</button>
       <button class="theme-switcher" id="fontBtn" title="Switch theme">Fonts</button>
       <script>
       document.getElementById('fontBtn').onclick = function() {
@@ -319,7 +301,6 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
 <?php
 // ----------- MAIN CONTENT -----------
 
-// Level 1: Repo list
 if ($level == 1): ?>
     <div class="main-pane">
         <?php if (empty($repos)): ?>
@@ -328,8 +309,8 @@ if ($level == 1): ?>
             <h2 style="margin-top:0;">Repositories</h2>
             <ul style="list-style:none; padding:0; margin:0;">
             <?php foreach($repos as $r): ?>
-                <li style="margin-bottom:1.1em;">
-                  <a href="<?=$selfUrl?>?repo=<?=urlencode($r)?>" class="levelup-btn" style="font-size:1.08em;">
+                <li id="repo-<?=urlencode($r)?>" style="margin-bottom:1.1em;">
+                  <a href="<?=$selfUrl?>?repo=<?=urlencode($r)?>#repo-<?=urlencode($r)?>" class="levelup-btn" style="font-size:1.08em;">
                         <?=htmlspecialchars($r)?>
                     </a>
                 </li>
@@ -338,7 +319,6 @@ if ($level == 1): ?>
         <?php endif; ?>
     </div>
 <?php
-// Level 2: Commit list for repo (NO nav-pane, only main-pane)
 elseif ($level == 2 && !$notfound): ?>
     <div class="main-pane">
         <h2 style="margin-top:0;">Commit History</h2>
@@ -347,9 +327,9 @@ elseif ($level == 2 && !$notfound): ?>
         <?php else: ?>
             <div>
             <?php foreach ($commits as $c): ?>
-                <div class="commit-row">
+                <div class="commit-row" id="commit-<?=htmlspecialchars($c['hash'])?>">
                     <div class="commit-meta">
-                      <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=htmlspecialchars($c['hash'])?>" class="levelup-btn commit-hash" style="font-family:monospace; font-size:1em;">
+                      <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=htmlspecialchars($c['hash'])?>#commit-<?=htmlspecialchars($c['hash'])?>" class="levelup-btn commit-hash" style="font-family:monospace; font-size:1em;">
                             <?=htmlspecialchars($c['hash'])?>
                         </a>
                         <span class="commit-date"><?=htmlspecialchars($c['date'])?></span>
@@ -362,7 +342,6 @@ elseif ($level == 2 && !$notfound): ?>
         <?php endif; ?>
     </div>
 <?php
-// Level 3: Commit diff
 elseif ($level == 3 && !$notfound): ?>
     <div class="nav-content-layout">
         <div class="nav-pane">
@@ -371,8 +350,8 @@ elseif ($level == 3 && !$notfound): ?>
             </div>
             <ul style="list-style:none; padding:0;">
             <?php foreach ($commits as $c): ?>
-                <li style="margin-bottom:0.39em;">
-                  <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=$c['hash']?>" class="levelup-btn" style="font-family:monospace; font-size:1em;<?=($c['hash']==$commit?' background:var(--btn-bg-hover);':'')?>">
+                <li id="commit-<?=htmlspecialchars($c['hash'])?>" style="margin-bottom:0.39em;">
+                  <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=$c['hash']?>#commit-<?=htmlspecialchars($c['hash'])?>" class="levelup-btn" style="font-family:monospace; font-size:1em;<?=($c['hash']==$commit?' background:var(--btn-bg-hover);':'')?>">
                         <?=htmlspecialchars($c['hash'])?>
                     </a>
                 </li>
@@ -380,17 +359,14 @@ elseif ($level == 3 && !$notfound): ?>
             </ul>
         </div>
         <div class="main-pane">
-            <div style="margin-bottom:2em;text-align:center;">
-								<span style="font-size:1.16em; color:var(--subheadline-color); font-weight:600;">
-								<?=htmlspecialchars($commit)?></span>
+            <div style="margin-bottom:2em;">
+                <span style="font-size:1.16em; color:var(--subheadline-color); font-weight:600;"><?=htmlspecialchars($repo)?> / <span style="font-family:monospace;"><?=htmlspecialchars($commit)?></span></span>
             </div>
             <div class="git-diff"><?=ansi2html($diff)?></div>
         </div>
     </div>
-
 <?php
-// Level 4: Font selector
-elseif ($level = 4): ?>
+elseif ($level == 4): ?>
     <div class="main-pane" style="text-align:left">
       <form style="text-align:center" onsubmit="return false;">
         <label for="fontSelect">Select font:</label>
@@ -432,7 +408,7 @@ elseif ($level = 4): ?>
           I assume, the average user does <strong>not</strong> like
           to be tracked. So I chose <em>bunny fonts</em> from 
           <em>bunny.net</em>
-          (see <a href="https://fonts.bunny.net/about">here</a>),
+          (see <a href="https://fonts.buny.net/about">here</a>),
           as they are 
           <ul>
             <li>free to use</li><li>open-source</li><li>privacy-first</li>
@@ -443,9 +419,7 @@ elseif ($level = 4): ?>
         </p>
       </div>
     </div>
-
 <?php
-// Not found
 else: ?>
     <div class="main-pane">
         <h2>Not found</h2>
