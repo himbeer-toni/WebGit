@@ -272,7 +272,7 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
       <?php elseif ($level==2): ?>
         <?=htmlspecialchars($repo)?>
       <?php elseif ($level==3): ?>
-        <?=htmlspecialchars($repo)?>: <span style="font-family:monospace;"><?=htmlspecialchars($commit)?></span>
+        <?=htmlspecialchars($repo)?>
       <?php elseif ($level==4): ?>
         Select font
       <?php endif; ?>
@@ -359,8 +359,8 @@ elseif ($level == 3 && !$notfound): ?>
             </ul>
         </div>
         <div class="main-pane">
-            <div style="margin-bottom:2em;">
-                <span style="font-size:1.16em; color:var(--subheadline-color); font-weight:600;"><?=htmlspecialchars($repo)?> / <span style="font-family:monospace;"><?=htmlspecialchars($commit)?></span></span>
+            <div style="margin-bottom:2em;text-align:center">
+                <span style="font-size:1.16em; color:var(--subheadline-color); font-weight:600;"><?=htmlspecialchars($commit)?></span>
             </div>
             <div class="git-diff"><?=ansi2html($diff)?></div>
         </div>
