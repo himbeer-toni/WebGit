@@ -39,11 +39,12 @@ function sanitizeRepo($repo) {
     // Only allow [A-Za-z0-9_.-]
     return preg_replace('/[^A-Za-z0-9_.-]/', '', $repo);
 }
+
 function themesAvailable($styleDir) {
     $themes = [];
     if (is_dir($styleDir)) {
         foreach (scandir($styleDir) as $f) {
-            if (preg_match('/^theme-(.+)\.css$/', $f, $m)) {
+            if (preg_match('/^(.+)-theme\.css$/', $f, $m)) {
                 $themes[$m[1]] = "$styleDir/$f";
             }
         }
@@ -260,6 +261,9 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
         window.location = window.location.pathname + '?fonts=0';
       };
       </script>
+<?php
+				$pattern = $styleDir . '/*-theme.css';
+?>
       <div class="theme-popup" id="themePopup" role="menu">
         <?php foreach ($themes as $t => $css): ?>
           <button class="theme-item<?php if($t==$theme)echo' selected';?>" data-theme="<?=htmlspecialchars($t)?>">
@@ -267,6 +271,14 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
           </button>
         <?php endforeach; ?>
       </div>
+<script>
+document.querySelectorAll('.theme-item').forEach(btn => {
+  btn.onclick = function() {
+    document.cookie = "GitPeekTheme=" + btn.getAttribute('data-theme') + "; path=/";
+    location.reload();
+  };
+});
+</script>
     </div>
 </div>
 <?php if ($level==3 && isset($msg) && $msg): ?>
@@ -275,7 +287,6 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
 
 <?php
 // ----------- MAIN CONTENT -----------
-
 if ($level == 1): ?>
     <div class="main-pane">
         <?php if (empty($repos)): ?>
