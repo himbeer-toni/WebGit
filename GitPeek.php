@@ -283,9 +283,9 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
 <div id="headline-row">
     <div class="hl-left">
       <?php if ($level==2 || $level==4): ?>
-        <a href="<?=$selfUrl?>" class="levelup-btn" title="Back to list">&larr;</a>
+        <a href="<?=$selfUrl?>#repo-<?=urlencode($repo)?>" class="levelup-btn" title="Back to list">&larr;</a>
       <?php elseif ($level==3): ?>
-        <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>" class="levelup-btn" title="Back to commits">&larr;</a>
+        <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>#commit-<?=htmlspecialchars($prevCommit)?>" class="levelup-btn" title="Back to commits">&larr;</a>
       <?php endif; ?>
     </div>
     <div class="hl-center">
@@ -333,8 +333,8 @@ if ($level == 1): ?>
             <h2 style="margin-top:0;">Repositories</h2>
             <ul style="list-style:none; padding:0; margin:0;">
             <?php foreach($repos as $r): ?>
-                <li style="margin-bottom:1.1em;">
-                    <a href="<?=$selfUrl?>?repo=<?=urlencode($r)?>" class="levelup-btn" style="font-size:1.08em;">
+                <li style="margin-bottom:1.1em;" id="repo-<?=urlencode($r)?>">
+                    <a href="<?=$selfUrl?>?repo=<?=urlencode($r)?>#repo-<?=urlencode($r)?>" class="levelup-btn" style="font-size:1.08em;">
                         <?=htmlspecialchars($r)?>
                     </a>
                 </li>
@@ -352,9 +352,9 @@ elseif ($level == 2 && !$notfound): ?>
         <?php else: ?>
             <div>
             <?php foreach ($commits as $c): ?>
-                <div class="commit-row">
+                <div class="commit-row" id="commit-<?=htmlspecialchars($c['hash'])?>">
                     <div class="commit-meta">
-                        <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=htmlspecialchars($c['hash'])?>" class="levelup-btn commit-hash" style="font-family:monospace; font-size:1em;">
+                        <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=htmlspecialchars($c['hash'])?>#commit-<?=htmlspecialchars($c['hash'])?>" class="levelup-btn commit-hash" style="font-family:monospace; font-size:1em;">
                             <?=htmlspecialchars($c['hash'])?>
                         </a>
                         <span class="commit-date"><?=htmlspecialchars($c['date'])?></span>
@@ -376,8 +376,8 @@ elseif ($level == 3 && !$notfound): ?>
             </div>
             <ul style="list-style:none; padding:0;">
             <?php foreach ($commits as $c): ?>
-                <li style="margin-bottom:0.39em;">
-                    <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=$c['hash']?>" class="levelup-btn" style="font-family:monospace; font-size:1em;<?=($c['hash']==$commit?' background:var(--btn-bg-hover);':'')?>">
+                <li style="margin-bottom:0.39em;" id="commit-<?=htmlspecialchars($c['hash'])?>">
+                    <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=$c['hash']?>#commit-<?=htmlspecialchars($c['hash'])?>" class="levelup-btn" style="font-family:monospace; font-size:1em;<?=($c['hash']==$commit?' background:var(--btn-bg-hover);':'')?>">
                         <?=htmlspecialchars($c['hash'])?>
                     </a>
                 </li>
@@ -385,9 +385,9 @@ elseif ($level == 3 && !$notfound): ?>
             </ul>
         </div>
         <div class="main-pane">
-            <div style="margin-bottom:2em; dispay: flex; align-items: center; justify-content: center;">
+            <div style="margin-bottom:2em; display: flex; align-items: center; justify-content: center;">
                 <?php if ($prevCommit): ?>
-                    <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=htmlspecialchars($prevCommit)?>" class="commit-nav-arrow" title="Previous commit">&larr;</a>
+                    <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=htmlspecialchars($prevCommit)?>#commit-<?=htmlspecialchars($prevCommit)?>" class="commit-nav-arrow" title="Previous commit">&larr;</a>
                 <?php else: ?>
                     <span class="commit-nav-arrow disabled" title="No previous commit">&larr;</span>
                 <?php endif; ?>
@@ -395,13 +395,13 @@ elseif ($level == 3 && !$notfound): ?>
                     <?=htmlspecialchars($repo)?> / <span style="font-family:monospace;"><?=htmlspecialchars($commit)?></span>
                 </span>
                 <?php if ($nextCommit): ?>
-                    <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=htmlspecialchars($nextCommit)?>" class="commit-nav-arrow" title="Next commit">&rarr;</a>
+                    <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=htmlspecialchars($nextCommit)?>#commit-<?=htmlspecialchars($nextCommit)?>" class="commit-nav-arrow" title="Next commit">&rarr;</a>
                 <?php else: ?>
                     <span class="commit-nav-arrow disabled" title="No next commit">&rarr;</span>
                 <?php endif; ?>
             </div>
             <div class="git-diff"><?=ansi2html($diff)?></div>
-        </div>
+       </div>
     </div>
 <?php
 // Level 4: Font Selector and Help
