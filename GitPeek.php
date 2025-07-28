@@ -376,5 +376,50 @@ elseif ($level == 4): ?>
       </div>
     </div>
 <?php endif; ?>
+<script>
+// -------- Font Selector --------
+function setFontCookie(fontName) {
+    document.cookie = 'appFont=' + encodeURIComponent(fontName) + ';path=/;max-age=31536000';
+    location.reload();
+}
+const fontBtn = document.getElementById('fontBtn');
+if (fontBtn) {
+    fontBtn.onclick = function() {
+        window.location = window.location.pathname + '?fonts=0';
+    };
+}
+
+// -------- Theme Selector --------
+const themeBtn = document.getElementById('themeBtn');
+const themePopup = document.getElementById('themePopup');
+if (themeBtn && themePopup) {
+    themeBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        themePopup.classList.toggle('show');
+    });
+    themeBtn.addEventListener('mouseenter', function() {
+        themeBtn.title = "Click to switch theme";
+    });
+    document.addEventListener('click', function(e) {
+        if(!themePopup.contains(e.target) && e.target!==themeBtn) {
+            themePopup.classList.remove('show');
+        }
+    });
+    themePopup.querySelectorAll('.theme-item').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var theme = btn.getAttribute('data-theme');
+            document.cookie = "theme=" + encodeURIComponent(theme) + ";path=/;max-age=31536000";
+            location.reload();
+        });
+        btn.addEventListener('mouseenter', function() {
+            let altTheme = btn.textContent.trim();
+            themeBtn.title = "Click to switch to " + altTheme + " theme";
+        });
+        btn.addEventListener('mouseleave', function() {
+            themeBtn.title = "Click to switch theme";
+        });
+    });
+}
+</script>
 </body>
 </html>
