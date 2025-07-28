@@ -9,12 +9,13 @@
 # https://www.gnu.org/licenses/gpl-3.0.en.html )
 # 
 # ©2025 Himbeertoni
-##
-
-$repoRoot = '/home/pi/gitrepos';
-$selfName = basename(__FILE__, ".php");
+#
+# --- MAIN REPO CONFIGURATION ---
+$repoRoot = '/home/pi/gitrepos'; // All git repos in this directory
+$selfName = basename(__FILE__,".php");
 $styleDir = __DIR__ . "/$selfName-style";
-$styleWebPath = "/$selfName-style";
+$styleWebPath = "/$selfName-style"; // Web-accessible path (relative to script location)
+// ----------- GIT BINARY SELECTION -----------
 $setuidGit = "$repoRoot/git4$selfName";
 $systemGit = '/usr/bin/git';
 if (is_executable($setuidGit)) {
@@ -22,7 +23,7 @@ if (is_executable($setuidGit)) {
 } elseif (is_executable($systemGit)) {
     $gitBin = $systemGit;
 } else {
-    $gitBin = 'git';
+    $gitBin = 'git'; // rely on PATH
 }
 $selfUrl = basename(__FILE__);
 
@@ -31,33 +32,83 @@ $fontFile = __DIR__ . "/$selfName-style/fontdata.txt";
 $fonts = [];
 if (file_exists($fontFile)) {
     $fonts = array_filter(array_map('trim', file($fontFile)));
-    sort($fonts, SORT_NATURAL | SORT_FLAG_CASE);
+    natcasesort($fonts);
+    $fonts = array_values($fonts);
+}
+
+// Default font is the first in the sorted list
+if (isset($_GET['fonts'])) {
+    if (!isset($fontOneShot)) {
+        $fontOneshot = 1;
+        $fontidx = (int)$_GET['fonts'];
+    }
+} else {
+    $fontidx = 0;
+}
+if ( $fontidx < 0 ) {
+    $defaultFont = $fonts[0] ?? 'sans-serif';
+} else if ( $fontidx > sizeof($fonts)-1 ) {
+    $defaultFont = $fonts[sizeof($fonts)-1] ?? 'sans-serif';
+} else {
+    $defaultFont = $fonts[0] ?? 'sans-serif';
+}
+
+// Check for user-selected font in cookie (must be in list)
+$appFont = $defaultFont;
+if ( $fontidx == 0 ) {
+    if (isset($_COOKIE['appFont']) && in_array($_COOKIE['appFont'], $fonts, true)) {
+        $appFont = $_COOKIE['appFont'];
+    }
 }
 
 // ----------- UTILS -----------
-function sanitizeRepo($repo) {
-    // Only allow [A-Za-z0-9_.-]
-    return preg_replace('/[^A-Za-z0-9_.-]/', '', $repo);
-}
-
 function themesAvailable($styleDir) {
     $themes = [];
-    if (is_dir($styleDir)) {
-        foreach (scandir($styleDir) as $f) {
-            if (preg_match('/^(.+)-theme\.css$/', $f, $m)) {
-                $themes[$m[1]] = "$styleDir/$f";
-            }
+    foreach (glob($styleDir . '/*-theme.css') as $css) {
+        $name = basename($css);
+        if (preg_match('/^(.*)-theme\.css$/', $name, $m)) {
+            $themeKey = trim($m[1]);
+            $themes[$themeKey] = $name;
         }
     }
+    // Custom sort order: Himbeertoni, Dark, Light, then others
+    $preferredOrder = ['Light', 'Dark', 'Himbeertoni'];
+    uksort($themes, function($a, $b) use ($preferredOrder) {
+        $posA = array_search($a, $preferredOrder);
+        $posB = array_search($b, $preferredOrder);
+        if ($posA !== false && $posB !== false) {
+            return $posA - $posB;
+        } elseif ($posA !== false) {
+            return -1;
+        } elseif ($posB !== false) {
+            return 1;
+        }
+        return strcmp($a, $b);
+    });
     return $themes;
 }
 function getTheme() {
-    if (isset($_COOKIE['GitPeekTheme'])) return $_COOKIE['GitPeekTheme'];
-    return 'dark';
+    if (!empty($_COOKIE['theme']) && preg_match('/^[a-zA-Z0-9_-]+$/', $_COOKIE['theme'])) {
+        return $_COOKIE['theme'];
+    }
+    return 'Light'; // Default
 }
 function setThemeHeader($themes, $theme, $styleWebPath) {
-    if (!array_key_exists($theme, $themes)) $theme = 'dark';
-    echo '<link rel="stylesheet" href="'.$styleWebPath.'/'.$theme.'-theme.css" id="themecss">';
+    if (isset($themes[$theme])) {
+        echo '<link rel="stylesheet" href="' . $styleWebPath . '/' . htmlspecialchars($themes[$theme]) . '" id="themecss">';
+    } else {
+        $first = reset($themes);
+        if ($first) {
+            echo '<link rel="stylesheet" href="' . $styleWebPath . '/' . htmlspecialchars($first) . '" id="themecss">';
+        }
+    }
+}
+function sanitizeRepo($repo) {
+    if ( basename($repo) != $repo) {
+        return "Do not even think of trying to trick me!";
+    } else {
+        return preg_replace('/[^\w.-]/', '', $repo);
+    }
 }
 function repoExists($repoRoot, $repo) {
     return is_dir("$repoRoot/$repo/.git");
@@ -77,9 +128,10 @@ function ansi2html($ansi) {
         "\033[0m"    => '</span>',
         "\033[m"     => '</span>',
     ];
-    $ansi = preg_replace_callback('/(\033\[[0-9;]*m)/', function ($m) use ($map) {
+    $ansi = preg_replace_callback('/(\033\[[0-9;]*m)/', function($m) use ($map) {
         return $map[$m[1]] ?? '';
     }, $ansi);
+
     $open = substr_count($ansi, '<span');
     $close = substr_count($ansi, '</span>');
     if ($open > $close) {
@@ -110,9 +162,9 @@ if (isset($_GET['fonts'])) {
 } else {
     $level = 1;
 }
-
 // ----------- DATA FETCHING -----------
 if ($level == 1) {
+    // List all repos, skipping symlinks to dirs within $repoRoot
     $repos = [];
     $all = scandir($repoRoot);
     $repoRootReal = realpath($repoRoot);
@@ -131,12 +183,13 @@ if ($level == 1) {
             }
             $real = realpath($path);
             if ($real === false || !is_dir($real . '/.git')) continue;
-            if (str_contains(substr($real, strlen($repoRoot) + 1), '/') === false) continue;
+            if (str_contains(substr($real,strlen($repoRoot)+1),'/') === false) continue;
             $repos[] = $r;
         }
     }
     sort($repos, SORT_NATURAL | SORT_FLAG_CASE);
 } elseif ($level == 2 && repoExists($repoRoot, $repo)) {
+    // Get commit list
     $cmd = sprintf('%s -C %s log --pretty=format:"%%h|%%ad|%%an|%%s" --date=short --no-color 2>&1',
         escapeshellarg($gitBin), escapeshellarg("$repoRoot/$repo"));
     $gitlog = shell_exec($cmd);
@@ -150,6 +203,7 @@ if ($level == 1) {
         }
     }
 } elseif ($level == 3 && repoExists($repoRoot, $repo)) {
+    // Get commit diff and message
     $cmd = sprintf('%s -C %s show --color=always %s 2>&1',
         escapeshellarg($gitBin), escapeshellarg("$repoRoot/$repo"), escapeshellarg($commit));
     $diff = shell_exec($cmd);
@@ -169,8 +223,22 @@ if ($level == 1) {
             }
         }
     }
+    // --- HOPPING ARROW LOGIC (ed8c86f) ---
+    $prevCommit = $nextCommit = null;
+    $currentIdx = null;
+    foreach ($commits as $i => $c) {
+        if ($c['hash'] === $commit) {
+            $currentIdx = $i;
+            break;
+        }
+    }
+    if ($currentIdx !== null) {
+        if ($currentIdx + 1 < count($commits)) $nextCommit = $commits[$currentIdx+1]['hash'];
+        if ($currentIdx - 1 >= 0) $prevCommit = $commits[$currentIdx-1]['hash'];
+    }
 }
 
+// ----------- ERROR HANDLING -----------
 $notfound = false;
 if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
     $notfound = true;
@@ -187,58 +255,37 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
         if ($level==3 && $repo && $commit) echo ': '.htmlspecialchars($repo).' '.htmlspecialchars($commit);
     ?></title>
     <?php setThemeHeader($themes, $theme, $styleWebPath); ?>
-    <link rel="stylesheet" href="https://fonts.bunny.net/css?family='system-ui:400|Open+Sans:400|Roboto:400|ABeeZee:400|Abyssinica+SIL:400|Acme:400|Actor:400|Aldrich:400|Annie+Use+Your+Telescope:400|Damion:400|M+PLUS+1+Code:400'" />
+    <link rel="stylesheet" href="https://fonts.bunny.net/css?family='system-ui:400|Open+Sans:400|Roboto:400|ABeeZee:400|Abyssinica+SIL:400|Acme:400|Actor:400|Aldrich:400|Annie+Use+Your+Telescope:400|Damion:400|M+PLUS+1+Code:400'">
     <link rel="stylesheet" href="<?=$styleWebPath?>/layout.css" id="layoutcss">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-      .commit-nav-arrow.disabled {
-        pointer-events: none;
-        opacity: 0.4;
-        cursor: default;
-      }
-      .commit-nav-arrow {
-        text-decoration: none;
-        font-size: 1.5em;
-        line-height: 1;
+    /* --- Commit hopping arrows (ed8c86f) --- */
+    .commit-nav-arrow {
+        font-size: 1.6em;
         padding: 0 0.2em;
-        color: inherit;
-        transition: color 0.2s;
-      }
-      .commit-nav-arrow:not(.disabled):hover {
-        color: var(--subheadline-color, #006be6);
-      }
-      /* Custom for commit nav row & msg area */
-      .commit-nav-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 0.5em;
-      }
-      .commit-msg-area {
-        min-height: calc(1.5em * 3); /* 3 lines of 1.5em each */
-        line-height: 1.5em;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        font-size: 1.16em;
-        color: var(--subheadline-color);
-        font-weight: 600;
-        margin-bottom: 0.5em;
-        white-space: pre-line;
-        word-break: break-word;
-      }
+        color: var(--btn-color);
+        text-decoration: none;
+        cursor: pointer;
+        transition: color 0.15s;
+    }
+    .commit-nav-arrow:hover {
+        color: var(--btn-bg-hover);
+    }
+    .commit-nav-arrow.disabled {
+        color: #bbb;
+        text-decoration: none;
+        pointer-events: none;
+        cursor: default;
+    }
     </style>
 </head>
 <body class="level-<?=$level?>" style="font-family:<?= htmlspecialchars($appFont) ?>,sans-serif;">
 <div id="headline-row">
     <div class="hl-left">
-      <?php if ($level==2): ?>
-        <a href="<?=$selfUrl?>#repo-<?=urlencode($repo)?>" class="levelup-btn" title="Back to list">&larr;</a>
-      <?php elseif ($level==3): ?>
-        <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>#commit-<?=htmlspecialchars($commit)?>" class="levelup-btn" title="Back to commits">&larr;</a>
-      <?php elseif ($level==4): ?>
+      <?php if ($level==2 || $level==4): ?>
         <a href="<?=$selfUrl?>" class="levelup-btn" title="Back to list">&larr;</a>
+      <?php elseif ($level==3): ?>
+        <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>" class="levelup-btn" title="Back to commits">&larr;</a>
       <?php endif; ?>
     </div>
     <div class="hl-center">
@@ -247,46 +294,37 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
       <?php elseif ($level==2): ?>
         <?=htmlspecialchars($repo)?>
       <?php elseif ($level==3): ?>
-        <?=htmlspecialchars($repo)?>
+        <?=htmlspecialchars($repo)?>: <span style="font-family:monospace;"><?=htmlspecialchars($commit)?></span>
       <?php elseif ($level==4): ?>
         Select font
       <?php endif; ?>
     </div>
     <div class="hl-right">
-      <button class="theme-switcher" id="themeBtn" title="Switch theme"><?=htmlspecialchars($theme)?> &#x25BC;</button>
-			<br/>
-      <button class="theme-switcher" id="fontBtn" title="Switch theme">Fonts</button>
-      <script>
-      document.getElementById('fontBtn').onclick = function() {
-        window.location = window.location.pathname + '?fonts=0';
-      };
-      </script>
-<?php
-				$pattern = $styleDir . '/*-theme.css';
-?>
-      <div class="theme-popup" id="themePopup" role="menu">
-        <?php foreach ($themes as $t => $css): ?>
-          <button class="theme-item<?php if($t==$theme)echo' selected';?>" data-theme="<?=htmlspecialchars($t)?>">
-            <?=ucfirst(htmlspecialchars($t))?>
-          </button>
-        <?php endforeach; ?>
-      </div>
-<script>
-document.querySelectorAll('.theme-item').forEach(btn => {
-  btn.onclick = function() {
-    document.cookie = "GitPeekTheme=" + btn.getAttribute('data-theme') + "; path=/";
-    location.reload();
-  };
-});
-</script>
+        <button class="theme-switcher" id="themeBtn" title="Switch theme"><?=htmlspecialchars($theme)?> &#x25BC;</button>
+        <br>
+        <button class="theme-switcher" id="fontBtn" title="Switch font">Fonts</button>
+        <script>
+        document.getElementById('fontBtn').onclick = function() {
+            window.location = window.location.pathname + '?fonts=0';
+        };
+        </script>
+        <div class="theme-popup" id="themePopup" role="menu">
+          <?php foreach ($themes as $t => $css): ?>
+            <button class="theme-item<?php if($t==$theme)echo' selected';?>" data-theme="<?=htmlspecialchars($t)?>">
+              <?=ucfirst(htmlspecialchars($t))?>
+            </button>
+          <?php endforeach; ?>
+        </div>
     </div>
 </div>
 <?php if ($level==3 && isset($msg) && $msg): ?>
-    <!-- The commit message is now rendered below (fixed height) -->
+    <div class="subheadline"><?=htmlspecialchars($msg)?></div>
 <?php endif; ?>
 
 <?php
 // ----------- MAIN CONTENT -----------
+
+// Level 1: Repo list
 if ($level == 1): ?>
     <div class="main-pane">
         <?php if (empty($repos)): ?>
@@ -295,8 +333,8 @@ if ($level == 1): ?>
             <h2 style="margin-top:0;">Repositories</h2>
             <ul style="list-style:none; padding:0; margin:0;">
             <?php foreach($repos as $r): ?>
-                <li id="repo-<?=urlencode($r)?>" style="margin-bottom:1.1em;">
-                  <a href="<?=$selfUrl?>?repo=<?=urlencode($r)?>#repo-<?=urlencode($r)?>" class="levelup-btn" style="font-size:1.08em;">
+                <li style="margin-bottom:1.1em;">
+                    <a href="<?=$selfUrl?>?repo=<?=urlencode($r)?>" class="levelup-btn" style="font-size:1.08em;">
                         <?=htmlspecialchars($r)?>
                     </a>
                 </li>
@@ -305,6 +343,7 @@ if ($level == 1): ?>
         <?php endif; ?>
     </div>
 <?php
+// Level 2: Commit list for repo (NO nav-pane, only main-pane)
 elseif ($level == 2 && !$notfound): ?>
     <div class="main-pane">
         <h2 style="margin-top:0;">Commit History</h2>
@@ -313,9 +352,9 @@ elseif ($level == 2 && !$notfound): ?>
         <?php else: ?>
             <div>
             <?php foreach ($commits as $c): ?>
-                <div class="commit-row" id="commit-<?=htmlspecialchars($c['hash'])?>">
+                <div class="commit-row">
                     <div class="commit-meta">
-                        <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=htmlspecialchars($c['hash'])?>#commit-<?=htmlspecialchars($c['hash'])?>" class="levelup-btn commit-hash" style="font-family:monospace; font-size:1em;">
+                        <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=htmlspecialchars($c['hash'])?>" class="levelup-btn commit-hash" style="font-family:monospace; font-size:1em;">
                             <?=htmlspecialchars($c['hash'])?>
                         </a>
                         <span class="commit-date"><?=htmlspecialchars($c['date'])?></span>
@@ -328,17 +367,8 @@ elseif ($level == 2 && !$notfound): ?>
         <?php endif; ?>
     </div>
 <?php
-elseif ($level == 3 && !$notfound):
-    // --- LEVEL 3: Commit detail view with navigation arrows ---
-
-    // Find current commit index in list
-    $curIdx = null;
-    foreach ($commits as $i => $c) {
-        if ($c['hash'] === $commit) { $curIdx = $i; break; }
-    }
-    $prevCommit = ($curIdx !== null && $curIdx < count($commits) - 1) ? $commits[$curIdx + 1]['hash'] : null;
-    $nextCommit = ($curIdx !== null && $curIdx > 0) ? $commits[$curIdx - 1]['hash'] : null;
-?>
+// Level 3: Commit diff (with hopping arrows)
+elseif ($level == 3 && !$notfound): ?>
     <div class="nav-content-layout">
         <div class="nav-pane">
             <div style="font-size:1.2em; font-weight:600; color:var(--subheadline-color); margin-bottom:1em;">
@@ -346,8 +376,8 @@ elseif ($level == 3 && !$notfound):
             </div>
             <ul style="list-style:none; padding:0;">
             <?php foreach ($commits as $c): ?>
-                <li id="commit-<?=htmlspecialchars($c['hash'])?>" style="margin-bottom:0.39em;">
-                  <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=$c['hash']?>#commit-<?=htmlspecialchars($c['hash'])?>" class="levelup-btn" style="font-family:monospace; font-size:1em;<?=($c['hash']==$commit?' background:var(--btn-bg-hover);':'')?>">
+                <li style="margin-bottom:0.39em;">
+                    <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=$c['hash']?>" class="levelup-btn" style="font-family:monospace; font-size:1em;<?=($c['hash']==$commit?' background:var(--btn-bg-hover);':'')?>">
                         <?=htmlspecialchars($c['hash'])?>
                     </a>
                 </li>
@@ -355,78 +385,116 @@ elseif ($level == 3 && !$notfound):
             </ul>
         </div>
         <div class="main-pane">
-            <div class="commit-nav-row">
-            <?php if ($prevCommit): ?>
-                <a class="commit-nav-arrow" href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=$prevCommit?>#commit-<?=$prevCommit?>" title="Previous commit">&#x25C0;</a>
-            <?php else: ?>
-                <span class="commit-nav-arrow disabled">&#x25C0;</span>
-            <?php endif; ?>
-            <span style="font-family:monospace; font-size:1em;"><?=htmlspecialchars($commit)?></span>
-            <?php if ($nextCommit): ?>
-                <a class="commit-nav-arrow" href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=$nextCommit?>#commit-<?=$nextCommit?>" title="Next commit">&#x25B6;</a>
-            <?php else: ?>
-                <span class="commit-nav-arrow disabled">&#x25B6;</span>
-            <?php endif; ?>
+            <div style="margin-bottom:2em; dispay: flex; align-items: center; justify-content: center;">
+                <?php if ($prevCommit): ?>
+                    <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=htmlspecialchars($prevCommit)?>" class="commit-nav-arrow" title="Previous commit">&larr;</a>
+                <?php else: ?>
+                    <span class="commit-nav-arrow disabled" title="No previous commit">&larr;</span>
+                <?php endif; ?>
+                <span style="font-size:1.16em; color:var(--subheadline-color); font-weight:600; margin: 0 0.7em;">
+                    <?=htmlspecialchars($repo)?> / <span style="font-family:monospace;"><?=htmlspecialchars($commit)?></span>
+                </span>
+                <?php if ($nextCommit): ?>
+                    <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=htmlspecialchars($nextCommit)?>" class="commit-nav-arrow" title="Next commit">&rarr;</a>
+                <?php else: ?>
+                    <span class="commit-nav-arrow disabled" title="No next commit">&rarr;</span>
+                <?php endif; ?>
             </div>
-            <div class="commit-msg-area"><?=htmlspecialchars($msg)?></div>
             <div class="git-diff"><?=ansi2html($diff)?></div>
         </div>
     </div>
 <?php
+// Level 4: Font Selector and Help
 elseif ($level == 4): ?>
     <div class="main-pane">
-      <h2 style="margin-top:0;">Font Selection</h2>
-      <div class="font-list">
-        <?php foreach ($fonts as $i => $f): ?>
-          <div class="font-item<?php if($f==$appFont)echo' selected';?>" style="font-family:<?=htmlspecialchars($f)?>,sans-serif;">
-            <a href="<?=$selfUrl?>?fonts=<?=$i?>" style="text-decoration:none;color:inherit;">
-              <?=htmlspecialchars($f)?>
-            </a>
-          </div>
-        <?php endforeach; ?>
-      </div>
+        <form method="get" action="" style="text-align:center; margin-top: 1.5em;">
+            <label for="font-select" style="font-weight:bold; font-size:1.2em; margin-right:1em;">Select font:</label>
+            <select name="fonts" id="font-select" onchange="this.form.submit()" style="font-size:1.1em;">
+                <?php foreach ($fonts as $idx => $font): ?>
+                    <option value="<?= $idx ?>" <?= ($appFont === $font ? 'selected' : '') ?>
+                        style="font-family:<?= htmlspecialchars($font) ?>,sans-serif;">
+                        <?= htmlspecialchars($font) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </form>
+        <div style="margin-top:1.5em; font-family: <?= htmlspecialchars($appFont) ?>, sans-serif; font-size:1.5em; text-align:center;">
+            Preview: <?= htmlspecialchars($appFont) ?>
+        </div>
+        <div style="margin-top:2.5em;">
+            <h4>About fonts on the web</h4>
+            <p>
+                If you want the font to be working, when you are completely <strong>off</strong>-net you should choose a
+                <strong>local font</strong>!<br/>
+                <strong>Local</strong> fonts are <strong>serif</strong>, <strong>sans-serif</strong> and
+                <strong>monospace</strong>.
+                <br/>If <strong>off</strong>-net, all other fonts will
+                look the same, as a fallback kicks in.
+            </p>
+            <h4>Background and Details</h4>
+            <p>While developing this app, I noticed that very few
+            fonts are available across all platforms. So-called
+            “web-safe” fonts only work reliably on some desktop
+            systems, and are rarely available on mobile devices.
+            To solve this common web development issue, I use
+            network-based fonts (like Google Fonts) for broader
+            compatibility. That is really a great help. But I had to
+            decide carefully, which font service I implement,
+            as some services track the users (even across sites
+            and apps).</p>
+            <p>I assume, the average user does <strong>not</strong> like
+            to be tracked. So I chose <em>bunny fonts</em> from
+            <em>bunny.net</em>
+            (see <a href="https://fonts.bunny.net/about">here</a>),
+            as they are <ul>
+            <li>free to use</li><li>open-source</li><li>privacy-first</li>
+            <li>zero-tracking</li><li>no-logging policy</li>
+            <li>hosted on a global CDN</li>
+            </ul>
+            which I decided, is good.
+            </p>
+        </div>
+    </div>
+<?php
+// Not found
+else: ?>
+    <div class="main-pane">
+        <h2>Not found</h2>
+        <div>The page you wanted does not exist or is not available.</div>
+        <div style="margin-top:2em;">
+            <a href="<?=$selfUrl?>" class="levelup-btn">Go to Repository List</a>
+        </div>
     </div>
 <?php endif; ?>
-<script>
-// -------- Font Selector --------
-function setFontCookie(fontName) {
-    document.cookie = 'appFont=' + encodeURIComponent(fontName) + ';path=/;max-age=31536000';
-    location.reload();
-}
-const fontBtn = document.getElementById('fontBtn');
-if (fontBtn) {
-    fontBtn.onclick = function() {
-        window.location = window.location.pathname + '?fonts=0';
-    };
-}
 
-// -------- Theme Selector --------
+<script>
 const themeBtn = document.getElementById('themeBtn');
 const themePopup = document.getElementById('themePopup');
+const fontBtn = document.getElementById('fontBtn');
 if (themeBtn && themePopup) {
-    themeBtn.addEventListener('click', function(e) {
+    themeBtn.addEventListener('click',function(e){
         e.stopPropagation();
         themePopup.classList.toggle('show');
     });
-    themeBtn.addEventListener('mouseenter', function() {
+    themeBtn.addEventListener('mouseenter',function(){
         themeBtn.title = "Click to switch theme";
     });
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click',function(e){
         if(!themePopup.contains(e.target) && e.target!==themeBtn) {
             themePopup.classList.remove('show');
         }
     });
-    themePopup.querySelectorAll('.theme-item').forEach(function(btn) {
-        btn.addEventListener('click', function() {
+    themePopup.querySelectorAll('.theme-item').forEach(function(btn){
+        btn.addEventListener('click',function(){
             var theme = btn.getAttribute('data-theme');
             document.cookie = "theme=" + encodeURIComponent(theme) + ";path=/;max-age=31536000";
             location.reload();
         });
-        btn.addEventListener('mouseenter', function() {
+        btn.addEventListener('mouseenter',function(){
             let altTheme = btn.textContent.trim();
             themeBtn.title = "Click to switch to " + altTheme + " theme";
         });
-        btn.addEventListener('mouseleave', function() {
+        btn.addEventListener('mouseleave',function(){
             themeBtn.title = "Click to switch theme";
         });
     });
