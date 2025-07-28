@@ -294,8 +294,8 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
       <?php elseif ($level==2): ?>
         <?=htmlspecialchars($repo)?>
       <?php elseif ($level==3): ?>
-        <?=htmlspecialchars($repo)?>: <span style="font-family:monospace;"><?=htmlspecialchars($commit)?></span>
-      <?php elseif ($level==4): ?>
+				<?=htmlspecialchars($repo)?>
+			<?php elseif ($level==4): ?>
         Select font
       <?php endif; ?>
     </div>
@@ -392,7 +392,7 @@ elseif ($level == 3 && !$notfound): ?>
                     <span class="commit-nav-arrow disabled" title="No previous commit">&larr;</span>
                 <?php endif; ?>
                 <span style="font-size:1.16em; color:var(--subheadline-color); font-weight:600; margin: 0 0.7em;">
-                    <?=htmlspecialchars($repo)?> / <span style="font-family:monospace;"><?=htmlspecialchars($commit)?></span>
+									<?=htmlspecialchars($commit)?>
                 </span>
                 <?php if ($nextCommit): ?>
                     <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=htmlspecialchars($nextCommit)?>#commit-<?=htmlspecialchars($nextCommit)?>" class="commit-nav-arrow" title="Next commit">&rarr;</a>
