@@ -57,7 +57,7 @@ function getTheme() {
 }
 function setThemeHeader($themes, $theme, $styleWebPath) {
     if (!array_key_exists($theme, $themes)) $theme = 'dark';
-    echo '<link rel="stylesheet" href="'.$styleWebPath.'/theme-'.$theme.'.css" id="themecss">';
+    echo '<link rel="stylesheet" href="'.$styleWebPath.'/'.$theme.'-theme.css" id="themecss">';
 }
 function repoExists($repoRoot, $repo) {
     return is_dir("$repoRoot/$repo/.git");
