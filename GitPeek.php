@@ -39,7 +39,7 @@ if (file_exists($fontFile)) {
 // Default font is the first in the sorted list
 if (isset($_GET['fonts'])) {
   if (!isset($fontOneShot)) {
-    $fontOneshot = 1;
+    $fontOneShot = 1;
     $fontidx = (int)$_GET['fonts'];
   }
 } else {
@@ -50,7 +50,7 @@ if ( $fontidx < 0 ) {
 } else if ( $fontidx > sizeof($fonts)-1 ) {
   $defaultFont = $fonts[sizeof($fonts)-1] ?? 'sans-serif';
 } else {
-  $defaultFont = $fonts[0] ?? 'sans-serif';
+  $defaultFont = $fonts[$fontidx] ?? 'sans-serif';
 }
 
 // Check for user-selected font in cookie (must be in list)
