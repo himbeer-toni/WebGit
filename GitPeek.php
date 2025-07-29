@@ -153,6 +153,7 @@ $theme = getTheme();
 if (isset($_GET['fonts'])) {
   $fontidx = (int)$_GET['fonts'];
   $level = 4;
+	setcookie('appFont', $fonts[$fontidx], time() + 86400 * 365, '/');
 } else if (!$repo) {
   $level = 1;
 } else if ($repo && !$commit) {
@@ -419,7 +420,7 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
           </select>
         </form>
         <div style="margin-top:1.5em; font-family: <?= htmlspecialchars($appFont) ?>, sans-serif; font-size:1.5em; text-align:center;">
-          Preview: <?= htmlspecialchars($appFont) ?>
+          <!-- disabled: Preview: <?= htmlspecialchars($appFont) ?> -->
         </div>
         <div style="margin-top:2.5em;">
           <h4>About fonts on the web</h4>
