@@ -317,9 +317,6 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
         </div>
     </div>
 </div>
-<?php if ($level==3 && isset($msg) && $msg): ?>
-    <div class="subheadline"><?=htmlspecialchars($msg)?></div>
-<?php endif; ?>
 
 <?php
 // ----------- MAIN CONTENT -----------
@@ -400,6 +397,9 @@ elseif ($level == 3 && !$notfound): ?>
                     <span class="commit-nav-arrow disabled" title="No next commit">&rarr;</span>
                 <?php endif; ?>
             </div>
+<?php if ($level==3 && isset($msg) && $msg): ?>
+    <div class="subheadline"><?=htmlspecialchars($msg)?></div>
+<?php endif; ?>
             <div class="git-diff"><?=ansi2html($diff)?></div>
        </div>
     </div>
