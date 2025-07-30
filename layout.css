@@ -211,6 +211,7 @@ body {
   padding: 1em 3vw 3em 1vw;
   min-width: 0;
   overflow-x: auto;
+	position: relative; /* enables absolutely positioned children */
 }
 
 .git-diff {
@@ -286,7 +287,4 @@ body {
 	pointer-events: none;
 	opacity: 0.4;
 	cursor: default;
-}
-.main-pane {
-	position: relative; /* enables absolutely positioned children */
 }
