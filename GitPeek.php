@@ -383,7 +383,7 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
           </ul>
         </div>
         <div class="main-pane">
-					<div style="position:absolute; left:0; top:0; z-index:5;">
+					<div style="position:absolute; left:20px; top:10px; z-index:5;">
 						<img src="GitPeek-style/logo.svg" alt="Raspberry Logo" style="display:block; width:40px; height:auto;">
 					</div>
           <div style="margin-bottom:2em; display: flex; align-items: center; justify-content: center;">
