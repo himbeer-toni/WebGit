@@ -39,8 +39,7 @@ POWNER  = www-data
 PGROUP  = www-data
 
 # Stylesheets to install
-PSTYLES	= Dark-theme.css Light-theme.css layout.css
-PSTYLES = layout.css $(wildcard *-theme.css)
+PSTYLES = layout.css $(wildcard *-theme.css) logo.svg
 
 # Font list
 FONTLIST=fontdata.txt
