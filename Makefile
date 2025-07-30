@@ -131,17 +131,6 @@ fontdata: $(FONTLIST) fontdata.local fontdata.default fontspec.txt fontload.txt
 				sudo install -o $(POWNER) -g $(PGROUP) -m 400 -t $(PSTYDIR) $(FONTLIST); \
 			fi; \
 
-stop:
-		sudo [ -r $(PSTYDIR)/$(FONTLIST) ] && diff -q $(FONTLIST) $(PSTYDIR)/$(FONTLIST) > /dev/null; 
-
-void:
-	sudo diff -q $(FONTLIST) $(PSTYDIR)/$(FONTLIST) > /dev/null; \
-	if [ "$$?" != "0" ];then \
-    echo installing in $(PSTYDIR): style $(FONTLIST); \
-		sudo install -o $(POWNER) -g $(PGROUP) -m 400 -t $(PSTYDIR)  $(FONTLIST); \
-	fi; \
-
-# Copy and set permissions for a setuid git binary for safe web use
 # Install only the main layout CSS if changed
 layout: $(PSTYLES)
 	@for n in $(PSTYLES);\
@@ -152,7 +141,6 @@ layout: $(PSTYLES)
 	   sudo install -o $(POWNER) -g $(PGROUP) -m 400 -t $(PSTYDIR) $$n;\
 	fi;\
 	done;
-
 
 # Copy and set permissions for a setuid git binary for safe web use
 suidbin: $(XTRGSRC)
@@ -182,8 +170,6 @@ rebrand: readme
 	mv $$prvprd.php $(cmdArg1).php && \
 	sed -i.bak -e 's/^PRODUCT =.*/PRODUCT = $(cmdArg1)/' Makefile && \
 	echo "done. To install the new files in your webserver run \"make\"."; \
-
-# Rebrand also requires ourself to be updated
 
 # Catch all and ignore undefined targets
 # to enable "make rebrand <new-name>"
