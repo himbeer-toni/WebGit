@@ -49,12 +49,18 @@ FONTLIST=fontdata.txt
 
 install: devinstall suidbin
 
-devinstall: fontdata readme php layout
+devinstall: styledir fontdata readme php layout
 
 styledir:
-	@sudo mkdir -p $(PSTYDIR)
-	@sudo chown $(POWNER):$(PGROUP) $(PSTYDIR)
-	@sudo chmod 500 $(PSTYDIR)
+	@if sudo [ ! -d $(PSTYDIR) ]; \
+		then \
+		sudo mkdir -p $(PSTYDIR) && \
+		sudo chown $(POWNER):$(PGROUP) $(PSTYDIR) && \
+		sudo chmod 500 $(PSTYDIR) && \
+		echo "$(PSTYDIR) created"; \
+	else \
+		echo "$(PSTYDIR) exists"; \
+	fi; \
 
 rmdemo:
 	rm -rf demo/
