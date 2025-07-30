@@ -284,9 +284,9 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
     <div id="headline-row">
       <div class="hl-left">
         <?php if ($level==2 || $level==4): ?>
-        <a href="<?=$selfUrl?>#repo-<?=urlencode($repo)?>" class="levelup-btn" title="Back to list">&larr;</a>
+        <a href="<?=$selfUrl?>#repo-<?=urlencode($repo)?>" class="levelup-btn" title="Back to list">&#x25B2;</a>
         <?php elseif ($level==3): ?>
-        <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>#commit-<?=htmlspecialchars($prevCommit)?>" class="levelup-btn" title="Back to commits">&larr;</a>
+        <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>#commit-<?=htmlspecialchars($prevCommit)?>" class="levelup-btn" title="Back to commits">&#x25B2;</a>
         <?php endif; ?>
       </div>
       <div class="hl-center">
@@ -385,17 +385,17 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
         <div class="main-pane">
           <div style="margin-bottom:2em; display: flex; align-items: center; justify-content: center;">
             <?php if ($prevCommit): ?>
-              <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=htmlspecialchars($prevCommit)?>#commit-<?=htmlspecialchars($prevCommit)?>" class="commit-nav-arrow" title="Previous commit">&larr;</a>
+              <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=htmlspecialchars($prevCommit)?>#commit-<?=htmlspecialchars($prevCommit)?>" class="commit-nav-arrow" title="Previous commit">&#x25C0;</a>
             <?php else: ?>
-              <span class="commit-nav-arrow disabled" title="No previous commit">&larr;</span>
+              <span class="commit-nav-arrow disabled" title="No previous commit">&#x25C0;</span>
             <?php endif; ?>
             <span style="font-size:1.16em; color:var(--subheadline-color); font-weight:600; margin: 0 0.7em;">
               <?=htmlspecialchars($commit)?>
             </span>
             <?php if ($nextCommit): ?>
-              <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=htmlspecialchars($nextCommit)?>#commit-<?=htmlspecialchars($nextCommit)?>" class="commit-nav-arrow" title="Next commit">&rarr;</a>
+              <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=htmlspecialchars($nextCommit)?>#commit-<?=htmlspecialchars($nextCommit)?>" class="commit-nav-arrow" title="Next commit">&#x25B6;</a>
             <?php else: ?>
-              <span class="commit-nav-arrow disabled" title="No next commit">&rarr;</span>
+              <span class="commit-nav-arrow disabled" title="No next commit">&#x25B6;</span>
             <?php endif; ?>
           </div>
     <?php if ($level==3 && isset($msg) && $msg): ?>
