@@ -287,3 +287,6 @@ body {
 	opacity: 0.4;
 	cursor: default;
 }
+.main-pane {
+	position: relative; /* enables absolutely positioned children */
+}
