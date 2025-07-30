@@ -124,11 +124,15 @@ fontdata: $(FONTLIST) fontdata.local fontdata.default fontspec.txt fontload.txt
 				echo installing in $(PSTYDIR): $(FONTLIST); \
 				sudo install -o $(POWNER) -g $(PGROUP) -m 400 -t $(PSTYDIR) $(FONTLIST); \
 			fi; \
-			echo $$sts; \
-			[ $$sts -lt 10 ] && [ $$sts -gt 0 ] && echo ins link; \
-			[ $$sts -gt 10 ] && echo ins link; \
-			true; \
-		fi; \
+		fi
+		@./sudiffif $(FONTLIST) $(PSTYDIR)/$(FONTLIST); \
+			if [ $$? != 0 ];then \
+				echo installing in $(PSTYDIR): $(FONTLIST); \
+				sudo install -o $(POWNER) -g $(PGROUP) -m 400 -t $(PSTYDIR) $(FONTLIST); \
+			fi; \
+
+stop:
+		sudo [ -r $(PSTYDIR)/$(FONTLIST) ] && diff -q $(FONTLIST) $(PSTYDIR)/$(FONTLIST) > /dev/null; 
 
 void:
 	sudo diff -q $(FONTLIST) $(PSTYDIR)/$(FONTLIST) > /dev/null; \
@@ -174,8 +178,7 @@ rebrand: readme
 	[ -z "$(cmdArg1)" ] && echo "fatal: cannot rebrand without a new name use \"make rebrand <new-name>\"" && exit 7; \
 	[ ! -e $$prvprd.php ] && echo "fatal: cannot rebrand absent $$prvprd.php - check variable \$$(PRODUCT) in Makefile" && exit 8; \
 	echo "rebranding: $$prvprd -> $(cmdArg1)"; \
-	mv $(REPODIR)/git4$(PRODUCT) $(REPODIR)/git4$(cmdArg1) && \
-	sudo mv $(PSTYDIR)/ $(PBINDIR)/$(cmdArg1)-style/ && \
+	cp $(REPODIR)/git4$(PRODUCT) $(REPODIR)/git4$(cmdArg1) && \
 	mv $$prvprd.php $(cmdArg1).php && \
 	sed -i.bak -e 's/^PRODUCT =.*/PRODUCT = $(cmdArg1)/' Makefile && \
 	echo "done. To install the new files in your webserver run \"make\"."; \
