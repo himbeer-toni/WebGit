@@ -1,0 +1,42 @@
+#!/bin/bash
+##
+# Author: Himbeertoni
+# Email: Toni.Himbeer@fn.de
+# Github: https://www.github.com/himbeer-toni
+# 
+# This script is available for
+# public use under GPL V3 (see
+# https://www.gnu.org/licenses/gpl-3.0.en.html )
+# 
+# ©2025 Himbeertoni
+# 
+##
+
+## Purpose:
+# Check whether a file differs, used for make
+# to decide whether to install or not a file that
+# is probably not readable for the user running make
+#
+## Arguments:
+#  #1 filename of source file
+#  #2 filename of target file
+#
+## Return values:
+#  $? of diff when both files exist
+#  101 when file given as arg #1 is missing
+#  102 when file given as arg #2 is missing
+#  103 when arg #1 and/or arg #2 are not given
+#  104 when exec sudo failed
+
+# If not running as root then run as root
+if [ $EUID != 0 ]; then
+	exec sudo $0 $@
+	# exec NEVER returns, when it works, so if we
+	# come here, it failed
+	exit 104
+fi
+
+[ -z $1 ] || [ -z $2 ] && exit 103
+[ ! -e "$1" ] && exit 101
+[ ! -e "$2" ] && exit 102
+diff -q "$1" "$2" > /dev/null
