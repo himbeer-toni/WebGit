@@ -39,7 +39,7 @@ POWNER  = www-data
 PGROUP  = www-data
 
 # Stylesheets to install
-PSTYLES = layout.css $(wildcard *-theme.css) logo.svg
+PSTYLES = layout.css $(wildcard *-theme.css) $(wildcard *-logo.svg)
 
 # Font list
 FONTLIST=fontdata.txt
@@ -57,8 +57,6 @@ styledir:
 		sudo chown $(POWNER):$(PGROUP) $(PSTYDIR) && \
 		sudo chmod 500 $(PSTYDIR) && \
 		echo "$(PSTYDIR) created"; \
-	else \
-		echo "$(PSTYDIR) exists"; \
 	fi; \
 
 rmdemo:

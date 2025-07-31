@@ -383,9 +383,14 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
           </ul>
         </div>
         <div class="main-pane">
+					<?php if (file_exists($styleDir.'/'.$theme.'-logo.svg')) : ?>
 					<div style="position:absolute; left:20px; top:10px; z-index:5;">
-						<img src="GitPeek-style/logo.svg" alt="Raspberry Logo" style="display:block; width:40px; height:auto;">
+					<img src="<?php echo $selfName.'-style/'.$theme ?>-logo.svg" alt="Logo" style="display:block; width:40px; height:auto;">
+					<div style="position:absolute; right:-20px; top:10px; z-index:5;">
+					<img src="<?php echo $selfName.'-style/'.$theme ?>-logo.svg" alt="Logo" style="display:block; width:40px; height:auto;">
 					</div>
+					</div>
+          <?php endif; ?>
           <div style="margin-bottom:2em; display: flex; align-items: center; justify-content: center;">
             <?php if ($prevCommit): ?>
               <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>&commit=<?=htmlspecialchars($prevCommit)?>#commit-<?=htmlspecialchars($prevCommit)?>" class="commit-nav-arrow" title="Previous commit">&#x25C0;</a>
