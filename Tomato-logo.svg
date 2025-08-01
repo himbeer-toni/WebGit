@@ -1,0 +1,13 @@
+<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+  <!-- Tomato body -->
+  <ellipse cx="30" cy="32" rx="18" ry="16" fill="#ea4335" stroke="#b62c1b" stroke-width="2"/>
+  <!-- Tomato shine -->
+  <ellipse cx="37" cy="25" rx="5" ry="2.5" fill="#fff7f2" opacity="0.5"/>
+  <!-- Stem (center top) -->
+  <rect x="28" y="11" width="4" height="10" rx="2" fill="#4e9827" stroke="#2d6316" stroke-width="0.6"/>
+  <!-- Leaves (top, stylized) -->
+  <ellipse cx="30" cy="14" rx="7" ry="2.2" fill="#74c943" stroke="#2d6316" stroke-width="0.6" transform="rotate(-10 30 14)"/>
+  <ellipse cx="30" cy="18" rx="5" ry="1.4" fill="#74c943" stroke="#2d6316" stroke-width="0.6" transform="rotate(15 30 18)"/>
+  <ellipse cx="26" cy="16" rx="2.2" ry="0.7" fill="#74c943" stroke="#2d6316" stroke-width="0.6" transform="rotate(-25 26 16)"/>
+  <ellipse cx="34" cy="16" rx="2.2" ry="0.7" fill="#74c943" stroke="#2d6316" stroke-width="0.6" transform="rotate(25 34 16)"/>
+</svg>
