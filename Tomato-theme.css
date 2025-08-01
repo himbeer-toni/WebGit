@@ -1,0 +1,41 @@
+/*
+ * Author: Himbeertoni
+ * Email: Toni.Himbeer@fn.de
+ * Github: https://www.github.com/himbeer-toni
+ *
+ * This CSS is available for
+ * public use under GPL V3 (see
+ * https://www.gnu.org/licenses/gpl-3.0.en.html )
+ *
+ * ©2025 Himbeertoni
+ * */
+:root {
+  --body-bg: #fdf8f8;       /* Light red-white background */
+  --body-color: #3d1a1a;
+  --btn-bg: #f5e8e8;
+  --btn-bg-hover: #f1d2d2;
+  --btn-fg: #721c24;
+  --popup-bg: #fdf1f1;
+  --border-color: #e6c3c7;
+  --headline-bg: #fdf1f1;
+  --subheadline-color: #8e6c6c;
+  --nav-bg: #fdf4f4;
+  --diff-bg: #fef7f7;
+  --git-red: #dc3545;
+  --git-green: #28a745;
+  --git-yellow: #ffc107;
+  --git-cyan: #17a2b8;
+  --git-bold: #721c24;
+  --meta-date: #7b6c6c;
+  --meta-author: #c82333;
+  --meta-subject: #721c24;
+}
+
+/* Ensure theme selector button and popup items are always readable */
+.theme-switcher,
+.theme-popup .theme-item {
+  color: var(--btn-fg) !important;
+}
+.theme-popup .theme-item.selected {
+  color: var(--btn-bg-hover) !important;
+}
