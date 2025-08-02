@@ -1,6 +1,3 @@
-
-# GitPeek
-
 GitPeek is a lightweight PHP script for browsing local git repositories via a web browser. It provides commit history, commit diffs (with color highlighting), and basic navigation, designed for self-hosting on a local or private server.
 
 ## Features
