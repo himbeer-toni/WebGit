@@ -1,0 +1,104 @@
+/* Himbeertoni markdown style - minimal, readable, light background
+##
+# Author: Himbeertoni
+# Email: Toni.Himbeer@fn.de
+# Github: https://www.github.com/himbeer-toni
+# 
+# This script is available for
+# public use under GPL V3 (see
+# https://www.gnu.org/licenses/gpl-3.0.en.html )
+# 
+# ©2025 Himbeertoni
+# 
+##
+*/
+body {
+  font-family: -apple-system, "Abyssinica SIL", ABeeZee, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  color: #24292f;
+  background: #fff;
+  line-height: 1.6;
+  padding: 32px 12px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+  line-height: 1.25;
+}
+h1 { font-size: 2.25em; border-bottom: 1px solid #eaecef; padding-bottom: 0.3em; }
+h2 { font-size: 1.5em; border-bottom: 1px solid #eaecef; padding-bottom: 0.3em; }
+h3 { font-size: 1.25em; }
+h4 { font-size: 1.1em; }
+h5, h6 { font-size: 1em; }
+a { color: #0969da; text-decoration: none; }
+a:hover { text-decoration: underline; }
+ul, ol { padding-left: 2em; margin-top: 0.5em; margin-bottom: 0.5em; }
+li { margin-bottom: 0.3em; }
+pre, code {
+  font-family: "M PLUS 1 Code", SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+  background: #f6f8fa;
+  color: #24292f;
+	font-size: 90%;
+  border-radius: 6px;
+}
+pre {
+  padding: 1em;
+  overflow: auto;
+  margin: 1em 0;
+}
+code {
+  padding: 0.2em 0.4em;
+  margin: 0;
+  background: #f6f8fa;
+  border-radius: 6px;
+}
+blockquote {
+  color: #6a737d;
+  border-left: 0.25em solid #dfe2e5;
+  padding: 0 1em;
+  margin: 0.7em 0;
+  background: #f7f7f7;
+}
+hr {
+  border: 0;
+  height: 1px;
+  background: #eaecef;
+  margin: 2em 0;
+}
+table {
+  border-collapse: collapse;
+  margin: 1em 0;
+  width: 100%;
+}
+table th, table td {
+  border: 1px solid #dfe2e5;
+  padding: 0.6em 1em;
+}
+table th {
+  background: #f6f8fa;
+  font-weight: 600;
+}
+img {
+  max-width: 100%;
+  background: #fff;
+  box-sizing: content-box;
+  border: 0;
+}
+.sourceCode, .sourceCode pre {
+  background: #f6f8fa !important;
+	font-size: 1.35em !important;
+  color: #24292f !important;
+  border-radius: 6px !important;
+  padding: 1em;
+  margin: 1em 0;
+  overflow-x: auto;
+}
+.diff .kw, .sourceCode.diff .kw { color: #6f42c1; font-weight: bold; }
+.diff .dt, .sourceCode.diff .dt { color: #22863a; }
+.diff .st, .sourceCode.diff .st { color: #b31d28; }
+.diff .va, .sourceCode.diff .va { color: #005cc5; }
+@media (max-width: 600px) {
+  body { padding: 12px 2vw; }
+}

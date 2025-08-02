@@ -4,7 +4,7 @@ gitTarget := $(firstword $(MAKECMDGOALS))
 cmdArg1 := $(word 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
 
 # Targets
-PHONY = install devinstall php layout suidbin rebrand phpadapt readme fontdata demo $(PFNTPHP)
+PHONY = install devinstall php layout suidbin rebrand phpadapt readme fontdata demo $(PFNTPHP) htmldoc
 
 # Product name - can be changed using make rebrand
 PRODUCT = GitPeek
@@ -33,6 +33,12 @@ XTARGET = $(REPODIR)/git4$(PRODUCT)
 # Web root for PHP and CSS
 PBINDIR = /data/www
 PSTYDIR = $(PBINDIR)/$(PRODUCT)-style
+
+# Docs in HTML
+DOCSRC = README.html
+DOCTRG = $(PSTYDIR)/$(DOCSRC)
+DOCCSSSRC = markdown.css
+DOCCSSTRG = $(PSTYDIR)/$(DOCCSSSRC)
 
 # Target owner/group for installed files
 POWNER  = www-data
@@ -90,7 +96,28 @@ phpadapt:
 # This creates a README.m4 with the actual $(PRODUCT)
 # in the text. 
 # Must be called whenever a README.in is edited
-readme: README.md
+readme: README.md htmldoc
+
+htmldoc: DOCCSSTRG DOCTRG
+
+DOCCSSTRG: $(DOCCSSSRC)
+		@./sudiffif $(DOCCSSTRG) $(DOCCSSSRC); \
+			if [ $$? != 0 ]; then \
+				trgdir=$$(dirname $(DOCCSSTRG)); \
+				sudo install -o $(POWNER) -g $(PGROUP) -m 500 -t $$trgdir $(DOCCSSSRC); \
+			fi; \
+	
+DOCTRG: $(DOCSRC)
+		@./sudiffif $(DOCTRG) $(DOCSRC); \
+				trgdir=$$(dirname $(DOCTRG)); \
+				sudo install -o $(POWNER) -g $(PGROUP) -m 500 -t $$trgdir $(DOCSRC); \
+	
+README.html: README.md
+	@pandoc --metadata title="$(PRODUCT) Info" -s README.md -o README-tmp.html && \
+		echo '<link rel="stylesheet" href="markdown.css" charset="utf-8">' > README.html && \
+		echo "<link rel=\"stylesheet\" href=\"https://fonts.bunny.net/css?family='ABeeZee:400|Abyssinica+SIL:400|M+PLUS+1+Code:400'\">" >> README.html && \
+		cat README-tmp.html >> README.html && \
+		rm -f README-tmp.html
 
 README.md: README.in
 	@sed -e 's/PRODUCT/$(PRODUCT)/g' README.in > README.md

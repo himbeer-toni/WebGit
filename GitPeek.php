@@ -284,7 +284,9 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
     <div id="headline-row">
       <div class="hl-left">
         <?php if ($level==2 || $level==4): ?>
-        <a href="<?=$selfUrl?>#repo-<?=urlencode($repo)?>" class="levelup-btn" title="Back to list">&#x25B2;</a>
+        <a href="<?php echo $selfName; ?>-style/README.html" class="levelup-btn" title="Back to list">&#x25B2;</a>
+        <?php elseif ($level==1): ?>
+        <a href="<?php echo $selfName; ?>-style/README.html" class="levelup-btn" title="Info">Info</a>
         <?php elseif ($level==3): ?>
         <a href="<?=$selfUrl?>?repo=<?=urlencode($repo)?>#commit-<?=htmlspecialchars($prevCommit)?>" class="levelup-btn" title="Back to commits">&#x25B2;</a>
         <?php endif; ?>
@@ -460,7 +462,7 @@ if (($level == 2 || $level == 3) && !repoExists($repoRoot, $repo)) {
           <li>zero-tracking</li><li>no-logging policy</li>
           <li>hosted on a global CDN</li>
           </ul>
-          which I decided, is good.
+					which I <a href="<?php echo $selfName; ?>-style/README.html"> d</a>ecided, is good.
           </p>
         </div>
       </div>
