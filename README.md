@@ -11,6 +11,16 @@ GitPeek is a lightweight PHP script for browsing local git repositories via a we
 - **Navigation**: Click to move between the list of repositories, commit history, and single commit view.
 - **Minimal dependencies**: Only requires PHP and read access to your git repositories.
 
+## Usage
+
+- **Repository List:** The landing page lists all git repositories under `$(REPODIR)` (default `/home/pi/gitrepos`).
+- **Commit History:** Click a repository to see its commit history.
+- **Commit Diff:** Click a commit hash to see the full diff, color-coded.
+- **Theme Switch:** Use the theme switcher (top right) to toggle between dark and light themes.
+- **Navigation:** Use the ← button (top left) to go up a level.
+
+## Concept and realization
+
 ### Self-contained
 
 GitPeek is fully self-contained: it requires only a standard PHP installation and Git on the server (plus optional CSS for themes). There are no external dependencies or required PHP extensions beyond what is typically bundled with PHP itself.
@@ -26,7 +36,10 @@ GitPeek can use a special setuid copy of the `git` binary to avoid permission is
 
 The Makefile includes a target to build and install the setuid git binary with suitable ownership and permissions.
 
-## Customizing for Your System
+## Installing on and Customizing for Your System
+
+### Where to get
+This software is hosted on this <a href="https://github.com/himbeer-toni/WebGit.git">github</a> repository. 
 
 ### Quick Start
 
@@ -92,14 +105,6 @@ No manual renaming or file editing is required—everything is handled automatic
    again, as it will re-create the setuid-copy only
    if the original binary was updated.[^1]
    [^1]:If you're paranoid to have an updated setuid-copy whenever the is a new one, you could set up a cronjob running `make suidbin` as frequent as you wish.
-
-## Usage
-
-- **Repository List:** The landing page lists all git repositories under `$(REPODIR)` (default `/home/pi/gitrepos`).
-- **Commit History:** Click a repository to see its commit history.
-- **Commit Diff:** Click a commit hash to see the full diff, color-coded.
-- **Theme Switch:** Use the theme switcher (top right) to toggle between dark and light themes.
-- **Navigation:** Use the ← button (top left) to go up a level.
 
 ## Security Notes
 
