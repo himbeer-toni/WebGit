@@ -39,7 +39,7 @@ The Makefile includes a target to build and install the setuid git binary with s
 ## Installing on and Customizing for Your System
 
 ### Where to get
-This software is hosted on this <a href="https://github.com/himbeer-toni/WebGit.gi
+This software is hosted on <a href="https://github.com/himbeer-toni/WebGit.git">@Himbeer-Toni/WebGit</a> github repository.
 
 ### Quick Start
 
