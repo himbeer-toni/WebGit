@@ -8,7 +8,7 @@ GitPeek is a lightweight PHP script for browsing local git repositories via a we
 - **See detailed diffs** for each commit, with colored highlights (additions, removals, metadata).
 - **Theme-switching** (dark/light/etc.) via the UI.
 - **Font-switching** (dark/light/etc.) via the UI.
-- **Navigation**: Click to move between the list of repositories, commit history, and single commit view.
+- **Navigation**: Click to move between the list of repositories, commit history, and single commit views.
 - **Minimal dependencies**: Only requires PHP and read access to your git repositories.
 
 ## Usage
@@ -17,7 +17,7 @@ GitPeek is a lightweight PHP script for browsing local git repositories via a we
 - **Commit History:** Click a repository to see its commit history.
 - **Commit Diff:** Click a commit hash to see the full diff, color-coded.
 - **Theme Switch:** Use the theme switcher (top right) to toggle between dark and light themes.
-- **Navigation:** Use the ← button (top left) to go up a level.
+- **Navigation:** Use the &#25b2; &#25c0; &#25b6; button (top left) to go up a level.
 
 ## Concept and realization
 
