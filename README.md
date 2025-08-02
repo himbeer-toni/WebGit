@@ -1,3 +1,4 @@
+
 # GitPeek
 
 GitPeek is a lightweight PHP script for browsing local git repositories via a web browser. It provides commit history, commit diffs (with color highlighting), and basic navigation, designed for self-hosting on a local or private server.
@@ -8,7 +9,7 @@ GitPeek is a lightweight PHP script for browsing local git repositories via a we
 - **See detailed diffs** for each commit, with colored highlights (additions, removals, metadata).
 - **Theme-switching** (dark/light/etc.) via the UI.
 - **Font-switching** (dark/light/etc.) via the UI.
-- **Navigation**: Click to move between the list of repositories, commit history, and single commit views.
+- **Navigation**: Click to move between the list of repositories, commit history, and single commit view.
 - **Minimal dependencies**: Only requires PHP and read access to your git repositories.
 
 ## Usage
@@ -18,8 +19,6 @@ GitPeek is a lightweight PHP script for browsing local git repositories via a we
 - **Commit Diff:** Click a commit hash to see the full diff, color-coded.
 - **Theme Switch:** Use the theme switcher (top right) to toggle between dark and light themes.
 - **Navigation:** Use the <span>▲</span> &#x25b2; &\u25c0; &u25b6; button (top left) to go up a level.
-
-## Concept and realization
 
 ### Self-contained
 
@@ -36,10 +35,7 @@ GitPeek can use a special setuid copy of the `git` binary to avoid permission is
 
 The Makefile includes a target to build and install the setuid git binary with suitable ownership and permissions.
 
-## Installing on and Customizing for Your System
-
-### Where to get
-This software is hosted on <a href="https://github.com/himbeer-toni/WebGit.git">@Himbeer-Toni/WebGit</a> github repository.
+## Customizing for Your System
 
 ### Quick Start
 
