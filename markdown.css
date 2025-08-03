@@ -12,6 +12,10 @@
 # 
 ##
 */
+:root {
+  background: #000; ! important;
+}
+
 body {
   font-family: -apple-system, "Abyssinica SIL", ABeeZee, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
   color: #24292f;
@@ -88,7 +92,8 @@ img {
 }
 .sourceCode, .sourceCode pre {
   background: #f6f8fa !important;
-	font-size: 1.35em !important;
+	font-size: 18 !important;
+	/* CAUTION! pandoc c */
   color: #24292f !important;
   border-radius: 6px !important;
   padding: 1em;

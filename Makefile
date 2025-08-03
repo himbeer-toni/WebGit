@@ -113,7 +113,7 @@ DOCTRG: $(DOCSRC)
 				sudo install -o $(POWNER) -g $(PGROUP) -m 500 -t $$trgdir $(DOCSRC); \
 	
 README.html: README.md
-	@pandoc --metadata title="$(PRODUCT) Info" -s README.md -o README-tmp.html && \
+	@pandoc --metadata title="About $(PRODUCT)" -s README.md -o README-tmp.html && \
 		echo '<link rel="stylesheet" href="markdown.css" charset="utf-8">' > README.html && \
 		echo "<link rel=\"stylesheet\" href=\"https://fonts.bunny.net/css?family='ABeeZee:400|Abyssinica+SIL:400|M+PLUS+1+Code:400'\">" >> README.html && \
 		cat README-tmp.html >> README.html && \
