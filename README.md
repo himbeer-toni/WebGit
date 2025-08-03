@@ -1,4 +1,5 @@
-GitPeek is a lightweight PHP script for browsing local git repositories via a web browser. It provides commit history, commit diffs (with color highlighting), and basic navigation, designed for self-hosting on a local or private server.
+
+RODUCT is a lightweight PHP script for browsing local git repositories via a web browser. It provides commit history, commit diffs (with color highlighting), and basic navigation, designed for self-hosting on a local or private server.
 
 ## Features
 
@@ -22,8 +23,8 @@ Use &#x25c0; and &#x25b6; to hop between commits in the commit-diff-view (level 
 
 GitPeek is fully self-contained: it requires only a standard PHP installation and Git on the server (plus optional CSS for themes). There are no external dependencies or required PHP extensions beyond what is typically bundled with PHP itself. [^pandoc]
 
-[^pandoc]: To change the README, the command **pandoc** must be available to convert the markdown to HTML. On debian or ubuntu this can be installed using `sudo apt install pandoc`. Without pandoc "make" will fail.
-Changing the README is automatically caused by rebranding, as the name is changed in the README, so `make rebrand <new-name>` will need pandoc.
+
+Changing the README is automatically caused by rebranding, as the name is changed in the README, so `make rebrand <new-name>` will need `pandoc`.
 
 ## Git Binary Selection
 
