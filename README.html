@@ -1,0 +1,505 @@
+<link rel="stylesheet" href="markdown.css" charset="utf-8">
+<link rel="stylesheet" href="https://fonts.bunny.net/css?family='ABeeZee:400|Abyssinica+SIL:400|M+PLUS+1+Code:400'">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>About GitPeek</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">About GitPeek</h1>
+</header>
+<p>GitPeek is a lightweight PHP script for browsing local git
+repositories via a web browser. It provides commit history, commit diffs
+(with color highlighting), and basic navigation, designed for
+self-hosting on a local or private server.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li><strong>View commit history</strong> of any repository in a
+directory.</li>
+<li><strong>See detailed diffs</strong> for each commit, with colored
+highlights (additions, removals, metadata).</li>
+<li><strong>Theme-switching</strong> (dark/light/etc.) via the UI.</li>
+<li><strong>Font-switching</strong> (ivariety of fonts available) via
+the UI.</li>
+<li><strong>Navigation</strong>: Click to move between the list of
+repositories, commit history, and single commit view.</li>
+<li><strong>Minimal dependencies</strong>: Only requires PHP and read
+access to your git repositories.</li>
+</ul>
+<h2 id="usage">Usage</h2>
+<ul>
+<li><strong>Repository List: (Level 1)</strong> The landing page lists
+all git repositories under <code>$(REPODIR)</code> (default
+<code>/home/pi/gitrepos</code>).</li>
+<li><strong>Commit History: (Level 2)</strong> Click a repository to see
+its commit history.</li>
+<li><strong>Commit Diff:</strong> (Level 3) Click a commit hash to see
+the full diff, color-coded.</li>
+<li><strong>Theme Switch:</strong> Use the theme switcher (top right) to
+toggle between dark and light themes.</li>
+<li><strong>Navigation:</strong> Use ▲ to go up a level. Use ◀ and ▶ to
+hop between commits in the commit-diff-view (level 3).</li>
+</ul>
+<h3 id="self-contained">Self-contained</h3>
+<p>GitPeek is fully self-contained: it requires only a standard PHP
+installation and Git on the server (plus optional CSS for themes). There
+are no external dependencies or required PHP extensions beyond what is
+typically bundled with PHP itself.</p>
+<h2 id="git-binary-selection">Git Binary Selection</h2>
+<p>GitPeek can use a special setuid copy of the <code>git</code> binary
+to avoid permission issues that often occur when the webserver runs as a
+different user than the owner of the repositories.</p>
+<ul>
+<li><strong>If a setuid git binary (default
+<code>&lt;your-repodir&gt;/git4GitPeek</code>) exists and is executable,
+GitPeek will use it.</strong></li>
+<li><strong>If it does not exist, GitPeek will fall back to the system
+git (<code>/usr/bin/git</code> or <code>git</code> in
+<code>$PATH</code>).</strong></li>
+</ul>
+<blockquote>
+<p><strong>Note:</strong> In most real-world setups, a setuid git binary
+is required to allow the web server (often running as
+<code>www-data</code>) to access repositories owned by another user
+(e.g., <code>pi</code>). Without it, you may encounter permission errors
+or git refusing to operate due to “dubious ownership.” For development
+or single-user installations where the web server and repositories share
+ownership, the system git may suffice.</p>
+</blockquote>
+<p>The Makefile includes a target to build and install the setuid git
+binary with suitable ownership and permissions.</p>
+<h2 id="customizing-for-your-system">Customizing for Your System</h2>
+<h3 id="quick-start">Quick Start</h3>
+<p>In most cases, <strong>the only variable you need to edit in the
+Makefile is <code>REPODIR</code></strong>, which defines where your Git
+repositories are stored.<br />
+For example:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">REPODIR </span><span class="ch">=</span><span class="st"> /home/pi/gitrepos</span></span></code></pre></div>
+<p>Set this to the directory containing your repositories.</p>
+<blockquote>
+<p><strong>Tip:</strong> Unless your web server uses a nonstandard
+document root, you do <strong>not</strong> need to change other
+settings.</p>
+</blockquote>
+<h3 id="web-server-root-pbindir">Web Server Root (PBINDIR)</h3>
+<p>By default, GitPeek installs the PHP frontend and style assets
+to:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">PBINDIR </span><span class="ch">=</span><span class="st"> /data/www</span></span></code></pre></div>
+<p>If your server uses a different web root (e.g.,
+<code>/var/www/html</code> for a standard Apache2 setup), change
+<code>PBINDIR</code> accordingly:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode makefile"><code class="sourceCode makefile"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">PBINDIR </span><span class="ch">=</span><span class="st"> /var/www/html</span></span></code></pre></div>
+<p>Other related paths (like <code>PSTYDIR</code> for styles) are
+automatically set based on <code>PBINDIR</code>.</p>
+<h3 id="rebranding">Rebranding</h3>
+<p>You can easily rename the tool (including all scripts, CSS, and the
+setuid binary) by running:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> rebrand <span class="op">&lt;</span>new-name<span class="op">&gt;</span></span></code></pre></div>
+<p>No manual renaming or file editing is required—everything is handled
+automatically.</p>
+<hr />
+<p><strong>Summary:</strong><br />
+- Only <code>REPODIR</code> must be edited for most setups.<br />
+- Adjust <code>PBINDIR</code> only if your web root is not
+<code>/data/www</code>.<br />
+- Use <code>make rebrand &lt;new-name&gt;</code> to change the tool’s
+name everywhere, without manual steps. ## Installation</p>
+<ol type="1">
+<li><strong>Clone or download this repository.</strong></li>
+<li><strong>cloned setuid git binary</strong> (recommended for
+multi-user or production setups):
+<ul>
+<li>The Makefile can create
+<code>&lt;your-repodir&gt;/git4GitPeek</code> as a copy of
+<code>/usr/bin/git</code>, owned by <code>pi:www-data</code> with mode
+<code>4610</code>.</li>
+<li>Adjust the <code>REPODIR</code>, <code>XTRGOWN</code>,
+<code>XTRGGRP</code>, <code>XTRGSRC</code>, and <code>XTARGET</code>
+variables in the Makefile if your paths or users differ.</li>
+</ul></li>
+<li>Run make to get everything to where it belongs
+<ul>
+<li>for a <strong>production environment</strong> where you
+<strong>do</strong> need a setuid-clone.</li>
+</ul>
+<pre><code>make</code></pre>
+<ul>
+<li>for a <strong>dev/test environment</strong> where you <strong>do
+not</strong> need a setuid-clone use</li>
+</ul>
+<pre><code>make devinstall</code></pre>
+This copies <code>GitPeek.php</code> and associated CSS to
+<code>/data/www</code> (edit <code>PBINDIR</code>/<code>PSTYDIR</code>
+as needed).</li>
+<li><strong>Point your web browser to</strong>
+<code>http://yourserver/GitPeek.php</code>.</li>
+<li>When the git-binary on your system
+<ul>
+<li>has been updated on your system or</li>
+<li>even when you doubt it could have been updated</li>
+<li>then just use</li>
+</ul>
+<pre><code>make</code></pre>
+again, as it will re-create the setuid-copy only if the original binary
+was updated.[^1] [^1]:If you’re paranoid to have an updated setuid-copy
+whenever the is a new one, you could set up a cronjob running
+<code>make suidbin</code> as frequent as you wish.</li>
+</ol>
+<h2 id="security-notes">Security Notes</h2>
+<ul>
+<li>This tool is intended for use on local or trusted networks
+only.</li>
+<li>The setuid git binary is a potential security risk if misconfigured.
+Make sure only trusted users have access to the web server and
+repository directories.</li>
+</ul>
+<h2 id="want-to-see-a-demo">Want to see a demo?</h2>
+<p>Just visit <a
+href="https://bkpages.de/GitPeekDemo.php">https://bkpages.de/GitPeekDemo.php</a>.
+It will show (a copy of) my local repos (including the one you are just
+viewing) that were pushed to github.</p>
+<h2 id="the-font-selector">The font selector</h2>
+<p>Implementing the font selector was interesting. Here is what
+learned.</p>
+<h3 id="about-fonts-on-the-web">About fonts on the web</h3>
+<p>If you want the font to be working, when you are completely
+<strong>off</strong>-net you should choose a <strong>local</strong>
+font!</p>
+<p><strong>Local</strong> fonts are <strong>serif</strong>,
+<strong>sans-serif</strong> and <strong>monospace</strong>. If off-net,
+all other fonts will look the same, as a fallback kicks in.</p>
+<h3 id="background-and-details">Background and Details</h3>
+<p>While developing this app, I noticed that very few fonts are
+available across all platforms. So-called “web-safe” fonts only work
+reliably on some desktop systems, and are rarely available on mobile
+devices. To solve this common web development issue, I use network-based
+fonts (like Google Fonts) for broader compatibility. That is really a
+great help. But I had to decide carefully, which font service I
+implement, as some services track the users (even across sites and
+apps).</p>
+<p>I assume, the average user does not like to be tracked. So I chose
+bunny fonts from bunny.net (see here), as they are - free to use -
+open-source - privacy-first - zero-tracking - no-logging policy - hosted
+on a global CDN</p>
+<p>which I decided, is good. So I implemented it.</p>
+<hr />
+<h2 id="appendix-understanding-colored-git-diff-output">Appendix:
+Understanding Colored Git Diff Output</h2>
+<p>GitPeek displays git diffs with color highlights for clarity, closely
+matching standard <code>git diff</code> output. Here’s what you may
+see:</p>
+<h3 id="diff-output-components">Diff Output Components</h3>
+<ul>
+<li><strong>Commit Information</strong>
+<ul>
+<li><code>commit &lt;hash&gt;</code>, <code>Author:</code>,
+<code>Date:</code>: Shown at the top of a commit.</li>
+<li>Displayed in yellow.</li>
+</ul></li>
+<li><strong>Diff Headers</strong>
+<ul>
+<li><code>diff --git a/file b/file</code>: Indicates which files are
+being compared.</li>
+<li><code>index &lt;hash&gt;..&lt;hash&gt; &lt;mode&gt;</code>: Shows
+file hashes and mode.</li>
+<li><code>--- a/file</code>, <code>+++ b/file</code>: Old and new
+filenames.</li>
+<li><code>@@ ... @@</code>: “Hunk” header, shows line numbers for the
+change.</li>
+<li>All of these are shown in yellow.</li>
+</ul></li>
+<li><strong>File Changes</strong>
+<ul>
+<li>Lines starting with <code>+</code> (plus): <strong>Added
+lines</strong>, highlighted in green.</li>
+<li>Lines starting with <code>-</code> (minus): <strong>Removed
+lines</strong>, highlighted in red.</li>
+<li>Lines starting with a space: Unchanged context, default color.</li>
+<li>Lines starting with <code>\</code>: Meta lines (e.g.,
+<code>\ No newline at end of file</code>), usually yellow.</li>
+</ul></li>
+<li><strong>Other Special Lines</strong>
+<ul>
+<li>Lines with file permission changes, new file or deleted file
+messages, or mode changes, are typically shown in yellow.</li>
+<li>Bold may be used for emphasis (e.g., commit ID).</li>
+</ul></li>
+</ul>
+<h3 id="example">Example</h3>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode diff"><code class="sourceCode diff"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>commit 1a2b3c4d5e6f7g8h9i0j</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>Author: Jane Doe &lt;jane@example.com&gt;</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>Date:   2024-07-10</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    Add new feature</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/file.txt b/file.txt</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>index 1234567..89abcd0 100644</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/file.txt</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/file.txt</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -1,6 +1,7 @@</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a> Line unchanged</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="st">-Line removed</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="va">+Line added</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a> Context line</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>\ No newline at end of file</span></code></pre></div>
+<h4 id="color-key">Color Key</h4>
+<ul>
+<li><strong>Yellow:</strong> Commit info, hunk headers, file headers,
+meta lines.</li>
+<li><strong>Green:</strong> Lines starting with <code>+</code>
+(additions).</li>
+<li><strong>Red:</strong> Lines starting with <code>-</code>
+(removals).</li>
+<li><strong>Default:</strong> All other lines (context).</li>
+</ul>
+<h3 id="notes">Notes</h3>
+<ul>
+<li>The coloring is handled by GitPeek’s CSS and PHP, using
+<code>&lt;span&gt;</code> tags for semantic highlighting.</li>
+<li>This makes it easier to read and understand changes at a glance,
+especially on larger diffs.</li>
+<li>Only the main content of the <code>git diff</code> is shown; binary
+files and non-text changes may appear as messages (yellow).</li>
+</ul>
+<hr />
+<h2 id="license-and-author">License and author</h2>
+<p>This software was created and designed by Himbeertoni. Email:
+Toni.Himbeer@fn.de Github: https://www.github.com/himbeer-toni</p>
+<p>I made extensive use of GitHub Copilot while developing this project.
+Copilot proved to be incredibly helpful, saving me significant time and
+enabling me to implement far more features than I could have on my own.
+It allowed me to easily enhance both the appearance and functionality of
+the project without requiring extensive manual coding.</p>
+<p>This project is licensed under the GNU General Public License v3.0
+(GPLv3).</p>
+<p><strong>What does this mean?</strong><br />
+- You are free to use, study, modify, and share this software. - If you
+distribute modified versions, you must also provide the source code and
+keep them under the same GPLv3 license. - This ensures that all users
+have the same freedoms with the software.</p>
+<p>For full details, please see the <a
+href="https://www.gnu.org/licenses/gpl-3.0.html">official GPL v3 license
+text</a>.</p>
+<p>©2025 Himbeertoni</p>
+</body>
+</html>
