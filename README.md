@@ -240,6 +240,10 @@ not use F12 to see Firefox's Web Developer Tools, because I work on Android wher
 this functionality. But it came up with usable 
 alternatives (to F12) every time I reminded it.
 
+Taken all this together I recommend using Copilot, as
+it saves significant amounts of time and surprises
+with elegant code (at least I've seen this for bash, CSS, HTML and PHP and even PERL).
+
 ### License
 
 This project is licensed under the GNU General Public License v3.0 (GPLv3).
