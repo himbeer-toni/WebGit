@@ -190,7 +190,7 @@ D ----------
 ```
 results in
 ![Example output of a diff](exdiff.jpg)
-[^(as displayed on smartphone)~]
+(as displayed on smartphone)
 
 #### Color Key
 
