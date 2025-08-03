@@ -20,7 +20,10 @@ Use &#x25c0; and &#x25b6; to hop between commits in the commit-diff-view (level 
 
 ### Self-contained
 
-GitPeek is fully self-contained: it requires only a standard PHP installation and Git on the server (plus optional CSS for themes). There are no external dependencies or required PHP extensions beyond what is typically bundled with PHP itself.
+GitPeek is fully self-contained: it requires only a standard PHP installation and Git on the server (plus optional CSS for themes). There are no external dependencies or required PHP extensions beyond what is typically bundled with PHP itself. [^1]
+
+
+[^1]: To change the README, the command **pandoc** must be available to convert the markdown to HTML. On debian or ubuntu this can be installed using `sudo apt install pandoc`. Without pandoc "make" will fail.
 
 ## Git Binary Selection
 
@@ -223,3 +226,4 @@ This project is licensed under the GNU General Public License v3.0 (GPLv3).
 For full details, please see the [official GPL v3 license text](https://www.gnu.org/licenses/gpl-3.0.html).
 
 ©2025 Himbeertoni
+
