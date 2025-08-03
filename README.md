@@ -237,8 +237,8 @@ and ended up presenting checks that could not lead to
 a fix. Sometimes annoying was that copilot did not
 remind my environment. I told it many times, that I can
 not use F12 to see Firefox's Web Developer Tools, because I work on Android where Firefox simply does not have
-this functionalty. But it came up with usable solutions
-every time I reminded it.
+this functionality. But it came up with usable 
+alternatives (to F12) every time I reminded it.
 
 ### License
 
