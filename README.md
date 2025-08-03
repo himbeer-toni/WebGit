@@ -173,7 +173,7 @@ GitPeek displays git diffs with color highlights for clarity, closely matching s
 
 ### Example
 
-```diff
+```
 commit 1a2b3c4d5e6f7g8h9i0j
 Author: Jane Doe <jane@example.com>
 Date:   2024-07-10
