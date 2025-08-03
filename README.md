@@ -181,7 +181,7 @@ GitPeek displays git diffs with color highlights for clarity, closely matching s
 
 ### Example diff output
 
-Example content before edit / commit:
+Assume this file before editing it
 ```
 A ----------
 B ----------
@@ -189,14 +189,15 @@ C ----------
 D ----------
 ```
 
-Example content after edit / commit:
+Now assume, you change it by deleting the B-line and introducing the new Cb-Line, so it now looks like
 ```
 A ----------
 C ----------
 Cb----------
 D ----------
 ```
-results in[^screenshot]
+and commit that change. That results in
+[^screenshot]
 ![Example output of a diff](exdiff.jpg)
 
 [^screenshot]:as displayed on smartphone
