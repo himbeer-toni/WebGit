@@ -140,6 +140,7 @@ If off-net, all other fonts will look the same, as a fallback kicks in.
 While developing this app, I noticed that very few fonts are available across all platforms. So-called “web-safe” fonts only work reliably on some desktop systems, and are rarely available on mobile devices. To solve this common web development issue, I use network-based fonts (like Google Fonts) for broader compatibility. That is really a great help. But I had to decide carefully, which font service I implement, as some services track the users (even across sites and apps).
 
 I assume, the average user does not like to be tracked. So I chose bunny fonts from bunny.net (see here), as they are
+
 - free to use
 - open-source
 - privacy-first
