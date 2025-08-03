@@ -23,6 +23,7 @@ Use &#x25c0; and &#x25b6; to hop between commits in the commit-diff-view (level 
 PRODUCT is fully self-contained: it requires only a standard PHP installation and Git on the server (plus optional CSS for themes). There are no external dependencies or required PHP extensions beyond what is typically bundled with PHP itself. [^pandoc]
 
 [^pandoc]: To change the README, the command **pandoc** must be available to convert the markdown to HTML. On debian or ubuntu this can be installed using `sudo apt install pandoc`. Without pandoc "make" will fail.
+Changing the README is automatically caused by rebranding, as the name is changed in the README, so `make rebrand <new-name>` will need pandoc.
 
 ## Git Binary Selection
 
@@ -68,12 +69,16 @@ make rebrand <new-name>
 ```
 No manual renaming or file editing is required—everything is handled automatically.
 
+**Caution!**
+Rebranding automatically changes the README to reflect the new name. Therefore it needs `pandoc` to be present on your system, as README.html needs to be re-created along with README.md.
+
 ---
 
 **Summary:**  
 - Only `REPODIR` must be edited for most setups.  
 - Adjust `PBINDIR` only if your web root is not `/data/www`.  
 - Use `make rebrand <new-name>` to change the tool’s name everywhere, without manual steps.
+
 ## Installation
 
 1. **Clone or download this repository.**
@@ -107,6 +112,7 @@ No manual renaming or file editing is required—everything is handled automatic
 
 - This tool is intended for use on local or trusted networks only.
 - The setuid git binary is a potential security risk if misconfigured. Make sure only trusted users have access to the web server and repository directories.
+- **Never ever** set the ownership of the setiud-binary `git4PRODUCT` to root-uid!
 
 ## Want to see a demo?
 

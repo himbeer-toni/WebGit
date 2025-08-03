@@ -317,13 +317,18 @@ setuid binary) by running:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> rebrand <span class="op">&lt;</span>new-name<span class="op">&gt;</span></span></code></pre></div>
 <p>No manual renaming or file editing is required—everything is handled
 automatically.</p>
+<p><strong>Caution!</strong> Rebranding automatically changes the README
+to reflect the new name. Therefore it needs <code>pandoc</code> to be
+present on your system, as README.html needs to be re-created along with
+README.md.</p>
 <hr />
 <p><strong>Summary:</strong><br />
 - Only <code>REPODIR</code> must be edited for most setups.<br />
 - Adjust <code>PBINDIR</code> only if your web root is not
 <code>/data/www</code>.<br />
 - Use <code>make rebrand &lt;new-name&gt;</code> to change the tool’s
-name everywhere, without manual steps. ## Installation</p>
+name everywhere, without manual steps.</p>
+<h2 id="installation">Installation</h2>
 <ol type="1">
 <li><strong>Clone or download this repository.</strong></li>
 <li><strong>cloned setuid git binary</strong> (recommended for
@@ -371,6 +376,8 @@ only.</li>
 <li>The setuid git binary is a potential security risk if misconfigured.
 Make sure only trusted users have access to the web server and
 repository directories.</li>
+<li><strong>Never ever</strong> set the ownership of the setiud-binary
+<code>git4GitPeek</code> to root-uid!</li>
 </ul>
 <h2 id="want-to-see-a-demo">Want to see a demo?</h2>
 <p>Just visit <a
@@ -504,8 +511,11 @@ role="doc-endnotes">
 <li id="fn1" role="doc-endnote"><p>To change the README, the command
 <strong>pandoc</strong> must be available to convert the markdown to
 HTML. On debian or ubuntu this can be installed using
-<code>sudo apt install pandoc</code>. Without pandoc “make” will fail.<a
-href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<code>sudo apt install pandoc</code>. Without pandoc “make” will fail.
+Changing the README is automatically caused by rebranding, as the name
+is changed in the README, so <code>make rebrand &lt;new-name&gt;</code>
+will need pandoc.<a href="#fnref1" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
 <li id="fn2" role="doc-endnote"><p>If you’re paranoid to have an updated
 setuid-copy whenever the is a new git-bin, you could set up a cronjob
 running <code>make suidbin</code> as frequent as you wish.<a
