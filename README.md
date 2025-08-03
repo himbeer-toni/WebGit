@@ -218,16 +218,24 @@ and commit that change. That results in the following commit view [^screenshot]
 
 ## License and author
 
+### Author
+
 This software was created and designed by
 Himbeertoni.
-Email: Toni.Himbeer@fn.de
-Github: https://www.github.com/himbeer-toni
+
+- Email: Toni.Himbeer@fn.de
+- Github: https://www.github.com/himbeer-toni
+
+### Co-Author 
 
 I made extensive use of GitHub Copilot while developing this project. Copilot proved to be incredibly helpful, saving me significant time and enabling me to implement far more features than I could have on my own. It allowed me to easily enhance both the appearance and functionality of the project without requiring extensive manual coding.
+
+### License
 
 This project is licensed under the GNU General Public License v3.0 (GPLv3).
 
 **What does this mean?**  
+
 - You are free to use, study, modify, and share this software.
 - If you distribute modified versions, you must also provide the source code and keep them under the same GPLv3 license.
 - This ensures that all users have the same freedoms with the software.
