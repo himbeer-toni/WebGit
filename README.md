@@ -111,7 +111,7 @@ Rebranding automatically changes the README to reflect the new name. Therefore i
 
 - This tool is intended for use on local or trusted networks only.
 - The setuid git binary is a potential security risk if misconfigured. Make sure only trusted users have access to the web server and repository directories.
-- **Never ever** set the ownership of the setiud-binary `git4$(GitPeek)` to root-uid!
+- **Never ever** set the ownership of the setiud-binary `git4GitPeek` to root-uid!
 
 ## Want to see a demo?
 
