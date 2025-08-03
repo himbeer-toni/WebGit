@@ -21,7 +21,9 @@ Use &#x25c0; and &#x25b6; to hop between commits in the commit-diff-view (level 
 
 ### Self-contained
 
-GitPeek is fully self-contained: it requires only a standard PHP installation and Git on the server (plus optional CSS for themes). There are no external dependencies or required PHP extensions beyond what is typically bundled with PHP itself.
+GitPeek is fully self-contained: it requires only a standard PHP installation and Git on the server (plus optional CSS for themes). There are no external dependencies
+[^pandoc]
+or required PHP extensions beyond what is typically bundled with PHP itself.
 
 [^pandoc]: Changing the README is automatically caused by rebranding, as the name is changed in the README, so `make rebrand <new-name>` will need `pandoc`.
 
