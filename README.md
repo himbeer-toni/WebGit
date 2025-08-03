@@ -196,8 +196,7 @@ C ----------
 Cb----------
 D ----------
 ```
-and commit that change. That results in
-[^screenshot]
+and commit that change. That results in the following commit view [^screenshot]
 ![Example output of a diff](exdiff.jpg)
 
 [^screenshot]:as displayed on smartphone
