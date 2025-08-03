@@ -5,7 +5,7 @@ PRODUCT is a lightweight PHP script for browsing local git repositories via a we
 - **View commit history** of any repository in a directory.
 - **See detailed diffs** for each commit, with colored highlights (additions, removals, metadata).
 - **Theme-switching** (dark/light/etc.) via the UI.
-- **Font-switching** (ivariety of fonts available) via the UI.
+- **Font-switching** (variety of fonts available) via the UI.
 - **Navigation**: Click to move between the list of repositories, commit history, and single commit view.
 - **Minimal dependencies**: Only requires PHP and read access to your git repositories.
 
