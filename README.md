@@ -241,8 +241,9 @@ this functionality. But it came up with usable
 alternatives (to F12) every time I reminded it.
 
 Taken all this together I recommend using Copilot, as
-it saves significant amounts of time and surprises
-with elegant code (at least I've seen this for bash, CSS, HTML and PHP and even PERL).
+it saves significant amounts of time and - 
+from time to time - surprises with quite
+elegant code (at least I've seen this for bash, CSS, HTML and PHP and even PERL).
 
 ### License
 
