@@ -44,8 +44,8 @@ DOCCSSTRG = $(PSTYDIR)/$(DOCCSSSRC)
 POWNER  = www-data
 PGROUP  = www-data
 
-# Stylesheets to install
-PSTYLES = layout.css $(wildcard *-theme.css) $(wildcard *-logo.svg)
+# Stylesheets (and  other stuff) to install
+PSTYLES = layout.css $(wildcard *-theme.css) $(wildcard *-logo.svg) exdiff.jpg
 
 # Font list
 FONTLIST=fontdata.txt
@@ -113,15 +113,15 @@ DOCTRG: $(DOCSRC)
 				sudo install -o $(POWNER) -g $(PGROUP) -m 500 -t $$trgdir $(DOCSRC); \
 	
 README.html: README.md
-	@pandoc --metadata title="About $(PRODUCT)" -s README.md -o README-tmp.html && \
+	@pandoc -t html5 -f markdown --metadata title="About $(PRODUCT)" -s README.md -o README-tmp.html && \
 		echo '<link rel="stylesheet" href="markdown.css" charset="utf-8">' > README.html && \
 		echo "<link rel=\"stylesheet\" href=\"https://fonts.bunny.net/css?family='ABeeZee:400|Abyssinica+SIL:400|M+PLUS+1+Code:400'\">" >> README.html && \
 		cat README-tmp.html >> README.html && \
 		rm -f README-tmp.html
 
-README.md: README.in
-	@sed -e 's/PRODUCT/$(PRODUCT)/g' README.in > README.md
-	@git commit -m "new version generated - README.in changed" README.md
+README.md: README.in.md
+	@sed -e 's/PRODUCT/$(PRODUCT)/g' README.in.md > README.md
+	@git commit -m "new version generated - README.in.md changed" README.md
 
 php: phpadapt
 	@for n in $(PTARGETS);\

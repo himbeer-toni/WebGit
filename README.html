@@ -235,8 +235,8 @@ directory.</li>
 <li><strong>See detailed diffs</strong> for each commit, with colored
 highlights (additions, removals, metadata).</li>
 <li><strong>Theme-switching</strong> (dark/light/etc.) via the UI.</li>
-<li><strong>Font-switching</strong> (ivariety of fonts available) via
-the UI.</li>
+<li><strong>Font-switching</strong> (variety of fonts available) via the
+UI.</li>
 <li><strong>Navigation</strong>: Click to move between the list of
 repositories, commit history, and single commit view.</li>
 <li><strong>Minimal dependencies</strong>: Only requires PHP and read
@@ -260,7 +260,8 @@ hop between commits in the commit-diff-view (level 3).</li>
 <p>GitPeek is fully self-contained: it requires only a standard PHP
 installation and Git on the server (plus optional CSS for themes). There
 are no external dependencies or required PHP extensions beyond what is
-typically bundled with PHP itself.</p>
+typically bundled with PHP itself. <a href="#fn1" class="footnote-ref"
+id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <h2 id="git-binary-selection">Git Binary Selection</h2>
 <p>GitPeek can use a special setuid copy of the <code>git</code> binary
 to avoid permission issues that often occur when the webserver runs as a
@@ -360,9 +361,12 @@ as needed).</li>
 </ul>
 <pre><code>make</code></pre>
 again, as it will re-create the setuid-copy only if the original binary
-was updated.[^1] [^1]:If you’re paranoid to have an updated setuid-copy
-whenever the is a new one, you could set up a cronjob running
-<code>make suidbin</code> as frequent as you wish.</li>
+was updated.<a href="#fn2" class="footnote-ref" id="fnref2"
+role="doc-noteref"><sup>2</sup></a> <a href="#fn3" class="footnote-ref"
+id="fnref3" role="doc-noteref"><sup>3</sup></a>:If you’re paranoid to
+have an updated setuid-copy whenever the is a new one, you could set up
+a cronjob running <code>make suidbin</code> as frequent as you
+wish.</li>
 </ol>
 <h2 id="security-notes">Security Notes</h2>
 <ul>
@@ -444,24 +448,19 @@ messages, or mode changes, are typically shown in yellow.</li>
 <li>Bold may be used for emphasis (e.g., commit ID).</li>
 </ul></li>
 </ul>
-<h3 id="example">Example</h3>
-<div class="sourceCode" id="cb8"><pre
-class="sourceCode diff"><code class="sourceCode diff"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>commit 1a2b3c4d5e6f7g8h9i0j</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>Author: Jane Doe &lt;jane@example.com&gt;</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>Date:   2024-07-10</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    Add new feature</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/file.txt b/file.txt</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>index 1234567..89abcd0 100644</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/file.txt</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/file.txt</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -1,6 +1,7 @@</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a> Line unchanged</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="st">-Line removed</span></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="va">+Line added</span></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a> Context line</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>\ No newline at end of file</span></code></pre></div>
+<h3 id="example-diff-output">Example diff output</h3>
+<p>Example content before edit / commit:</p>
+<pre><code>A ----------
+B ----------
+C ----------
+D ----------</code></pre>
+<p>Example content after edit / commit:</p>
+<pre><code>A ----------
+C ----------
+Cb----------
+D ----------</code></pre>
+<p>results in <img src="exdiff.jpg" alt="Example output of a diff" />
+~(as displayed on smartphone)~</p>
 <h4 id="color-key">Color Key</h4>
 <ul>
 <li><strong>Yellow:</strong> Commit info, hunk headers, file headers,
@@ -501,5 +500,26 @@ have the same freedoms with the software.</p>
 href="https://www.gnu.org/licenses/gpl-3.0.html">official GPL v3 license
 text</a>.</p>
 <p>©2025 Himbeertoni</p>
+<section class="footnotes footnotes-end-of-document"
+role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1" role="doc-endnote"><p>To change the README, the command
+<strong>pandoc</strong> must be available to convert the markdown to
+HTML. On debian or ubuntu this can be installed using
+<code>sudo apt install pandoc</code>. Without pandoc “make” will fail.<a
+href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p>To change the README, the command
+<strong>pandoc</strong> must be available to convert the markdown to
+HTML. On debian or ubuntu this can be installed using
+<code>sudo apt install pandoc</code>. Without pandoc “make” will fail.<a
+href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3" role="doc-endnote"><p>To change the README, the command
+<strong>pandoc</strong> must be available to convert the markdown to
+HTML. On debian or ubuntu this can be installed using
+<code>sudo apt install pandoc</code>. Without pandoc “make” will fail.<a
+href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
 </body>
 </html>

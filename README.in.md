@@ -20,7 +20,10 @@ Use &#x25c0; and &#x25b6; to hop between commits in the commit-diff-view (level 
 
 ### Self-contained
 
-PRODUCT is fully self-contained: it requires only a standard PHP installation and Git on the server (plus optional CSS for themes). There are no external dependencies or required PHP extensions beyond what is typically bundled with PHP itself.
+PRODUCT is fully self-contained: it requires only a standard PHP installation and Git on the server (plus optional CSS for themes). There are no external dependencies or required PHP extensions beyond what is typically bundled with PHP itself. [^1]
+
+
+[^1]: To change the README, the command **pandoc** must be available to convert the markdown to HTML. On debian or ubuntu this can be installed using `sudo apt install pandoc`. Without pandoc "make" will fail.
 
 ## Git Binary Selection
 
@@ -168,26 +171,26 @@ PRODUCT displays git diffs with color highlights for clarity, closely matching s
   - Lines with file permission changes, new file or deleted file messages, or mode changes, are typically shown in yellow.
   - Bold may be used for emphasis (e.g., commit ID).
 
-### Example
+### Example diff output
 
-```diff
-commit 1a2b3c4d5e6f7g8h9i0j
-Author: Jane Doe <jane@example.com>
-Date:   2024-07-10
-
-    Add new feature
-
-diff --git a/file.txt b/file.txt
-index 1234567..89abcd0 100644
---- a/file.txt
-+++ b/file.txt
-@@ -1,6 +1,7 @@
- Line unchanged
--Line removed
-+Line added
- Context line
-\ No newline at end of file
+Example content before edit / commit:
 ```
+A ----------
+B ----------
+C ----------
+D ----------
+```
+
+Example content after edit / commit:
+```
+A ----------
+C ----------
+Cb----------
+D ----------
+```
+results in
+![Example output of a diff](exdiff.jpg)
+~(as displayed on smartphone)~
 
 #### Color Key
 
@@ -223,3 +226,4 @@ This project is licensed under the GNU General Public License v3.0 (GPLv3).
 For full details, please see the [official GPL v3 license text](https://www.gnu.org/licenses/gpl-3.0.html).
 
 ©2025 Himbeertoni
+
