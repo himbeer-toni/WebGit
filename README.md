@@ -188,11 +188,10 @@ C ----------
 Cb----------
 D ----------
 ```
-results in
+results in[^screenshot]
 ![Example output of a diff](exdiff.jpg)
-[^screenshot]
 
-[^screenshot]:(as displayed on smartphone)
+[^screenshot]:as displayed on smartphone
 
 #### Color Key
 
