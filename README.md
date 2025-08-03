@@ -72,7 +72,8 @@ No manual renaming or file editing is required—everything is handled automatic
 **Caution!**
 Rebranding automatically changes the README to reflect the new name. Therefore it needs `pandoc` to be present on your system, as README.html needs to be re-created along with README.md.[^aptpandoc]
 
-[^aptpandoc]: If you are on Debian or Ubuntu system pandoc is easy to install with `sudo apt install pandoc`.
+[^aptpandoc]: If you are on Debian or Ubuntu system,
+pandoc is easy to install with `sudo apt install pandoc`.
 
 ---
 
