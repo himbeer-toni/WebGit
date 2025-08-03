@@ -70,8 +70,7 @@ make rebrand <new-name>
 No manual renaming or file editing is required—everything is handled automatically.
 
 **Caution!**
-
-Rebranding automatically changes the README to reflect the new name. Therefore it needs 'pandoc' to be present on your system.
+Rebranding automatically changes the README to reflect the new name. Therefore it needs 'pandoc' to be present on your system, as README.html needs to be re-created along with README.md.
 
 ---
 
