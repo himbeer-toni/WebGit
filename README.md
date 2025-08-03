@@ -230,7 +230,15 @@ Himbeertoni.
 
 ### Co-Author 
 
-I made extensive use of GitHub Copilot while developing this project. Copilot proved to be incredibly helpful, saving me significant time and enabling me to implement far more features than I could have on my own. It allowed me to easily enhance both the appearance and functionality of the project without requiring extensive manual coding.
+I made extensive use of GitHub Copilot while developing this project. Copilot proved to be incredibly helpful, saving me significant time and enabling me to implement far more features than I could have on my own. It allowed me to easily enhance both the appearance and functionality of the project without requiring extensive manual coding. Beside all that, my Copilot confused me
+from time to time, it sometimes "forgot" to include important existing code it knew into sections provided for pasting into that code. Also the ideas presented for
+fixing problems did sometimes end in confusion of us both, because Copilot forgot things it knew before
+and ended up presenting checks that could not lead to
+a fix. Sometimes annoying was that copilot did not
+remind my environment. I told it many times, that I can
+not use F12 to see Firefox's Web Developer Tools, because I work on Android where Firefox simply does not have
+this functionalty. But it came up with usable solutions
+every time I reminded it.
 
 ### License
 
