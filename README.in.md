@@ -20,10 +20,9 @@ Use &#x25c0; and &#x25b6; to hop between commits in the commit-diff-view (level 
 
 ### Self-contained
 
-PRODUCT is fully self-contained: it requires only a standard PHP installation and Git on the server (plus optional CSS for themes). There are no external dependencies or required PHP extensions beyond what is typically bundled with PHP itself. [^1]
+PRODUCT is fully self-contained: it requires only a standard PHP installation and Git on the server (plus optional CSS for themes). There are no external dependencies or required PHP extensions beyond what is typically bundled with PHP itself. [^pandoc]
 
-
-[^1]: To change the README, the command **pandoc** must be available to convert the markdown to HTML. On debian or ubuntu this can be installed using `sudo apt install pandoc`. Without pandoc "make" will fail.
+[^pandoc]: To change the README, the command **pandoc** must be available to convert the markdown to HTML. On debian or ubuntu this can be installed using `sudo apt install pandoc`. Without pandoc "make" will fail.
 
 ## Git Binary Selection
 
@@ -100,8 +99,9 @@ No manual renaming or file editing is required—everything is handled automatic
    make
    ```
    again, as it will re-create the setuid-copy only
-   if the original binary was updated.[^1]
-   [^1]:If you're paranoid to have an updated setuid-copy whenever the is a new one, you could set up a cronjob running `make suidbin` as frequent as you wish.
+   if the original binary was updated.[^paranoid]
+
+[^paranoid]:If you're paranoid to have an updated setuid-copy whenever the is a new git-bin, you could set up a cronjob running `make suidbin` as frequent as you wish.
 
 ## Security Notes
 
@@ -188,9 +188,10 @@ C ----------
 Cb----------
 D ----------
 ```
-results in
+results in[^screenshot]
 ![Example output of a diff](exdiff.jpg)
-(as displayed on smartphone)
+
+[^screenshot]:as displayed on smartphone
 
 #### Color Key
 

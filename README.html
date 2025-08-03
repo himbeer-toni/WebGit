@@ -362,11 +362,7 @@ as needed).</li>
 <pre><code>make</code></pre>
 again, as it will re-create the setuid-copy only if the original binary
 was updated.<a href="#fn2" class="footnote-ref" id="fnref2"
-role="doc-noteref"><sup>2</sup></a> <a href="#fn3" class="footnote-ref"
-id="fnref3" role="doc-noteref"><sup>3</sup></a>:If you’re paranoid to
-have an updated setuid-copy whenever the is a new one, you could set up
-a cronjob running <code>make suidbin</code> as frequent as you
-wish.</li>
+role="doc-noteref"><sup>2</sup></a></li>
 </ol>
 <h2 id="security-notes">Security Notes</h2>
 <ul>
@@ -459,8 +455,9 @@ D ----------</code></pre>
 C ----------
 Cb----------
 D ----------</code></pre>
-<p>results in <img src="exdiff.jpg" alt="Example output of a diff" />
-(as displayed on smartphone)</p>
+<p>results in<a href="#fn3" class="footnote-ref" id="fnref3"
+role="doc-noteref"><sup>3</sup></a> <img src="exdiff.jpg"
+alt="Example output of a diff" /></p>
 <h4 id="color-key">Color Key</h4>
 <ul>
 <li><strong>Yellow:</strong> Commit info, hunk headers, file headers,
@@ -509,15 +506,11 @@ role="doc-endnotes">
 HTML. On debian or ubuntu this can be installed using
 <code>sudo apt install pandoc</code>. Without pandoc “make” will fail.<a
 href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2" role="doc-endnote"><p>To change the README, the command
-<strong>pandoc</strong> must be available to convert the markdown to
-HTML. On debian or ubuntu this can be installed using
-<code>sudo apt install pandoc</code>. Without pandoc “make” will fail.<a
+<li id="fn2" role="doc-endnote"><p>If you’re paranoid to have an updated
+setuid-copy whenever the is a new git-bin, you could set up a cronjob
+running <code>make suidbin</code> as frequent as you wish.<a
 href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3" role="doc-endnote"><p>To change the README, the command
-<strong>pandoc</strong> must be available to convert the markdown to
-HTML. On debian or ubuntu this can be installed using
-<code>sudo apt install pandoc</code>. Without pandoc “make” will fail.<a
+<li id="fn3" role="doc-endnote"><p>as displayed on smartphone<a
 href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
