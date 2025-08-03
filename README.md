@@ -100,8 +100,8 @@ No manual renaming or file editing is required—everything is handled automatic
    make
    ```
    again, as it will re-create the setuid-copy only
-   if the original binary was updated.[^1]
-   [^1]:If you're paranoid to have an updated setuid-copy whenever the is a new one, you could set up a cronjob running `make suidbin` as frequent as you wish.
+   if the original binary was updated.[^paranoid]
+   [^paranoid]:If you're paranoid to have an updated setuid-copy whenever the is a new one, you could set up a cronjob running `make suidbin` as frequent as you wish.
 
 ## Security Notes
 
@@ -190,8 +190,9 @@ D ----------
 ```
 results in
 ![Example output of a diff](exdiff.jpg)
-[^2]
-[^2]:(as displayed on smartphone)
+[^screenshot]
+
+[^screenshot]:(as displayed on smartphone)
 
 #### Color Key
 
