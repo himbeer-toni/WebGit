@@ -78,6 +78,7 @@ Rebranding automatically changes the README to reflect the new name. Therefore i
 - Only `REPODIR` must be edited for most setups.  
 - Adjust `PBINDIR` only if your web root is not `/data/www`.  
 - Use `make rebrand <new-name>` to change the tool’s name everywhere, without manual steps.
+
 ## Installation
 
 1. **Clone or download this repository.**
