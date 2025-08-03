@@ -173,27 +173,24 @@ GitPeek displays git diffs with color highlights for clarity, closely matching s
 
 ### Example diff output
 
-![Example output of a diff](exdiff.jpg)
-^(as displayed on a smartphone)^
-
-```diff
-commit 1a2b3c4d5e6f7g8h9i0j
-Author: Jane Doe <jane@example.com>
-Date:   2024-07-10
-
-    Add new feature
-
-diff --git a/file.txt b/file.txt
-index 1234567..89abcd0 100644
---- a/file.txt
-+++ b/file.txt
-@@ -1,6 +1,7 @@
- Line unchanged
--Line removed
-+Line added
- Context line
-\ No newline at end of file
+Example content before edit / commit:
 ```
+A ----------
+B ----------
+C ----------
+D ----------
+```
+
+Example content after edit / commit:
+```
+A ----------
+C ----------
+Cb----------
+D ----------
+```
+results in
+![Example output of a diff](exdiff.jpg)
+~(as displayed on smartphone)~
 
 #### Color Key
 
