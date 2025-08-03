@@ -173,6 +173,9 @@ GitPeek displays git diffs with color highlights for clarity, closely matching s
 
 ### Example diff output
 
+![Example output of a diff](exdiff.jpg)
+^(as displayed on a smartphone)^
+
 ```diff
 commit 1a2b3c4d5e6f7g8h9i0j
 Author: Jane Doe <jane@example.com>
