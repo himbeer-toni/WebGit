@@ -171,7 +171,7 @@ GitPeek displays git diffs with color highlights for clarity, closely matching s
   - Lines with file permission changes, new file or deleted file messages, or mode changes, are typically shown in yellow.
   - Bold may be used for emphasis (e.g., commit ID).
 
-### Example
+### Example diff output
 
 ```diff
 commit 1a2b3c4d5e6f7g8h9i0j
