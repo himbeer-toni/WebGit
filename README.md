@@ -27,8 +27,9 @@ GitPeek is fully self-contained: it requires only a standard PHP installation an
 rebrand the app, it must change (not only) the README 
 to reflect the new name. Changing the README means that
 README.md and README.html need to be re-created out of
-README.in.md. To create the HTML `make` needs `pandoc`.Long story short: If you want to rebrand the app, then
-`pandoc` is required[^aptpandoc].
+README.in.md. To create the HTML `make` needs `pandoc`.
+Long story short: If you want to rebrand the app, then
+`pandoc` is required.
 See the *Rebranding* section for further information.
 
 ## Git Binary Selection
