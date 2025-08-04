@@ -25,7 +25,7 @@ GitPeek is fully self-contained: it requires only a standard PHP installation an
 
 [^pandoc]: For use as delivered. If you decide to
 rebrand the app, it must change (not only) the README 
-to reflect the new name. Changing the README means that
+to reflect the new name. Changing the README means 
 README.md and README.html need to be re-created out of
 README.in.md. To create the HTML `make` needs `pandoc`.
 Long story short: If you want to rebrand the app, then
@@ -146,7 +146,7 @@ If off-net, all other fonts will look the same, as a fallback kicks in.
 
 ### Background and Details
 
-While developing this app, I noticed that very few fonts are available across all platforms. So-called “web-safe” fonts only work reliably on some desktop systems, and are rarely available on mobile devices. To solve this common web development issue, I use network-based fonts (like Google Fonts) for broader compatibility. That is really a great help. But I had to decide carefully, which font service I implement, as some services track the users (even across sites and apps).
+While developing this app, I noticed very few fonts are available across all platforms. So-called “web-safe” fonts only work reliably on some desktop systems, and are rarely available on mobile devices. To solve this common web development issue, I use network-based fonts (like Google Fonts) for broader compatibility. That is really a great help. But I had to decide carefully, which font service I implement, as some services track the users (even across sites and apps).
 
 I assume, the average user does not like to be tracked. So I chose bunny fonts from bunny.net (see here), as they are
 
@@ -242,7 +242,7 @@ from time to time. Sometimes it "forgot" to include important existing code part
 fixing problems did sometimes end in confusion both of us, because Copilot forgot things it knew before
 and ended up presenting checks that could not lead to
 a fix. Sometimes annoying was that copilot did not
-remind my environment. I told it many times, that I can
+remind my environment. I told it many times, I can
 not use F12 to see Firefox's Web Developer Tools, because I was working on Android where Firefox simply does not have
 this functionality. But it came up with usable 
 alternatives (to F12) every time I reminded it.
