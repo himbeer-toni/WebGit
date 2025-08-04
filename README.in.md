@@ -11,19 +11,26 @@ PRODUCT is a lightweight PHP script for browsing local git repositories via a we
 
 ## Usage
 
-- **Repository List: (Level 1)** The landing page lists all git repositories under `$(REPODIR)` (default `/home/pi/gitrepos`).
-- **Commit History: (Level 2)** Click a repository to see its commit history.
-- **Commit Diff:**  (Level 3) Click a commit hash to see the full diff, color-coded.
-- **Theme Switch:** Use the theme switcher (top right) to toggle between dark and light themes.
+- **Repository List** (Level 1): The landing page lists all git repositories under `$(REPODIR)` (default `/home/pi/gitrepos`).
+- **Commit History** (Level 2): Click a repository to see its commit history.
+- **Commit Diff**  (Level 3): Click a commit hash to see the full diff, color-coded.
+- **Theme Selector:** Use the theme selector (top right) to toggle between dark and light themes.
+- **Font Selector:** Use the font selector (top right) to choose from a list of fonts.
 - **Navigation:** Use &#x25b2; to go up a level.
 Use &#x25c0; and &#x25b6; to hop between commits in the commit-diff-view (level 3).
 
 ### Self-contained
 
-PRODUCT is fully self-contained: it requires only a standard PHP installation and Git on the server (plus optional CSS for themes). There are no external dependencies or required PHP extensions beyond what is typically bundled with PHP itself. [^pandoc]
+PRODUCT is fully self-contained: it requires only a standard PHP installation and Git on the server (plus optional CSS for themes). There are no external dependencies[^pandoc] or required PHP extensions beyond what is typically bundled with PHP itself.
 
-[^pandoc]: To change the README, the command **pandoc** must be available to convert the markdown to HTML. On debian or ubuntu this can be installed using `sudo apt install pandoc`. Without pandoc "make" will fail.
-Changing the README is automatically caused by rebranding, as the name is changed in the README, so `make rebrand <new-name>` will need pandoc.
+[^pandoc]: For use as delivered. If you decide to
+rebrand the app, it must change (not only) the README 
+to reflect the new name. Changing the README means 
+README.md and README.html need to be re-created out of
+README.in.md. To create the HTML `make` needs `pandoc`.
+Long story short: If you want to rebrand the app, then
+`pandoc` is required.
+See the *Rebranding* section for further information.
 
 ## Git Binary Selection
 
@@ -70,7 +77,10 @@ make rebrand <new-name>
 No manual renaming or file editing is required—everything is handled automatically.
 
 **Caution!**
-Rebranding automatically changes the README to reflect the new name. Therefore it needs `pandoc` to be present on your system, as README.html needs to be re-created along with README.md.
+Rebranding automatically changes the README to reflect the new name. Therefore it needs `pandoc` to be present on your system, as README.html needs to be re-created along with README.md.[^aptpandoc]
+
+[^aptpandoc]: If you are on Debian or Ubuntu system,
+pandoc is easy to install with `sudo apt install pandoc`.
 
 ---
 
@@ -136,9 +146,10 @@ If off-net, all other fonts will look the same, as a fallback kicks in.
 
 ### Background and Details
 
-While developing this app, I noticed that very few fonts are available across all platforms. So-called “web-safe” fonts only work reliably on some desktop systems, and are rarely available on mobile devices. To solve this common web development issue, I use network-based fonts (like Google Fonts) for broader compatibility. That is really a great help. But I had to decide carefully, which font service I implement, as some services track the users (even across sites and apps).
+While developing this app, I noticed very few fonts are available across all platforms. So-called “web-safe” fonts only work reliably on some desktop systems, and are rarely available on mobile devices. To solve this common web development issue, I use network-based fonts (like Google Fonts) for broader compatibility. That is really a great help. But I had to decide carefully, which font service I implement, as some services track the users (even across sites and apps).
 
 I assume, the average user does not like to be tracked. So I chose bunny fonts from bunny.net (see here), as they are
+
 - free to use
 - open-source
 - privacy-first
@@ -179,7 +190,7 @@ PRODUCT displays git diffs with color highlights for clarity, closely matching s
 
 ### Example diff output
 
-Example content before edit / commit:
+Assume this file before editing it
 ```
 A ----------
 B ----------
@@ -187,14 +198,14 @@ C ----------
 D ----------
 ```
 
-Example content after edit / commit:
+Now assume, you change it by deleting the B-line and introducing the new Cb-Line, so it now looks like
 ```
 A ----------
 C ----------
 Cb----------
 D ----------
 ```
-results in[^screenshot]
+and commit that change. That results in the following commit view [^screenshot]
 ![Example output of a diff](exdiff.jpg)
 
 [^screenshot]:as displayed on smartphone
@@ -216,16 +227,37 @@ results in[^screenshot]
 
 ## License and author
 
+### Author
+
 This software was created and designed by
 Himbeertoni.
-Email: Toni.Himbeer@fn.de
-Github: https://www.github.com/himbeer-toni
 
-I made extensive use of GitHub Copilot while developing this project. Copilot proved to be incredibly helpful, saving me significant time and enabling me to implement far more features than I could have on my own. It allowed me to easily enhance both the appearance and functionality of the project without requiring extensive manual coding.
+- Email: Toni.Himbeer@fn.de
+- Github: https://www.github.com/himbeer-toni
+
+### Co-Author 
+
+I made extensive use of GitHub Copilot while developing this project. Copilot proved to be incredibly helpful, saving me significant time and enabling me to implement far more features than I could have on my own. It allowed me to easily enhance both the appearance and functionality of the project without requiring extensive manual coding. Beside that, my Copilot confused me
+from time to time. Sometimes it "forgot" to include important existing code parts into sections provided for pasting. Also the ideas presented for
+fixing problems did sometimes end in confusion both of us, because Copilot forgot things it knew before
+and ended up presenting checks that could not lead to
+a fix. Sometimes annoying was that copilot did not
+remind my environment. I told it many times, I can
+not use F12 to see Firefox's Web Developer Tools, because I was working on Android where Firefox simply does not have
+this functionality. But it came up with usable 
+alternatives (to F12) every time I reminded it.
+
+Taken all this together I recommend using Copilot, as
+it saves significant amounts of time and - 
+from time to time - surprises with quite
+elegant code (at least I've seen this for bash, CSS, HTML and PHP and even PERL).
+
+### License
 
 This project is licensed under the GNU General Public License v3.0 (GPLv3).
 
 **What does this mean?**  
+
 - You are free to use, study, modify, and share this software.
 - If you distribute modified versions, you must also provide the source code and keep them under the same GPLv3 license.
 - This ensures that all users have the same freedoms with the software.
