@@ -92,7 +92,7 @@ pandoc is easy to install with `sudo apt install pandoc`.
 ## Installation
 
 1. **Clone or download this repository.**
-2. **cloned setuid git binary** (recommended for multi-user or production setups):
+2. **Create setuid git binary** (recommended for multi-user or production setups):
    - The Makefile can create `<your-repodir>/git4GitPeek` as a copy of `/usr/bin/git`, owned by `pi:www-data` with mode `4610`.
    - Adjust the `REPODIR`, `XTRGOWN`, `XTRGGRP`, `XTRGSRC`, and `XTARGET` variables in the Makefile if your paths or users differ.
 3. Run make to get everything to where it belongs
@@ -116,13 +116,13 @@ pandoc is easy to install with `sudo apt install pandoc`.
    again, as it will re-create the setuid-copy only
    if the original binary was updated.[^paranoid]
 
-[^paranoid]:If you're paranoid to have an updated setuid-copy whenever the is a new git-bin, you could set up a cronjob running `make suidbin` as frequent as you wish.
+[^paranoid]:If you're paranoid to have an updated setuid-copy whenever the is a new git-bin, you could set up a cronjob running `make suidbin` as frequently as you wish.
 
 ## Security Notes
 
 - This tool is intended for use on local or trusted networks only.
 - The setuid git binary is a potential security risk if misconfigured. Make sure only trusted users have access to the web server and repository directories.
-- **Never ever** set the ownership of the setiud-binary `git4GitPeek` to root-uid!
+- **Never ever** set the ownership of the setuid-binary `git4GitPeek` to root-uid!
 
 ## Want to see a demo?
 
@@ -135,7 +135,7 @@ were pushed to github.
 ## The font selector
 
 Implementing the font selector was interesting. Here
-is what learned.
+is what I learned:
 	
 ### About fonts on the web
 
@@ -208,7 +208,7 @@ D ----------
 and commit that change. That results in the following commit view [^screenshot]
 ![Example output of a diff](exdiff.jpg)
 
-[^screenshot]:as displayed on smartphone
+[^screenshot]:as displayed on a smartphone
 
 #### Color Key
 
