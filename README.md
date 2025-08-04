@@ -23,7 +23,13 @@ Use &#x25c0; and &#x25b6; to hop between commits in the commit-diff-view (level 
 
 GitPeek is fully self-contained: it requires only a standard PHP installation and Git on the server (plus optional CSS for themes). There are no external dependencies[^pandoc] or required PHP extensions beyond what is typically bundled with PHP itself.
 
-[^pandoc]: Changing the README is automatically caused by rebranding, as the name is changed in the README, so `make rebrand <new-name>` will need `pandoc`. See the *Rebranding* section for further information.
+[^pandoc]: For use as delivered. If you decide to
+rebrand the app, it must change (not only) the README 
+to reflect the new name. Changing the README means that
+README.md and README.html need to be re-created out of
+README.in.md. To create the HTML `make` needs `pandoc`.Long story short: If you want to rebrand the app, then
+`pandoc` is required[^aptpandoc].
+See the *Rebranding* section for further information.
 
 ## Git Binary Selection
 
